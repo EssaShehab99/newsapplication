@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:newsapplication/shared/components/components.dart';
+import 'package:newsapplication/shared/components/constants.dart';
 import '../shared/setting/application_setting.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +14,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-
   runApp(const InitialApp());
 }
 
@@ -21,7 +22,6 @@ class InitialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return EasyLocalization(
       child: MultiProvider(
         providers: [
@@ -46,11 +46,32 @@ class LauncherApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
+      theme: ThemeData(
+        indicatorColor: secondaryColor_light,
+          fontFamily: "Cairo",
+          primaryColor: primaryColor_light,
+          backgroundColor: secondaryColor_light,
+          tabBarTheme: TabBarTheme(
+            labelColor: reverseColor_light,
+            unselectedLabelColor: secondaryColor_light,
+            labelStyle: textStyle(fontSize: 15,color: reverseColor_light),
+            unselectedLabelStyle: textStyle(fontSize: 13,color: secondaryColor_light),
+          ),
+          appBarTheme: AppBarTheme(
+              color: primaryColor_light,
+            iconTheme: IconThemeData(
+                color: reverseColor_light
+            ),
+          ),
+          textTheme: TextTheme(
+            headline1: textStyle(fontSize: 15,color: reverseColor_light),
+            headline2: textStyle(fontSize: 13,color: reverseColor_light),
+            headline3: textStyle(fontSize: 10,color: reverseColor_light),
+          )),
       initialRoute: '/',
       routes: {
         '/': (ctx) => Home(),
@@ -66,4 +87,3 @@ class LauncherApp extends StatelessWidget {
     );
   }
 }
-

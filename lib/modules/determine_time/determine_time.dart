@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:newsapplication/shared/components/components.dart';
 import '/shared/components/constants.dart';
 
 class DetermineTime extends StatefulWidget {
@@ -41,12 +42,12 @@ class _DetermineTimeState extends State<DetermineTime> {
     if (DateTime.now().difference(dateTime!).inMinutes < 1) {
       return Builder(builder: (context) {
         return Text("now".tr().toString(),
-            style: Theme.of(context).textTheme.headline5);
+            style: textStyle(fontSize: 13,color: Colors.blue));
       });
     } else if (DateTime.now().difference(dateTime!).inMinutes == 1) {
       return Builder(builder: (context) {
         return Text("oneMinute".tr().toString(),
-            style: Theme.of(context).textTheme.headline5);
+            style: textStyle(fontSize: 13,color: Colors.blue));
       });
     } else if (DateTime.now().difference(dateTime!).inMinutes <= 10) {
       textTime = (DateTime.now().difference(dateTime!).inMinutes).toString() +
@@ -71,8 +72,10 @@ class _DetermineTimeState extends State<DetermineTime> {
       textTime = DateFormat(timeFormat).format(dateTime!);
     }
 
-    return Builder(builder: (context) {
-      return Text(textTime, style: Theme.of(context).textTheme.headline4);
-    });
+    return Builder(
+      builder: (context) {
+        return Text(textTime, style: Theme.of(context).textTheme.headline2);
+      },
+    );
   }
 }

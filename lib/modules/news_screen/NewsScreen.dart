@@ -23,7 +23,8 @@ class _NewsScreenState extends State<NewsScreen> {
     var _posts = Provider.of<PostsManager>(context, listen: true).postsList;
     var _titles =
         Provider.of<NewsTitlesManager>(context, listen: true).titlesList;
-    var _favoritePosts = Provider.of<FavoritePostManager>(context, listen: true).favoritePostsList;
+    var _favoritePosts = Provider.of<FavoritePostManager>(context, listen: true)
+        .favoritePostsList;
     SliverAppBar appBar = SliverAppBar(
       actions: [
         Container(
@@ -67,10 +68,7 @@ class _NewsScreenState extends State<NewsScreen> {
       elevation: 5,
       bottom: TabBar(
         isScrollable: true,
-        tabs: Provider.of<NewsTitlesManager>(context, listen: true)
-            .titlesList
-            .map((name) => Tab(text: name.title))
-            .toList(),
+        tabs: _titles.map((title) => Tab(text: title.title)).toList(),
       ),
     );
     return Scaffold(
@@ -91,6 +89,7 @@ class _NewsScreenState extends State<NewsScreen> {
           body: TabBarView(
             children: _titles
                 .map((_newsTitle) => Container(
+                      color: Theme.of(context).backgroundColor,
                       child: SafeArea(
                         top: false,
                         bottom: false,
@@ -150,6 +149,8 @@ class _NewsScreenState extends State<NewsScreen> {
           ),
         ),
       ),
+      floatingActionButton:
+          defaultFloatingActionButton(icon: Icons.edit, onPressed: () {}),
     );
   }
 
@@ -173,6 +174,7 @@ class _NewsScreenState extends State<NewsScreen> {
                           builder: (context, snapShot) {
                             return AutoSizeText(
                               "${_posts[index].title}",
+                              style: Theme.of(context).textTheme.headline2,
                               textAlign: TextAlign.justify,
                               wrapWords: false,
                               textDirection: snapShot.hasData
@@ -201,7 +203,9 @@ class _NewsScreenState extends State<NewsScreen> {
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: DetermineTime(DateTime.parse(_posts[index].date),),
+                    child: DetermineTime(
+                      DateTime.parse(_posts[index].date),
+                    ),
                   ),
                   Spacer(),
                   _posts[index].isRead

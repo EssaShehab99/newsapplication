@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     Provider.of<NewsTitlesManager>(context, listen: false)
         .titlesList.add(NewsTitle(id: "1", title: "اخر الاخبار", typeTitle: TypeTitle.MIXED));
     Provider.of<NewsTitlesManager>(context, listen: false)
@@ -77,6 +77,11 @@ class _HomeState extends State<Home> {
           isRead: false,
           isFavorite: false,
         ));
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+
     return NewsScreen();
   }
 }
