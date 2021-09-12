@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:newsapplication/models/post/favorite_posts_manager.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
 import 'package:newsapplication/modules/determine_time/determine_time.dart';
+import 'package:newsapplication/modules/post_editing/post_editing.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:newsapplication/shared/components/constants.dart';
 import 'package:newsapplication/shared/setting/application_setting.dart';
@@ -149,8 +150,13 @@ class _NewsScreenState extends State<NewsScreen> {
           ),
         ),
       ),
-      floatingActionButton:
-          defaultFloatingActionButton(icon: Icons.edit, onPressed: () {}),
+      floatingActionButton: defaultFloatingActionButton(
+        icon: Icons.edit,
+        onPressed: () {
+          Navigator.of(context).pushNamed(PostEditing.postEditing,
+              arguments: {'isNew': true, 'post': null});
+        },
+      ),
     );
   }
 

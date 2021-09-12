@@ -3,6 +3,7 @@ import 'post.dart';
 import 'package:flutter/material.dart';
 
 class PostsManager with ChangeNotifier {
+  bool isUpload=false;
   List<Post> postsList = [];
 
   Future<void> insertPost({required Post post}) async {}
