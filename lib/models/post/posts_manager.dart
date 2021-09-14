@@ -21,4 +21,9 @@ class PostsManager with ChangeNotifier {
   Future<void> uploadImageTitlePost({required Post post}) async {}
 
   Future<void> uploadImageListPost({required Post post}) async {}
+
+  Future<void> downloadImage({required String imageUrl,required int id}) async {
+    postsList[id].localImageList?.add('sdfdfv');
+    notifyListeners();
+  }
 }

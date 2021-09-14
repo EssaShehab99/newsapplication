@@ -33,8 +33,12 @@ class _HomeState extends State<Home> {
           id: "1",
           title:
           "I have some text, maybe long and a box, WxH fixed size. I've calculated that given my font size and height scale, I can fit L lines of text. So I put maxLines and ellipsize and it works in Android app (since line height is predictable), but doesn't in Flutter app.",
-          imageTitle:
+          remoteImageTitle:
           "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+          localImageTitle:
+          "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+          remoteImageList:[],
+          localImageList:[],
           detail:
           "مركز العالمية للغات والتعليم المستمر يعلن عن بدأ التسجيل في الدبلومات التالية.دبلوم القباله التوليديةدبلوم مساعد طبيب دبلوم التمريض العام دبلوم التغذية العلاجية دورة الاسعافات الاوليه مجاناً موعد_الدراسة: تبدأ الفترتين الصباحية والمسائية من السبت الموافق 2021/8/14.مميزاتنا: كادر تدريسي وتدريبي متخصص وذو كفاءات عالية - قاعات تدريسية واسعة ومجهزة بـ ٲحدث وسائل التعليم والتدريب "
               "مركز العالمية للغات والتعليم المستمر يعلن عن بدأ التسجيل في الدبلومات التالية.دبلوم القباله التوليديةدبلوم مساعد طبيب دبلوم التمريض العام دبلوم التغذية العلاجية دورة الاسعافات الاوليه مجاناً موعد_الدراسة: تبدأ الفترتين الصباحية والمسائية من السبت الموافق 2021/8/14.مميزاتنا: كادر تدريسي وتدريبي متخصص وذو كفاءات عالية - قاعات تدريسية واسعة ومجهزة بـ ٲحدث وسائل التعليم والتدريب "
@@ -73,7 +77,6 @@ class _HomeState extends State<Home> {
           date: "${DateTime.now()}",
           type: Provider.of<NewsTitlesManager>(context, listen: false)
               .titlesList[2],
-          imageList: [],
           isRead: false,
           isFavorite: false,
         ));

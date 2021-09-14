@@ -9,8 +9,10 @@ class Post {
   final bool isRead;
   final bool isSync;
   bool isFavorite;
-  final String? imageTitle;
-  final List<String>? imageList;
+  final String? remoteImageTitle;
+  final String? localImageTitle;
+  final List<String>? remoteImageList;
+  final List<String>? localImageList;
 
   Post({
     this.id,
@@ -21,8 +23,10 @@ class Post {
     required this.isRead,
     required this.isSync,
     required this.isFavorite,
-    required this.imageTitle,
-    required this.imageList,
+    required this.remoteImageTitle,
+    required this.localImageTitle,
+    required this.remoteImageList,
+    required this.localImageList,
   });
 }
 
