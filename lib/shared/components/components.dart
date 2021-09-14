@@ -1,6 +1,28 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:newsapplication/models/title/news_title.dart';
+
+Future<List<File>?>? selectFiles({bool allowMultiple = true}) async {
+  List<File>? _files = [];
+  try {
+    final files= await FilePicker.platform.pickFiles(
+      allowMultiple: allowMultiple,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+    );
+
+    if (files == null) return _files;
+    files.files.forEach((element) {
+      _files.add(File(element.path));
+    });
+return _files;
+  } catch (e) {
+    print(e);
+  }
+}
 
 Image defaultImageLogo({fit}) => Image.asset(
       'assets/images/logo.png',
@@ -155,3 +177,10 @@ Widget defaultDropdownButton({
       }).toList(),
     );
 
+Widget defaultImageButton({required child}) =>Container(
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.black),
+    borderRadius: BorderRadius.circular(10),
+  ),
+  child: child,
+);
