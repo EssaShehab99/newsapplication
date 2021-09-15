@@ -40,6 +40,7 @@ dependencies:
   flutter_cache_manager: ^3.1.2
   permission_handler: ^8.1.6
   flowder: ^0.2.0
+  percent_indicator: ^3.0.1
 
 
 
