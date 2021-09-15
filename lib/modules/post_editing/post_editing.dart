@@ -189,7 +189,7 @@ class _PostEditingState extends State<PostEditing> {
                       ),
                     ),
                   ),
-                  PhotoViewer(images: _images, onDismissed: (_) {}),
+                  // PhotoViewer(images: _images, onDismissed: (_) {}),
                   PhotoViewer(images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png',
                   'http://www.w3bai.com/css/img_forest.jpg'], onDismissed: (_) {}),
                 ],

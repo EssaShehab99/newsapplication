@@ -1,10 +1,12 @@
-import 'dart:io';
+import 'package:flowder/flowder.dart';
 import 'package:flutter/material.dart';
-import 'package:newsapplication/models/post/posts_manager.dart';
+import 'package:http/src/response.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:provider/provider.dart';
-
+import 'package:http/http.dart' show get;
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 class PhotoViewer extends StatefulWidget {
   PhotoViewer({Key? key, required this.images,required Function(DismissDirection) this.onDismissed}) :super(key: key);
@@ -39,7 +41,7 @@ class _PhotoViewerState extends State<PhotoViewer> {
                         });
                         print(image.absolute);
                       },
-                      child: DefaultBoxImage(images: widget.images!, initialIndex: widget.images!.indexOf(image)),
+                      child: DefaultBoxImage(images: widget.images!, image: image,download: false,),
                     );
                     },
                   )
@@ -56,20 +58,66 @@ class _PhotoViewerState extends State<PhotoViewer> {
 }
 
 class DefaultBoxImage extends StatefulWidget {
-  const DefaultBoxImage({Key? key, required this.images,required this.initialIndex}) : super(key: key);
+  const DefaultBoxImage({Key? key, required this.images,required this.image,this.download=true}) : super(key: key);
   final List<dynamic> images;
-  final int initialIndex;
+  final  image;
+
+  final bool  download;
   @override
   _DefaultBoxImageState createState() => _DefaultBoxImageState();
 }
 
 class _DefaultBoxImageState extends State<DefaultBoxImage> {
+  bool  download=true;
+
+  late DownloaderUtils options;
+  late DownloaderCore core;
+  late final String path;
+
+downloadimage() async {
+  var status = await Permission.storage.status;
+  if (!status.isGranted) {
+    await Permission.storage.request();
+  }
+
+  options = DownloaderUtils(
+    progressCallback: (current, total) {
+      final progress = (current / total) * 100;
+      print('Downloading: $progress');
+    },
+    file: File('/storage/emulated/0/200MB.jpg'),
+    progress: ProgressImplementation(),
+    onDone: () => print('COMPLETE $path' ),
+    deleteOnCancel: true,
+  );
+  core = await Flowder.download(
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png',
+      options);
+
+}
+  Future<void> initPlatformState() async {
+    _setPath();
+    if (!mounted) return;
+  }
+
+  void _setPath() async {
+    path = (await getExternalStorageDirectory())!.path;
+  }
+
+  @override
+  void initState() {
+    download=widget.download;
+    initPlatformState();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Stack(
         children: [
-          ClipRRect(
+          if(widget.image.runtimeType!=String||(widget.image.runtimeType==String&&download))
+            ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: InkWell(
               onTap: () {
@@ -79,12 +127,12 @@ class _DefaultBoxImageState extends State<DefaultBoxImage> {
                         builder: (_) =>
                             DefaultInteractiveImage(
                               images: widget.images,
-                              selectedIndex: widget.initialIndex,
+                              selectedIndex:widget.images.indexOf(widget.image),
                             )));
               },
               child: PhotoView(
                 disableGestures: true,
-                imageProvider: DefaultInteractiveImage.imageProvider(widget.images[widget.initialIndex]),
+                imageProvider: DefaultInteractiveImage.imageProvider(widget.image),
                 initialScale: PhotoViewComputedScale
                     .covered,
                 errorBuilder: (context, error,
@@ -92,7 +140,6 @@ class _DefaultBoxImageState extends State<DefaultBoxImage> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
-
                         },
                         style: ElevatedButton
                             .styleFrom(
@@ -125,10 +172,15 @@ class _DefaultBoxImageState extends State<DefaultBoxImage> {
               ),
             ),
           ),
-          if(widget.images[widget.initialIndex].runtimeType==String)  Center(
+          if(widget.image.runtimeType==String&&download==false)
+            Center(
             child: ElevatedButton(
               onPressed: () {
-                setState(() {});
+
+                download=true;
+                setState(() {
+
+                });
               },
               style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),
@@ -144,6 +196,8 @@ class _DefaultBoxImageState extends State<DefaultBoxImage> {
       ),
     );
   }
+
+
 }
 
 class DefaultInteractiveImage extends StatefulWidget {
@@ -273,3 +327,4 @@ class _DefaultInteractiveImageState extends State<DefaultInteractiveImage> {
     );
   }
 }
+
