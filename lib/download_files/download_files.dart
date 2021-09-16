@@ -36,33 +36,44 @@ class _DownloadButtonState extends State<DownloadButton> {
   double value = 0.0;
   bool isDownload = false;
   String? localPath;
+  PostsManager? _postsManager;
 
+  @override
+  void initState() {
+    initPlatformState();
+    super.initState();
+    _postsManager = Provider.of<PostsManager>(context, listen: false);
+  }
+  @override
+  void setState(fn) {
+    if (mounted)    super.setState(fn);
+
+  }
   Future<dynamic> downloadFile(
       {required String url,
-      required String folder,
-      String extension = 'jpg'}) async {
+        required String folder,
+        String extension = 'jpg'}) async {
     var status = await Permission.storage.status;
     if (!status.isGranted) await Permission.storage.request();
 
     String _filePath =
         '/storage/emulated/0/$folder/${DateTime.now()}.$extension';
     options = DownloaderUtils(
-        progressCallback: (current, total) {
-          final progress = (current / total);
-          setState(() {
-            value = progress;
-          });
-          print('Downloading: $progress');
-        },
-        file: File(_filePath),
-        progress: ProgressImplementation(),
-        onDone: () async {
-          Provider.of<PostsManager>(context, listen: false)
-              .downloadImage(localUrl: _filePath, remoteUrl: url);
-          print('COMPLETE $localPath');
-        },
-        deleteOnCancel: true,
-       /* client: Dio(BaseOptions(
+      progressCallback: (current, total) {
+        final progress = (current / total);
+        setState(() {
+          value = progress;
+        });
+        print('Downloading: $progress');
+      },
+      file: File(_filePath),
+      progress: ProgressImplementation(),
+      onDone: () async {
+        _postsManager?.downloadImage(localUrl: _filePath, remoteUrl: url);
+        print('COMPLETE $localPath');
+      },
+      deleteOnCancel: true,
+      /* client: Dio(BaseOptions(
             baseUrl: url,
             receiveTimeout: 1000,
             connectTimeout: 1000,
@@ -71,18 +82,12 @@ class _DownloadButtonState extends State<DownloadButton> {
   }
 
   Future<void> initPlatformState() async {
-    _setPath();
-    if (!mounted) return;
+    if (!mounted)
+    return;
   }
 
   void _setPath() async {
     path = (await getExternalStorageDirectory())!.path;
-  }
-
-  @override
-  void initState() {
-    initPlatformState();
-    super.initState();
   }
 
   @override
@@ -103,7 +108,7 @@ class _DownloadButtonState extends State<DownloadButton> {
             } else {
               isDownload = true;
               if (Provider.of<PostsManager>(context, listen: false)
-                      .imageLocalUrl(widget.url) ==
+                  .imageLocalUrl(widget.url) ==
                   null) downloadFile(url: widget.url, folder: widget.folder);
             }
             setState(() {});
@@ -123,51 +128,3 @@ class _DownloadButtonState extends State<DownloadButton> {
   }
 }
 
-class DownloadFile {
-  DownloadFile({this.value = 0.0, required this.setState, this.localPath}) {}
-  late DownloaderUtils options;
-  late DownloaderCore core;
-  double value = 0.0;
-  String? localPath;
-  Function setState;
-
-/*  void _setPath() async {
-    path = (await getExternalStorageDirectory())!.path;
-  }*/
-
-  Future<dynamic> download({
-    required url,
-    required folder,
-    extension = 'jpg',
-  }) async {
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-    }
-    String _filePath =
-        '/storage/emulated/0/$folder/${DateTime.now()}.$extension';
-    options = DownloaderUtils(
-      progressCallback: (current, total) {
-        final progress = (current / total);
-        value = progress;
-        print('Downloading: $progress');
-        setState();
-      },
-      file: File(_filePath),
-      progress: ProgressImplementation(),
-      onDone: () async {
-        localPath = _filePath;
-        print('COMPLETE $localPath');
-      },
-      deleteOnCancel: true,
-      /*client: Dio(BaseOptions(
-            baseUrl: url!,
-            receiveTimeout: 1000,
-            connectTimeout: 1000,
-            sendTimeout: 1000))*/
-    );
-    core = await Flowder.download(url!, options);
-  }
-}
-
-enum DownloadStatus { DOWNLOAD, RESUME, CANCEL, PAUSE }

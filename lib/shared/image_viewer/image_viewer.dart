@@ -107,7 +107,7 @@ class _DefaultBoxImageState extends State<DefaultBoxImage> {
                       MaterialPageRoute(
                           builder: (_) => InteractiveImage(
                                 images: widget.images,
-                                selectedIndex:
+                                index:
                                     widget.images.indexOf(widget.image),
                               )));
                 },

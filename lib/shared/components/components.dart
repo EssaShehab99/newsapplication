@@ -49,15 +49,15 @@ defaultTextButton({required Function onPressed, required Widget child}) =>
       );
     });
 
-defaultItemListView({required Column child,required Function() onPressed}) => Card(
+defaultItemListView({required Column child, required Function() onPressed}) =>
+    Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 5.0,
       child: defaultTextButton(
-        onPressed:(){
-          print("xx");
-           onPressed();
+        onPressed: () {
+          onPressed();
         },
         child: Container(
           child: child,
@@ -193,14 +193,22 @@ Widget defaultImageButton({required child}) => Container(
       child: child,
     );
 
-Widget defaultPhotoView({required File value, required Function onPressed,disableGestures=true}) =>
+Widget defaultPhotoView(
+        {required File value,
+        required Function onPressed,
+        disableGestures = true}) =>
     PhotoView(
+      onTapDown: (context, details, controllerValue) {
+        onPressed();
+      },
       disableGestures: disableGestures,
       imageProvider: FileImage(value),
-      initialScale: disableGestures?PhotoViewComputedScale.covered:PhotoViewComputedScale.contained,
+      initialScale: disableGestures
+          ? PhotoViewComputedScale.covered
+          : PhotoViewComputedScale.contained,
       errorBuilder: (context, error, stackTrace) => Center(
         child: ElevatedButton(
-          onPressed: onPressed(),
+          onPressed: () {},
           style: ElevatedButton.styleFrom(
               shape: CircleBorder(),
               primary: Colors.white.withOpacity(0.5),

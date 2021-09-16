@@ -22,6 +22,10 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
+  Future<void> initPlatformState() async {
+    if (!mounted)
+      return;
+  }
   @override
   Widget build(BuildContext context) {
     var _posts = Provider.of<PostsManager>(context, listen: true).postsList;

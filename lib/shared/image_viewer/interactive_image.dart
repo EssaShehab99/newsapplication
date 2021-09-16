@@ -7,10 +7,10 @@ import 'package:newsapplication/shared/components/components.dart';
 import 'package:provider/provider.dart';
 
 class InteractiveImage extends StatefulWidget {
-  const InteractiveImage(
-      {Key? key, required this.images, int selectedIndex = 0})
+  const InteractiveImage({Key? key, required this.images, this.index = 0})
       : super(key: key);
   final List<dynamic> images;
+  final int index;
 
   @override
   _InteractiveImageState createState() => _InteractiveImageState();
@@ -18,6 +18,13 @@ class InteractiveImage extends StatefulWidget {
 
 class _InteractiveImageState extends State<InteractiveImage> {
   bool _isVisible = true;
+  int index = 0;
+
+  @override
+  void initState() {
+    index = widget.index;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +39,13 @@ class _InteractiveImageState extends State<InteractiveImage> {
                   child: Stack(
                     children: [
                       PageView(
+                        controller: PageController(initialPage: index),
+                        onPageChanged: (value) {
+                          setState(() {
+                            index = value;
+                          });
+                        },
+
                         scrollDirection: Axis.horizontal,
                         children: widget.images
                             .map(
@@ -50,14 +64,26 @@ class _InteractiveImageState extends State<InteractiveImage> {
                                                 if (value != null)
                                                   defaultPhotoView(
                                                       value: File(value),
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        print('fffffffffff');
+
+                                                        setState(() {
+                                                          _isVisible =
+                                                              !_isVisible;
+                                                        });
+                                                      },
                                                       disableGestures: false),
                                               ],
                                             ))
                                   else
                                     defaultPhotoView(
                                         value: image,
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          print('fffffffffff');
+                                          setState(() {
+                                            _isVisible = !_isVisible;
+                                          });
+                                        },
                                         disableGestures: false),
                                 ],
                               ),
@@ -70,9 +96,11 @@ class _InteractiveImageState extends State<InteractiveImage> {
                         curve: Curves.linear,
                         duration: Duration(milliseconds: 350),
                         child: AppBar(
-                          backgroundColor: Colors.black54,
+                          iconTheme: IconThemeData(color: Colors.white),
+                          backgroundColor: Colors.black,
                           title: Text(
-                            "${1} of ${widget.images.length}",
+                            "${index + 1} of ${widget.images.length}",
+                            style: TextStyle(color: Colors.white),
                           ),
                           centerTitle: true,
                         ),
@@ -83,7 +111,7 @@ class _InteractiveImageState extends State<InteractiveImage> {
                           height: _isVisible ? 56.0 : 0.0,
                           curve: Curves.linear,
                           duration: Duration(milliseconds: 350),
-                          color: Colors.black54,
+                          color: Colors.black,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [

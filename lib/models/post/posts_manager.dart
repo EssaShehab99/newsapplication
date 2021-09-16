@@ -9,7 +9,19 @@ class PostsManager with ChangeNotifier {
   List<Post> postsList = [];
   List<Post> favoritePostsList = [];
   List<Map<String,String>> localImages=[];
+  bool _isDisposed = false;
 
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+  @override
+  void notifyListeners() {
+    if (!_isDisposed) {
+      super.notifyListeners();
+    }
+  }
   Future<void> insertPost({required Post post}) async {}
 
   Future<void> updatePost({required Post post}) async {}
@@ -28,7 +40,9 @@ class PostsManager with ChangeNotifier {
 
   Future<void> downloadImage({required String remoteUrl,required String localUrl}) async {
     localImages.add({remoteUrl:localUrl});
-    notifyListeners();
+    if(!_isDisposed){
+      notifyListeners();
+    }
   }
   void favoritePost({required Post post, required bool favoriteStatus}) {
     if(favoriteStatus)favoritePostsList.add(post);
