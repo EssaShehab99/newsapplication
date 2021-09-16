@@ -1,15 +1,17 @@
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:newsapplication/models/title/news_title.dart';
+import 'package:photo_view/photo_view.dart';
 
 Future<List<File>?>? selectFiles({bool allowMultiple = true}) async {
   List<File>? _files = [];
   try {
-    final files= await FilePicker.platform.pickFiles(
+    final files = await FilePicker.platform.pickFiles(
       allowMultiple: allowMultiple,
       type: FileType.custom,
       allowedExtensions: ['jpg', 'jpeg', 'png'],
@@ -19,7 +21,7 @@ Future<List<File>?>? selectFiles({bool allowMultiple = true}) async {
     files.files.forEach((element) {
       _files.add(File(element.path));
     });
-return _files;
+    return _files;
   } catch (e) {
     print(e);
   }
@@ -40,18 +42,23 @@ defaultTextButton({required Function onPressed, required Widget child}) =>
             ),
           ),
         ),
-        onPressed: () => onPressed,
+        onPressed: () {
+          onPressed();
+        },
         child: child,
       );
     });
 
-defaultItemListView({required Column child}) => Card(
+defaultItemListView({required Column child,required Function() onPressed}) => Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 5.0,
       child: defaultTextButton(
-        onPressed: () {},
+        onPressed:(){
+          print("xx");
+           onPressed();
+        },
         child: Container(
           child: child,
         ),
@@ -178,10 +185,90 @@ Widget defaultDropdownButton({
       }).toList(),
     );
 
-Widget defaultImageButton({required child}) =>Container(
-  decoration: BoxDecoration(
-    border: Border.all(color: Colors.black),
-    borderRadius: BorderRadius.circular(10),
-  ),
-  child: child,
-);
+Widget defaultImageButton({required child}) => Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: child,
+    );
+
+Widget defaultPhotoView({required File value, required Function onPressed,disableGestures=true}) =>
+    PhotoView(
+      disableGestures: disableGestures,
+      imageProvider: FileImage(value),
+      initialScale: disableGestures?PhotoViewComputedScale.covered:PhotoViewComputedScale.contained,
+      errorBuilder: (context, error, stackTrace) => Center(
+        child: ElevatedButton(
+          onPressed: onPressed(),
+          style: ElevatedButton.styleFrom(
+              shape: CircleBorder(),
+              primary: Colors.white.withOpacity(0.5),
+              minimumSize: Size(50, 50)),
+          child: const Icon(
+            Icons.refresh,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      loadingBuilder: (context, event) => Center(
+        child: SizedBox(
+          width: 20.0,
+          height: 20.0,
+          child: CircularProgressIndicator(
+            value: event == null
+                ? 0
+                : event.cumulativeBytesLoaded / event.expectedTotalBytes!,
+          ),
+        ),
+      ),
+    );
+
+Future<dynamic> defaultDialog(
+    {required BuildContext context, id, Widget? title, Widget? child}) async {
+  AlertDialog alertDialog = AlertDialog(
+    backgroundColor: Theme.of(context).primaryColor,
+    title: title,
+    content: Container(
+      height: 90,
+      child: child,
+    ),
+  );
+  return await showDialog(context: context, builder: (context) => alertDialog);
+}
+
+Future<dynamic> defaultConfirmDialog({
+  required BuildContext context,
+}) =>
+    defaultDialog(
+        context: context,
+        child: Column(
+          children: [
+            Text(
+              "doYouWantToDeleteThePost".tr().toString(),
+              style: Theme.of(context).textTheme.headline1,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: Text(
+                      "yes".tr().toString(),
+                    )),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Text(
+                      "no".tr().toString(),
+                    )),
+              ],
+            )
+          ],
+        ));

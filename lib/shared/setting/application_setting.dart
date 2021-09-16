@@ -82,16 +82,16 @@ class ApplicationSetting with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<TextDirection> startIdentifyingPossibleLanguages(String? text)  async {
-    // LanguageIdentifier _identifier = LanguageIdentifier();
-    // List<IdentifiedLanguage> languages =
-    // await _identifier.idenfityPossibleLanguages(text!) ;
-
-    String result = '';
-    // for (IdentifiedLanguage l in languages) {
-    //   result += '${l.language.toUpperCase()}';
-    // }
-
-    return result.contains("AR")?TextDirection.rtl:TextDirection.ltr;
-  }
+  // Future<TextDirection> startIdentifyingPossibleLanguages(String? text)  async {
+  //   // LanguageIdentifier _identifier = LanguageIdentifier();
+  //   // List<IdentifiedLanguage> languages =
+  //   // await _identifier.idenfityPossibleLanguages(text!) ;
+  //
+  //   String result = '';
+  //   // for (IdentifiedLanguage l in languages) {
+  //   //   result += '${l.language.toUpperCase()}';
+  //   // }
+  //
+  //   return result.contains("AR")?TextDirection.rtl:TextDirection.ltr;
+  // }
 }

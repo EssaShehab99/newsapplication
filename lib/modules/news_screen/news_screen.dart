@@ -10,6 +10,9 @@ import 'package:newsapplication/shared/components/constants.dart';
 import 'package:newsapplication/shared/setting/application_setting.dart';
 import '/models/title/news_titles_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart' as intl;
+
+import 'news_details.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({Key? key}) : super(key: key);
@@ -172,24 +175,18 @@ class _NewsScreenState extends State<NewsScreen> {
                   Expanded(
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: FutureBuilder(
-                          future: Provider.of<ApplicationSetting>(context,
-                                  listen: false)
-                              .startIdentifyingPossibleLanguages(
-                                  _posts[index].title),
-                          builder: (context, snapShot) {
-                            return AutoSizeText(
-                              "${_posts[index].title}",
-                              style: Theme.of(context).textTheme.headline2,
-                              textAlign: TextAlign.justify,
-                              wrapWords: false,
-                              textDirection: snapShot.hasData
-                                  ? snapShot.data as TextDirection
-                                  : TextDirection.rtl,
-                              overflow: TextOverflow.fade,
-                              maxLines: 5,
-                            );
-                          }),
+                      child: AutoSizeText(
+                        "${_posts[index].title}",
+                        style: Theme.of(context).textTheme.headline2,
+                        textAlign: TextAlign.justify,
+                        wrapWords: false,
+                        textDirection:
+                          intl.Bidi.detectRtlDirectionality(_posts[index].title)
+                          ? TextDirection.rtl
+                          : TextDirection.ltr,
+                        overflow: TextOverflow.fade,
+                        maxLines: 5,
+                      ),
                     ),
                   ),
                   Provider.of<ApplicationSetting>(context, listen: true)
@@ -227,5 +224,10 @@ class _NewsScreenState extends State<NewsScreen> {
             ),
           ],
         ),
+      onPressed: (){
+        Navigator.of(context)
+            .pushNamed(NewsDetails.newsDetailsScreen,
+            arguments: _posts[index]);
+      }
       );
 }

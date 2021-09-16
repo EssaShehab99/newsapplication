@@ -10,6 +10,7 @@ import 'models/post/favorite_posts_manager.dart';
 import 'models/post/posts_manager.dart';
 import 'models/title/news_titles_manager.dart';
 import 'modules/home/home.dart';
+import 'modules/news_screen/news_details.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -81,8 +82,8 @@ class LauncherApp extends StatelessWidget {
         '/': (ctx) => Home(),
 
         PostEditing.postEditing: (ctx) => const PostEditing(),
-  /*      AppSetting.appSettingScreen: (ctx) => const AppSetting(),
-        About.aboutScreen: (ctx) => const About(),
+        NewsDetails.newsDetailsScreen: (ctx) => const NewsDetails(),
+   /*      About.aboutScreen: (ctx) => const About(),
         NewsDetails.newsDetailsScreen: (ctx) => const NewsDetails(),
         ImageControl.imageControlScreen: (ctx) => const ImageControl(),
         AddTitleBar.addTitleBar: (ctx) => const AddTitleBar(),
