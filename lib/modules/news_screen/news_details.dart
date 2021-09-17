@@ -12,8 +12,7 @@ import 'package:favorite_button/favorite_button.dart';
 
 class NewsDetails extends StatefulWidget {
   const NewsDetails({Key? key}) : super(key: key);
-  static String newsDetailsScreen =
-      "/newsDetailsScreen";
+  static String newsDetailsScreen = "/newsDetailsScreen";
 
   @override
   _NewsDetailsState createState() => _NewsDetailsState();
@@ -22,8 +21,7 @@ class NewsDetails extends StatefulWidget {
 class _NewsDetailsState extends State<NewsDetails> {
   @override
   Widget build(BuildContext context) {
-    Post post = ModalRoute.of(context)!.settings.arguments
-    as Post;
+    Post post = ModalRoute.of(context)!.settings.arguments as Post;
     return Scaffold(
       appBar: AppBar(
           iconTheme: IconThemeData(
@@ -47,86 +45,102 @@ class _NewsDetailsState extends State<NewsDetails> {
                 var isDelete = await defaultConfirmDialog(context: context);
                 isDelete == true
                     ? Navigator.of(context)
-                    .pop({"isDelete": isDelete, "id": ''})
+                        .pop({"isDelete": isDelete, "id": ''})
                     : null;
               },
               icon: Icon(Icons.delete),
             ),
           ]),
       body: Consumer<PostsManager>(
-        builder: (context,value,child) => SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Container(
-                    child:SelectableText(
-                      value.postsList[0].title,
-                      style: Theme.of(context).textTheme.bodyText1,
-                textDirection:
-                intl.Bidi.detectRtlDirectionality(value.postsList[0].title)
-                    ? TextDirection.rtl
-                    : TextDirection.ltr,
-                      textAlign: TextAlign.justify,
-                      toolbarOptions: ToolbarOptions(
-                        copy: true,
-                        selectAll: true,
-                      ),
+        builder: (context, value, child) => SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Container(
+                  child: SelectableText(
+                    value.postsList[0].title,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    textDirection: intl.Bidi.detectRtlDirectionality(
+                            value.postsList[0].title)
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
+                    textAlign: TextAlign.justify,
+                    toolbarOptions: ToolbarOptions(
+                      copy: true,
+                      selectAll: true,
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    child: SelectableText(
-                      localization.DateFormat(timeFormat)
-                          .format(DateTime.parse(value.postsList[0].date)),
-                      style: Theme.of(context).textTheme.headline2,
-                      toolbarOptions: ToolbarOptions(
-                        copy: true,
-                        selectAll: true,
-                      ),
+                ),
+                Container(
+                  width: double.infinity,
+                  child: SelectableText(
+                    localization.DateFormat(timeFormat)
+                        .format(DateTime.parse(value.postsList[0].date)),
+                    style: Theme.of(context).textTheme.headline2,
+                    toolbarOptions: ToolbarOptions(
+                      copy: true,
+                      selectAll: true,
                     ),
                   ),
-                  Divider(
-                    thickness: 1.0,
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
-                  PhotoViewer(images: [value.postsList[0].remoteImageTitle], onDismissed: (_) {},enableInfiniteScroll: false),
-                  SizedBox.shrink(),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
-                  Container(
-                    child: SelectableText(
-                      value.postsList[0].detail??'',
-                      style: Theme.of(context).textTheme.headline3,
-                      textAlign: TextAlign.justify,
-                      textDirection:
-                      intl.Bidi.detectRtlDirectionality(value.postsList[0].title)
-                          ? TextDirection.rtl
-                          : TextDirection.ltr,
-                      toolbarOptions: ToolbarOptions(
-                        copy: true,
-                        selectAll: true,
-                      ),
+                ),
+                Divider(
+                  thickness: 1.0,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.04,
+                ),
+                PhotoViewer(
+                    images: [value.postsList[0].remoteImageTitle],
+                    onDismissed: (_) {},
+                    enableInfiniteScroll: false),
+                SizedBox.shrink(),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.04,
+                ),
+                Container(
+                  child: SelectableText(
+                    value.postsList[0].detail ?? '',
+                    style: Theme.of(context).textTheme.headline3,
+                    textAlign: TextAlign.justify,
+                    textDirection: intl.Bidi.detectRtlDirectionality(
+                            value.postsList[0].title)
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
+                    toolbarOptions: ToolbarOptions(
+                      copy: true,
+                      selectAll: true,
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
-                  Divider(
-                    thickness: 1.0,
-                  ),
-                  PhotoViewer(images: value.postsList[0].remoteImageList, onDismissed: (_) {}),
-                  Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 20),
-                      child: StarButton(
-                        isStarred: value.favoritePostsList.contains(value.postsList[0]),
-                        valueChanged: (favoriteStatus) {
-                          print(Provider.of<PostsManager>(context,listen: false).localImages[0][value.postsList[0].remoteImageTitle]);
-                          value.favoritePost(post: value.postsList[0],favoriteStatus: favoriteStatus);
-                        },
-                      )),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.04,
+                ),
+                Divider(
+                  thickness: 1.0,
+                ),
+                PhotoViewer(
+                    images: value.postsList[0].remoteImageList,
+                    onDismissed: (_) {}),
+                Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(top: 20),
+                    child: StarButton(
+                      isStarred:
+                          value.favoritePostsList.contains(value.postsList[0]),
+                      valueChanged: (favoriteStatus) {
+                        print(Provider.of<PostsManager>(context, listen: false)
+                                .localImages[0]
+                            [value.postsList[0].remoteImageTitle]);
+                        value.favoritePost(
+                            post: value.postsList[0],
+                            favoriteStatus: favoriteStatus);
+                      },
+                    )),
+              ],
             ),
-          )
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

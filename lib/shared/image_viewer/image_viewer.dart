@@ -16,13 +16,12 @@ import 'package:provider/provider.dart';
 import 'interactive_image.dart';
 
 class PhotoViewer extends StatefulWidget {
-  PhotoViewer(
-      {Key? key,
-      required this.images,
-      required Function(DismissDirection) this.onDismissed,
-       this.enableInfiniteScroll=true,
-      })
-      : super(key: key);
+  PhotoViewer({
+    Key? key,
+    required this.images,
+    required Function(DismissDirection) this.onDismissed,
+    this.enableInfiniteScroll = true,
+  }) : super(key: key);
   final List<dynamic>? images;
   final bool enableInfiniteScroll;
 
@@ -66,9 +65,9 @@ class _PhotoViewerState extends State<PhotoViewer> {
                         ).toList()
                       : [],
                   options: CarouselOptions(
-                    enableInfiniteScroll: widget.enableInfiniteScroll,
+                    enableInfiniteScroll: false,
                     enlargeCenterPage: false,
-                    viewportFraction: widget.enableInfiniteScroll?0.8:1,
+                    viewportFraction: widget.enableInfiniteScroll ? 0.8 : 1,
                     height: 220,
                   ),
                 ),
@@ -107,8 +106,7 @@ class _DefaultBoxImageState extends State<DefaultBoxImage> {
                       MaterialPageRoute(
                           builder: (_) => InteractiveImage(
                                 images: widget.images,
-                                index:
-                                    widget.images.indexOf(widget.image),
+                                index: widget.images.indexOf(widget.image),
                               )));
                 },
                 child: widget.image.runtimeType == String
@@ -131,5 +129,3 @@ class _DefaultBoxImageState extends State<DefaultBoxImage> {
     );
   }
 }
-
-
