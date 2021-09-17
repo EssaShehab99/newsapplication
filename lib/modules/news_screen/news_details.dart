@@ -59,18 +59,9 @@ class _NewsDetailsState extends State<NewsDetails> {
             child: Column(
               children: [
                 Container(
-                  child: SelectableText(
-                    value.postsList[0].title,
+                  child: defaultSelectableText(
+                   text:  value.postsList[0].title,
                     style: Theme.of(context).textTheme.bodyText1,
-                    textDirection: intl.Bidi.detectRtlDirectionality(
-                            value.postsList[0].title)
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
-                    textAlign: TextAlign.justify,
-                    toolbarOptions: ToolbarOptions(
-                      copy: true,
-                      selectAll: true,
-                    ),
                   ),
                 ),
                 Container(

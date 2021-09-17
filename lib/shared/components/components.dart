@@ -297,3 +297,17 @@ defaultElevatedButton({required Function onPressed, required Widget child}) =>
         ),
       ),
     );
+
+defaultSelectableText({required String text,TextStyle? style})=>SelectableText(
+text,
+style: style,
+textDirection: intl.Bidi.detectRtlDirectionality(
+text)
+? TextDirection.rtl
+    : TextDirection.ltr,
+textAlign: TextAlign.justify,
+toolbarOptions: ToolbarOptions(
+copy: true,
+selectAll: true,
+),
+);
