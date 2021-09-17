@@ -11,7 +11,6 @@ import 'package:newsapplication/shared/image_viewer/image_viewer.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
-
 class PostEditing extends StatefulWidget {
   const PostEditing({Key? key}) : super(key: key);
   static String postEditing = "/postEditing";
@@ -88,13 +87,14 @@ class _PostEditingState extends State<PostEditing> {
                         value: titlesList[0],
                         onChanged: (value) {
                           _postTpe = value;
-                        }),
+                        },
+                    onTap: (){ FocusScope.of(context).unfocus();}),
                   ),
                   SizedBox(
                     height: size.height * 0.04,
                   ),
                   Container(
-                    child: defaultImageButton(
+                    child: defaultBorderContainer(
                         child: Stack(
                       children: [
                         Container(
@@ -108,7 +108,7 @@ class _PostEditingState extends State<PostEditing> {
                                       }));
                             },
                             child: Container(
-                              height: size.height * 0.25,
+                              height: 215,
                               child: _image == null
                                   ? _imageUrl == null
                                       ? Icon(Icons.add_photo_alternate_outlined)
@@ -151,47 +151,47 @@ class _PostEditingState extends State<PostEditing> {
                     height: size.height * 0.04,
                   ),
                   Container(
-                    child: defaultImageButton(
-                      child: Column(
-                        children: [
-                          Center(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10))),
-                              child: Text(
-                                "extraPictures".tr().toString(),
-                                textAlign: TextAlign.center,
+                    child: defaultBorderContainer(
+                      child: Stack(
+                          children: [
+                            PhotoViewer(enableInfiniteScroll:false ,
+                              images: _images,
+                              onDismissed: (_) {},
+                              child: IconButton(
+                                onPressed: () async {
+                                  _images = await selectFiles();
+                                  setState(() {});
+                                },
+                                icon: Icon(Icons.add_to_photos_outlined),
                               ),
                             ),
-                          ),
-                          GridView.count(
-                            crossAxisCount: 3,
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            physics: ScrollPhysics(),
-                            children: [
-                              Container(
-                                child: IconButton(
-                                  onPressed: () async {
-                                    _images = await selectFiles();
-                                    setState(() {});
-                                  },
-                                  icon: Icon(Icons.photo_library_sharp),
+                            Center(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor,
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10))),
+                                child: Text(
+                                  "extraPictures".tr().toString(),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
                     ),
                   ),
-                  PhotoViewer(images: _images, onDismissed: (_) {},),
-                  PhotoViewer(images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png',
-                  'http://www.w3bai.com/css/img_forest.jpg'], onDismissed: (_) {}),
+                  SizedBox(
+                    height: size.height * 0.04,
+                  ),
+                  Container(
+                    child: defaultElevatedButton(onPressed: (){}, child: Text('post'.tr().toString(),style: Theme.of(context).textTheme.headline6,)),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.04,
+                  ),
                 ],
               ),
             ),

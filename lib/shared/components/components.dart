@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -134,12 +133,13 @@ Widget defaultTextFormField({
         onFieldSubmitted: onFieldSubmitted,
         keyboardType: keyboardType,
         maxLength: maxLength,
+        style: Theme.of(context).textTheme.headline2,
         textInputAction: textInputAction,
         decoration: InputDecoration(
           hintText: hintText,
           hintTextDirection: Directionality.of(context),
           contentPadding: EdgeInsets.symmetric(horizontal: 20),
-          hintStyle: Theme.of(context).textTheme.headline4,
+          hintStyle: Theme.of(context).textTheme.headline5,
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 width: 1,
@@ -174,6 +174,7 @@ Widget defaultDropdownButton({
       hint: hint,
       isExpanded: true,
       onTap: onTap,
+      style: Theme.of(context).textTheme.headline2,
       onChanged: onChanged,
       onSaved: onSaved,
       items: list.map((val) {
@@ -185,7 +186,7 @@ Widget defaultDropdownButton({
       }).toList(),
     );
 
-Widget defaultImageButton({required child}) => Container(
+Widget defaultBorderContainer({required child}) => Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
         borderRadius: BorderRadius.circular(10),
@@ -280,3 +281,19 @@ Future<dynamic> defaultConfirmDialog({
             )
           ],
         ));
+
+defaultElevatedButton({required Function onPressed, required Widget child}) =>
+    SizedBox(
+      height:50,
+      width:200,
+      child: ElevatedButton(
+        onPressed: () {
+          onPressed();
+        },
+        child: Center(child: child),
+        style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all<Size>(Size(150,50)),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))
+        ),
+      ),
+    );

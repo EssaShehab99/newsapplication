@@ -1,9 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:newsapplication/models/file_manager/download_files.dart';
+import 'package:newsapplication/models/file_manager/download_button.dart';
 import 'package:newsapplication/models/file_manager/files_manager.dart';
-import 'package:newsapplication/models/post/posts_manager.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:provider/provider.dart';
 
@@ -46,28 +45,27 @@ class _InteractiveImageState extends State<InteractiveImage> {
                             index = value;
                           });
                         },
-
                         scrollDirection: Axis.horizontal,
                         children: widget.images
                             .map(
                               (image) => Stack(
                                 children: [
                                   if (image.runtimeType == String)
-                                    Selector<FilesManager, String?>(
-                                        selector: (context, value) =>
-                                            value.imageLocalUrl(image),
+                                    Consumer<FilesManager>(
                                         builder: (context, value, child) =>
                                             Stack(
                                               children: [
-                                                DownloadFile(
-                                                    remoteUrl:  image,
+                                                DownloadButton(
+                                                    remoteUrl: image,
                                                     folder: 'Yemen Net'),
-                                                if (value != null)
+                                                if (value.fileInDatabase(
+                                                        image) !=
+                                                    null)
                                                   defaultPhotoView(
-                                                      value: File(value),
+                                                      value: File(
+                                                          value.fileInDatabase(
+                                                              image)!),
                                                       onPressed: () {
-                                                        print('fffffffffff');
-
                                                         setState(() {
                                                           _isVisible =
                                                               !_isVisible;
@@ -80,7 +78,6 @@ class _InteractiveImageState extends State<InteractiveImage> {
                                     defaultPhotoView(
                                         value: image,
                                         onPressed: () {
-                                          print('fffffffffff');
                                           setState(() {
                                             _isVisible = !_isVisible;
                                           });
@@ -117,10 +114,8 @@ class _InteractiveImageState extends State<InteractiveImage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               IconButton(
-                                icon: const Icon(
-                                  Icons.download,
-                                  color: Colors.white,
-                                ),
+                                icon: const Icon(Icons.download,
+                                    color: Colors.white),
                                 onPressed: () {},
                               ),
                               IconButton(

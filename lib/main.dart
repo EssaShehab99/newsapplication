@@ -59,6 +59,11 @@ class LauncherApp extends StatelessWidget {
           primaryColor: primaryColor_light,
           backgroundColor: secondaryColor_light,
         indicatorColor: secondaryColor_light,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(secondaryColor_light)
+            )
+          ),
           tabBarTheme: TabBarTheme(
             labelColor: reverseColor_light,
             unselectedLabelColor: secondaryColor_light,
@@ -78,6 +83,8 @@ class LauncherApp extends StatelessWidget {
             headline2: textStyle(fontSize: 13,color: reverseColor_light),
             headline3: textStyle(fontSize: 10,color: reverseColor_light),
             headline4: textStyle(fontSize: 15,color: secondaryColor_light),
+            headline5: textStyle(fontSize: 15,color: secondaryColor_light,fontWeight: FontWeight.normal),
+            headline6: textStyle(fontSize: 15,color: primaryColor_light),
           )),
       initialRoute: '/',
       routes: {

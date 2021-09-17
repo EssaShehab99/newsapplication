@@ -92,9 +92,11 @@ class _NewsDetailsState extends State<NewsDetails> {
                   height: MediaQuery.of(context).size.height * 0.04,
                 ),
                 PhotoViewer(
-                    images: [value.postsList[0].remoteImageTitle],
-                    onDismissed: (_) {},
-                    enableInfiniteScroll: false),
+                  images: [value.postsList[0].remoteImageTitle],
+                  onDismissed: (_) {},
+                  enableInfiniteScroll: false,
+                  child: Container(),
+                ),
                 SizedBox.shrink(),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.04,
@@ -121,8 +123,10 @@ class _NewsDetailsState extends State<NewsDetails> {
                   thickness: 1.0,
                 ),
                 PhotoViewer(
-                    images: value.postsList[0].remoteImageList,
-                    onDismissed: (_) {}),
+                  images: value.postsList[0].remoteImageList,
+                  onDismissed: (_) {},
+                  child: Container(),
+                ),
                 Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(top: 20),
@@ -130,7 +134,6 @@ class _NewsDetailsState extends State<NewsDetails> {
                       isStarred:
                           value.favoritePostsList.contains(value.postsList[0]),
                       valueChanged: (favoriteStatus) {
-
                         value.favoritePost(
                             post: value.postsList[0],
                             favoriteStatus: favoriteStatus);
