@@ -1,5 +1,6 @@
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
+import 'package:newsapplication/models/file_manager/files_manager.dart';
 import 'package:newsapplication/models/post/post.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
 import 'package:newsapplication/shared/components/components.dart';
@@ -129,9 +130,7 @@ class _NewsDetailsState extends State<NewsDetails> {
                       isStarred:
                           value.favoritePostsList.contains(value.postsList[0]),
                       valueChanged: (favoriteStatus) {
-                        print(Provider.of<PostsManager>(context, listen: false)
-                                .localImages[0]
-                            [value.postsList[0].remoteImageTitle]);
+
                         value.favoritePost(
                             post: value.postsList[0],
                             favoriteStatus: favoriteStatus);

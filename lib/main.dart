@@ -6,6 +6,7 @@ import 'package:newsapplication/shared/components/constants.dart';
 import '../shared/setting/application_setting.dart';
 import 'package:provider/provider.dart';
 
+import 'models/file_manager/files_manager.dart';
 import 'models/post/favorite_posts_manager.dart';
 import 'models/post/posts_manager.dart';
 import 'models/title/news_titles_manager.dart';
@@ -31,6 +32,7 @@ class InitialApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => ApplicationSetting()),
           ChangeNotifierProvider(create: (_) => NewsTitlesManager()),
           ChangeNotifierProvider(create: (_) => FavoritePostManager()),
+          ChangeNotifierProvider(create: (_) => FilesManager()),
         ],
         child: const LauncherApp(),
       ),

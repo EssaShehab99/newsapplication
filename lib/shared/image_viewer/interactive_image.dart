@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:newsapplication/download_files/download_files.dart';
+import 'package:newsapplication/models/file_manager/download_files.dart';
+import 'package:newsapplication/models/file_manager/files_manager.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:provider/provider.dart';
@@ -52,14 +53,14 @@ class _InteractiveImageState extends State<InteractiveImage> {
                               (image) => Stack(
                                 children: [
                                   if (image.runtimeType == String)
-                                    Selector<PostsManager, String?>(
+                                    Selector<FilesManager, String?>(
                                         selector: (context, value) =>
                                             value.imageLocalUrl(image),
                                         builder: (context, value, child) =>
                                             Stack(
                                               children: [
-                                                DownloadButton(
-                                                    url: image,
+                                                DownloadFile(
+                                                    remoteUrl:  image,
                                                     folder: 'Yemen Net'),
                                                 if (value != null)
                                                   defaultPhotoView(

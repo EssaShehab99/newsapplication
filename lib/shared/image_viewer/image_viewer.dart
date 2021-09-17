@@ -1,16 +1,10 @@
 import 'package:flowder/flowder.dart';
 import 'package:flutter/material.dart';
-import 'package:http/src/response.dart';
-import 'package:newsapplication/download_files/download_files.dart';
-import 'package:newsapplication/models/post/post.dart';
-import 'package:newsapplication/models/post/posts_manager.dart';
+import 'package:newsapplication/models/file_manager/download_files.dart';
+import 'package:newsapplication/models/file_manager/files_manager.dart';
 import 'package:newsapplication/shared/components/components.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:http/http.dart' show get;
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'interactive_image.dart';
@@ -110,16 +104,15 @@ class _DefaultBoxImageState extends State<DefaultBoxImage> {
                               )));
                 },
                 child: widget.image.runtimeType == String
-                    ? Selector<PostsManager, String?>(
-                        selector: (context, value) =>
-                            value.imageLocalUrl(widget.image),
+                    ? Consumer<FilesManager>(
                         builder: (context, value, child) => Stack(
                               children: [
-                                DownloadButton(
-                                    url: widget.image, folder: 'Yemen Net'),
-                                if (value != null)
+                                DownloadFile(
+                                    remoteUrl: widget.image,
+                                    folder: 'Yemen Net'),
+                                if (value.imageLocalUrl(widget.image) != null)
                                   defaultPhotoView(
-                                      value: File(value), onPressed: () {}),
+                                      value: File(value.imageLocalUrl(widget.image)!), onPressed: () {}),
                               ],
                             ))
                     : defaultPhotoView(value: widget.image, onPressed: () {})),
