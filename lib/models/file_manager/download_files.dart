@@ -12,7 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
-class DownloadFile extends StatelessWidget {
+class DownloadFile extends StatefulWidget {
   DownloadFile(
       {Key? key,
       required this.remoteUrl,
@@ -23,13 +23,26 @@ class DownloadFile extends StatelessWidget {
   final String folder;
   final String remoteUrl;
   final String extension;
+
+  @override
+  State<DownloadFile> createState() => _DownloadFileState();
+}
+
+class _DownloadFileState extends State<DownloadFile> {
   String? localUrl;
-  DownloaderUtils? options;
-  DownloaderCore? core;
-  String? path;
+  late DownloaderUtils options;
+  late DownloaderCore core;
+  late final String path;
   String? localPath;
+
   FilesManager? _fileManager;
 
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+    _fileManager = Provider.of<FilesManager>(context, listen: false);
+  }
 
   Future<dynamic> downloadFile(
       {required String url,
@@ -49,9 +62,10 @@ class DownloadFile extends StatelessWidget {
       file: File(_filePath),
       progress: ProgressImplementation(),
       onDone: () async {
-        _fileManager?.downloadImage(remoteUrl: remoteUrl, localUrl: _filePath);
+        _fileManager?.downloadImage(
+            remoteUrl: widget.remoteUrl, localUrl: _filePath);
 
-        print('COMPLETE ${_fileManager?.imageLocalUrl(remoteUrl)}');
+        print('COMPLETE ${_fileManager?.imageLocalUrl(widget.remoteUrl)}');
       },
       deleteOnCancel: true,
       /* client: Dio(BaseOptions(
@@ -60,28 +74,32 @@ class DownloadFile extends StatelessWidget {
             connectTimeout: 1000,
             sendTimeout: 1000))*/
     );
-    core = await Flowder.download(url, options!);
+    core = await Flowder.download(url, options);
+  }
+
+  Future<void> initPlatformState() async {
+    if (!mounted) return;
   }
 
   @override
   Widget build(BuildContext context) {
-    _fileManager = Provider.of<FilesManager>(context, listen: false);
     return Center(
       child: Consumer<FilesManager>(
         builder: (context, value, child) => CircularPercentIndicator(
           radius: 50.0,
           lineWidth: 4.0,
           backgroundColor: Colors.black.withOpacity(0.0),
-          percent: _fileManager?.value[remoteUrl] ?? 0.0,
+          percent: _fileManager?.value[widget.remoteUrl] ?? 0.0,
           center: TextButton(
             onPressed: () async {
-              if (_fileManager?.value.containsKey(remoteUrl) == true &&
-                  _fileManager!.value[remoteUrl]! > 0) {
-                core?.cancel();
+              if (_fileManager?.value.containsKey(widget.remoteUrl) == true &&
+                  _fileManager!.value[widget.remoteUrl]! > 0) {
+                _fileManager?.cancelDownload(remoteUrl: widget.remoteUrl);
+                return core.cancel();
               } else {
-                if (_fileManager?.imageLocalUrl(remoteUrl) == null &&
-                    _fileManager?.value.containsKey(remoteUrl) != true) {
-                  downloadFile(url: remoteUrl, folder: folder);
+                if (_fileManager?.imageLocalUrl(widget.remoteUrl) == null &&
+                    _fileManager?.value.containsKey(widget.remoteUrl) != true) {
+                  downloadFile(url: widget.remoteUrl, folder: widget.folder);
                 }
               }
             },
@@ -90,7 +108,7 @@ class DownloadFile extends StatelessWidget {
                 backgroundColor: Colors.black.withOpacity(0.3),
                 minimumSize: Size(50, 50)),
             child: Icon(
-              _fileManager?.value.containsKey(remoteUrl) ==true
+              _fileManager?.value.containsKey(widget.remoteUrl) == true
                   ? Icons.stop
                   : Icons.download,
               color: Colors.white,

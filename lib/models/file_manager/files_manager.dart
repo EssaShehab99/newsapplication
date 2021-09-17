@@ -50,4 +50,11 @@ class FilesManager extends ChangeNotifier {
       notifyListeners();
     }
   }
+  void cancelDownload({required String remoteUrl}){
+    if(this.value.containsKey(remoteUrl))
+      this.value.remove(remoteUrl);
+    if (!_isDisposed) {
+      notifyListeners();
+    }
+  }
 }
