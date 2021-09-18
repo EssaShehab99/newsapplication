@@ -1,5 +1,6 @@
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
+import 'package:newsapplication/layout/main_layout/main_layout.dart';
 import 'package:newsapplication/models/file_manager/files_manager.dart';
 import 'package:newsapplication/models/post/post.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
@@ -23,35 +24,26 @@ class _NewsDetailsState extends State<NewsDetails> {
   @override
   Widget build(BuildContext context) {
     Post post = ModalRoute.of(context)!.settings.arguments as Post;
-    return Scaffold(
-      appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Theme.of(context).primaryColorDark,
-          ),
-          backgroundColor: Theme.of(context).primaryColor,
-          title: Text(
-            "details".tr().toString(),
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop({"isDelete": false, "id": ""});
-            },
-            icon: Icon(Icons.arrow_back_sharp),
-          ),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () async {
-                var isDelete = await defaultConfirmDialog(context: context);
-                isDelete == true
-                    ? Navigator.of(context)
-                        .pop({"isDelete": isDelete, "id": ''})
-                    : null;
-              },
-              icon: Icon(Icons.delete),
-            ),
-          ]),
+    return defaultScaffld(
+      title: "details".tr().toString(),
+      context: context,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.of(context).pop({"isDelete": false, "id": ""});
+        },
+        icon: Icon(Icons.arrow_back_sharp),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () async {
+            var isDelete = await defaultConfirmDialog(context: context);
+            isDelete == true
+                ? Navigator.of(context).pop({"isDelete": isDelete, "id": ''})
+                : null;
+          },
+          icon: Icon(Icons.delete),
+        ),
+      ],
       body: Consumer<PostsManager>(
         builder: (context, value, child) => SingleChildScrollView(
           child: Container(
@@ -60,24 +52,17 @@ class _NewsDetailsState extends State<NewsDetails> {
               children: [
                 Container(
                   child: defaultSelectableText(
-                   text:  value.postsList[0].title,
+                    text: value.postsList[0].title.trim(),
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
                 Container(
                   width: double.infinity,
-                  child: SelectableText(
-                    localization.DateFormat(timeFormat)
+                  child: defaultSelectableText(
+                    text: localization.DateFormat(timeFormat)
                         .format(DateTime.parse(value.postsList[0].date)),
                     style: Theme.of(context).textTheme.headline2,
-                    toolbarOptions: ToolbarOptions(
-                      copy: true,
-                      selectAll: true,
-                    ),
                   ),
-                ),
-                Divider(
-                  thickness: 1.0,
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.04,
@@ -88,23 +73,16 @@ class _NewsDetailsState extends State<NewsDetails> {
                   enableInfiniteScroll: false,
                   child: Container(),
                 ),
-                SizedBox.shrink(),
+                Divider(
+                  thickness: 1.0,
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.04,
                 ),
                 Container(
-                  child: SelectableText(
-                    value.postsList[0].detail ?? '',
-                    style: Theme.of(context).textTheme.headline3,
-                    textAlign: TextAlign.justify,
-                    textDirection: intl.Bidi.detectRtlDirectionality(
-                            value.postsList[0].title)
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
-                    toolbarOptions: ToolbarOptions(
-                      copy: true,
-                      selectAll: true,
-                    ),
+                  child: defaultSelectableText(
+                    text: value.postsList[0].detail?.trim() ?? '',
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
                 SizedBox(
@@ -135,7 +113,7 @@ class _NewsDetailsState extends State<NewsDetails> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: defaultFloatingActionButton(
         onPressed: () {
           // Navigator.of(context).pushNamed(AddPost.addPostScreen, arguments: {
           //   "isNew": false,
@@ -155,7 +133,7 @@ class _NewsDetailsState extends State<NewsDetails> {
           //       imageList: argumentPassed.imageList)
           // });
         },
-        child: Icon(Icons.edit),
+        icon: Icons.edit,
       ),
     );
   }

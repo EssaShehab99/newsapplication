@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:newsapplication/models/title/news_title.dart';
 import 'package:photo_view/photo_view.dart';
@@ -90,7 +91,8 @@ TextStyle textStyle(
         fontSize: fontSize,
         fontWeight: fontWeight,
         fontFamily: fontFamily,
-        color: color);
+        color: color,
+        letterSpacing: 0.79);
 
 Widget defaultFloatingActionButton(
         {required IconData icon, required Function onPressed}) =>
@@ -133,6 +135,7 @@ Widget defaultTextFormField({
         onFieldSubmitted: onFieldSubmitted,
         keyboardType: keyboardType,
         maxLength: maxLength,
+        maxLines: null,
         style: Theme.of(context).textTheme.headline2,
         textInputAction: textInputAction,
         decoration: InputDecoration(
@@ -284,30 +287,47 @@ Future<dynamic> defaultConfirmDialog({
 
 defaultElevatedButton({required Function onPressed, required Widget child}) =>
     SizedBox(
-      height:50,
-      width:200,
+      height: 50,
+      width: 200,
       child: ElevatedButton(
         onPressed: () {
           onPressed();
         },
         child: Center(child: child),
         style: ButtonStyle(
-          minimumSize: MaterialStateProperty.all<Size>(Size(150,50)),
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))
-        ),
+            minimumSize: MaterialStateProperty.all<Size>(Size(150, 50)),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)))),
       ),
     );
 
-defaultSelectableText({required String text,TextStyle? style})=>SelectableText(
-text,
-style: style,
-textDirection: intl.Bidi.detectRtlDirectionality(
-text)
-? TextDirection.rtl
-    : TextDirection.ltr,
-textAlign: TextAlign.justify,
-toolbarOptions: ToolbarOptions(
-copy: true,
-selectAll: true,
-),
-);
+defaultSelectableText(
+        {required String text,
+        TextStyle? style,
+        TextAlign textAlign = TextAlign.justify}) =>
+    SelectableText(
+      text,
+      //   "ميزة أو فائدة؟ ولكن من لديه الحق أن ينتقد شخص ما أراد أن يشعر بالسعادة التي لا تشوبها عواقب أليمة أو آخر أراد أن يتجنب الألم الذي ربما تنجم عنه بعض المتعة ؟ علي الجانب الآخر نشجب ونستنكر هؤلاء الرجال المفتونون بنشوة اللحظة الهائمون في رغباتهم فلا يدركون ما يعقبها من الألم والأسي المحتم، واللوم كذلك يشمل هؤلاء الذين أخفقوا في واجباتهم نتيجة لضعف إرادتهم فيتساوي مع هؤلاء الذين يتجنبون وينأون عن تحمل الكدح",
+      textAlign: textAlign,
+      style: style,
+      textDirection: intl.Bidi.detectRtlDirectionality(text)
+          ? TextDirection.rtl
+          : TextDirection.ltr,
+      toolbarOptions: ToolbarOptions(
+        copy: true,
+        selectAll: true,
+      ),
+    )
+/*SelectableText(
+      text,
+      style: style,
+      textDirection: */ /*intl.Bidi.detectRtlDirectionality(text)
+          ? */ /*TextDirection.rtl
+          */ /*: TextDirection.ltr*/ /*,
+      textAlign: TextAlign.justify,
+      toolbarOptions: ToolbarOptions(
+        copy: true,
+        selectAll: true,
+      ),
+    )*/
+    ;

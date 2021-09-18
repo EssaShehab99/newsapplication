@@ -54,7 +54,7 @@ class _PostEditingState extends State<PostEditing> {
                       context: context,
                       textEditingController: _title,
                       hintText: "title".tr().toString(),
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.multiline,
                       onChanged: (_) => setState(() {}),
                       validator: (String? value) {
                         if (value != null && value.trim().isEmpty ||
@@ -71,6 +71,7 @@ class _PostEditingState extends State<PostEditing> {
                   Container(
                     child: defaultTextFormField(
                       context: context,
+                      keyboardType: TextInputType.multiline,
                       textEditingController: _detail,
                       hintText: "details".tr().toString(),
                       onFieldSubmitted: (_) {
@@ -88,7 +89,9 @@ class _PostEditingState extends State<PostEditing> {
                         onChanged: (value) {
                           _postTpe = value;
                         },
-                    onTap: (){ FocusScope.of(context).unfocus();}),
+                        onTap: () {
+                          FocusScope.of(context).unfocus();
+                        }),
                   ),
                   SizedBox(
                     height: size.height * 0.04,
@@ -153,41 +156,47 @@ class _PostEditingState extends State<PostEditing> {
                   Container(
                     child: defaultBorderContainer(
                       child: Stack(
-                          children: [
-                            PhotoViewer(enableInfiniteScroll:false ,
-                              images: _images,
-                              onDismissed: (_) {},
-                              child: IconButton(
-                                onPressed: () async {
-                                  _images = await selectFiles();
-                                  setState(() {});
-                                },
-                                icon: Icon(Icons.add_to_photos_outlined),
+                        children: [
+                          PhotoViewer(
+                            enableInfiniteScroll: false,
+                            images: _images,
+                            onDismissed: (_) {},
+                            child: IconButton(
+                              onPressed: () async {
+                                _images = await selectFiles();
+                                setState(() {});
+                              },
+                              icon: Icon(Icons.add_to_photos_outlined),
+                            ),
+                          ),
+                          Center(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10))),
+                              child: Text(
+                                "extraPictures".tr().toString(),
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                            Center(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10))),
-                                child: Text(
-                                  "extraPictures".tr().toString(),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: size.height * 0.04,
                   ),
                   Container(
-                    child: defaultElevatedButton(onPressed: (){}, child: Text('post'.tr().toString(),style: Theme.of(context).textTheme.headline6,)),
+                    child: defaultElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          'post'.tr().toString(),
+                          style: Theme.of(context).textTheme.headline6,
+                        )),
                   ),
                   SizedBox(
                     height: size.height * 0.04,

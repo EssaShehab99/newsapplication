@@ -50,7 +50,8 @@ class LauncherApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
@@ -58,41 +59,44 @@ class LauncherApp extends StatelessWidget {
           fontFamily: "Cairo",
           primaryColor: primaryColor_light,
           backgroundColor: secondaryColor_light,
-        indicatorColor: secondaryColor_light,
+          indicatorColor: secondaryColor_light,
           elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(secondaryColor_light)
-            )
-          ),
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(secondaryColor_light))),
           tabBarTheme: TabBarTheme(
             labelColor: reverseColor_light,
             unselectedLabelColor: secondaryColor_light,
-            labelStyle: textStyle(fontSize: 15,color: reverseColor_light),
-            unselectedLabelStyle: textStyle(fontSize: 13,color: secondaryColor_light),
+            labelStyle: textStyle(fontSize: 15, color: reverseColor_light),
+            unselectedLabelStyle:
+                textStyle(fontSize: 13, color: secondaryColor_light),
           ),
           appBarTheme: AppBarTheme(
-              color: primaryColor_light,
-            centerTitle: true,
+            color: primaryColor_light,
             titleTextStyle: textStyle(color: reverseColor_light),
-            iconTheme: IconThemeData(
-                color: reverseColor_light
-            ),
+            iconTheme: IconThemeData(color: reverseColor_light),
           ),
           textTheme: TextTheme(
-            headline1: textStyle(fontSize: 15,color: reverseColor_light),
-            headline2: textStyle(fontSize: 13,color: reverseColor_light),
-            headline3: textStyle(fontSize: 10,color: reverseColor_light),
-            headline4: textStyle(fontSize: 15,color: secondaryColor_light),
-            headline5: textStyle(fontSize: 15,color: secondaryColor_light,fontWeight: FontWeight.normal),
-            headline6: textStyle(fontSize: 15,color: primaryColor_light),
+            headline1: textStyle(fontSize: 15, color: reverseColor_light),
+            headline2: textStyle(fontSize: 13, color: reverseColor_light),
+            headline3: textStyle(fontSize: 10, color: reverseColor_light),
+            headline4: textStyle(fontSize: 15, color: secondaryColor_light),
+            headline5: textStyle(
+                fontSize: 15,
+                color: secondaryColor_light,
+                fontWeight: FontWeight.normal),
+            headline6: textStyle(fontSize: 15, color: primaryColor_light),
+            bodyText1: textStyle(
+                fontSize: 13,
+                color: reverseColor_light,
+                fontWeight: FontWeight.normal),
           )),
       initialRoute: '/',
       routes: {
         '/': (ctx) => Home(),
-
         PostEditing.postEditing: (ctx) => const PostEditing(),
         NewsDetails.newsDetailsScreen: (ctx) => const NewsDetails(),
-   /*      About.aboutScreen: (ctx) => const About(),
+        /*      About.aboutScreen: (ctx) => const About(),
         NewsDetails.newsDetailsScreen: (ctx) => const NewsDetails(),
         ImageControl.imageControlScreen: (ctx) => const ImageControl(),
         AddTitleBar.addTitleBar: (ctx) => const AddTitleBar(),

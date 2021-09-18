@@ -1,6 +1,6 @@
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
-import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
+import 'package:newsapplication/layout/main_layout/main_layout.dart';
 import 'package:newsapplication/models/post/favorite_posts_manager.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
 import 'package:newsapplication/modules/determine_time/determine_time.dart';
@@ -22,10 +22,7 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-  Future<void> initPlatformState() async {
-    if (!mounted)
-      return;
-  }
+
   @override
   Widget build(BuildContext context) {
     var _posts = Provider.of<PostsManager>(context, listen: true).postsList;
@@ -66,10 +63,8 @@ class _NewsScreenState extends State<NewsScreen> {
           ),
         )
       ],
-      title: Container(
-        width: 120,
-        child: defaultImageLogo(fit: BoxFit.contain),
-      ),
+      title:
+          Container(width: 120, child: defaultImageLogo(fit: BoxFit.contain)),
       floating: true,
       pinned: true,
       snap: true,
@@ -79,7 +74,8 @@ class _NewsScreenState extends State<NewsScreen> {
         tabs: _titles.map((title) => Tab(text: title.title)).toList(),
       ),
     );
-    return Scaffold(
+    return defaultScaffld(
+      context: context,
       body: DefaultTabController(
         length: Provider.of<NewsTitlesManager>(context, listen: true)
             .titlesList
@@ -168,70 +164,67 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   Widget _listViewBuilder(_posts, index) => defaultItemListView(
-        child: Column(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * 0.2,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: AutoSizeText(
-                        "${_posts[index].title}",
-                        style: Theme.of(context).textTheme.headline2,
-                        textAlign: TextAlign.justify,
-                        wrapWords: false,
-                        textDirection:
-                          intl.Bidi.detectRtlDirectionality(_posts[index].title)
-                          ? TextDirection.rtl
-                          : TextDirection.ltr,
-                        overflow: TextOverflow.fade,
-                        maxLines: 5,
-                      ),
-                    ),
-                  ),
-                  Provider.of<ApplicationSetting>(context, listen: true)
-                              .isImageLoad ==
-                          true
-                      ? (_posts[index].imageTitle == null
-                          ? SizedBox.shrink()
-                          : defaultImage(imageUrl: _posts[index].imageTitle))
-                      : SizedBox.shrink(),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(top: 10),
-              child: Row(
-                children: [
-                  Container(
+      child: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height * 0.2,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: DetermineTime(
-                      DateTime.parse(_posts[index].date),
+                    child: AutoSizeText(
+                      "${_posts[index].title}",
+                      style: Theme.of(context).textTheme.headline2,
+                      textAlign: TextAlign.justify,
+                      wrapWords: false,
+                      textDirection:
+                          intl.Bidi.detectRtlDirectionality(_posts[index].title)
+                              ? TextDirection.rtl
+                              : TextDirection.ltr,
+                      overflow: TextOverflow.fade,
+                      maxLines: 5,
                     ),
                   ),
-                  Spacer(),
-                  _posts[index].isRead
-                      ? SizedBox.shrink()
-                      : Container(
-                          height: 20,
-                          width: 20,
-                          decoration: BoxDecoration(
-                              color: Colors.green, shape: BoxShape.circle),
-                        ),
-                ],
-              ),
+                ),
+                Provider.of<ApplicationSetting>(context, listen: true)
+                            .isImageLoad ==
+                        true
+                    ? (_posts[index].imageTitle == null
+                        ? SizedBox.shrink()
+                        : defaultImage(imageUrl: _posts[index].imageTitle))
+                    : SizedBox.shrink(),
+              ],
             ),
-          ],
-        ),
-      onPressed: (){
+          ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.only(top: 10),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: DetermineTime(
+                    DateTime.parse(_posts[index].date),
+                  ),
+                ),
+                Spacer(),
+                _posts[index].isRead
+                    ? SizedBox.shrink()
+                    : Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            color: Colors.green, shape: BoxShape.circle),
+                      ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      onPressed: () {
         Navigator.of(context)
-            .pushNamed(NewsDetails.newsDetailsScreen,
-            arguments: _posts[index]);
-      }
-      );
+            .pushNamed(NewsDetails.newsDetailsScreen, arguments: _posts[index]);
+      });
 }
