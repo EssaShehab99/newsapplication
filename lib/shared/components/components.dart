@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ Image defaultImageLogo({fit}) => Image.asset(
       fit: fit,
     );
 
-defaultTextButton({required Function onPressed, required Widget child}) =>
+defaultTextButton({required Function onPressed, required Widget child,Function? onLongPress}) =>
     Builder(builder: (context) {
       return TextButton(
         style: ButtonStyle(
@@ -41,15 +42,17 @@ defaultTextButton({required Function onPressed, required Widget child}) =>
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
+          overlayColor: MaterialStateProperty.all<Color>(onLongPress==null?Theme.of(context).backgroundColor:Theme.of(context).primaryColor)
         ),
         onPressed: () {
           onPressed();
         },
+        onLongPress:onLongPress==null?null : ()=>onLongPress,
         child: child,
       );
     });
 
-defaultItemListView({required Column child, required Function() onPressed}) =>
+defaultItemListView({required Widget child, required Function() onPressed,Function? onLongPress}) =>
     Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -59,6 +62,7 @@ defaultItemListView({required Column child, required Function() onPressed}) =>
         onPressed: () {
           onPressed();
         },
+        onLongPress: onLongPress,
         child: Container(
           child: child,
         ),
@@ -317,17 +321,15 @@ defaultSelectableText(
         copy: true,
         selectAll: true,
       ),
-    )
-/*SelectableText(
-      text,
-      style: style,
-      textDirection: */ /*intl.Bidi.detectRtlDirectionality(text)
-          ? */ /*TextDirection.rtl
-          */ /*: TextDirection.ltr*/ /*,
-      textAlign: TextAlign.justify,
-      toolbarOptions: ToolbarOptions(
-        copy: true,
-        selectAll: true,
-      ),
-    )*/
-    ;
+    );
+Widget defaultAutoSizeText({required String text,required BuildContext context,TextAlign textAlign = TextAlign.justify})=>AutoSizeText(
+  text,
+textAlign: textAlign,
+style: Theme.of(context).textTheme.headline2,
+wrapWords: false,
+textDirection: intl.Bidi.detectRtlDirectionality(text)
+    ? TextDirection.rtl
+    : TextDirection.ltr,
+overflow: TextOverflow.fade,
+maxLines: 5,
+);

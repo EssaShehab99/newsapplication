@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Scaffold defaultScaffld(
+Scaffold defaultScaffold(
         {required Widget body,
         Widget? floatingActionButton,
         required BuildContext context,

@@ -39,7 +39,7 @@ class _PostEditingState extends State<PostEditing> {
     var size = MediaQuery.of(context).size;
     List<NewsTitle> titlesList =
         Provider.of<NewsTitlesManager>(context, listen: true).titlesList;
-    return defaultScaffld(
+    return defaultScaffold(
         title: "addPost".tr().toString(),
         context: context,
         body: Container(

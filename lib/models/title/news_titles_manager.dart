@@ -10,5 +10,5 @@ class NewsTitlesManager with ChangeNotifier {
 
   Future<dynamic> deleteTitle({required int id}) async {}
 
-  Future<void> fetchTitle(String _title) async {}
+  Future<void> fetchTitle() async {}
 }

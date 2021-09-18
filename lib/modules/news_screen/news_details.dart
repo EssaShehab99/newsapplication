@@ -24,7 +24,7 @@ class _NewsDetailsState extends State<NewsDetails> {
   @override
   Widget build(BuildContext context) {
     Post post = ModalRoute.of(context)!.settings.arguments as Post;
-    return defaultScaffld(
+    return defaultScaffold(
       title: "details".tr().toString(),
       context: context,
       leading: IconButton(

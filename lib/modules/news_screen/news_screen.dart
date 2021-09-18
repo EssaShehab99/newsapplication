@@ -5,6 +5,7 @@ import 'package:newsapplication/models/post/favorite_posts_manager.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
 import 'package:newsapplication/modules/determine_time/determine_time.dart';
 import 'package:newsapplication/modules/post_editing/post_editing.dart';
+import 'package:newsapplication/modules/title_news/title_editing.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:newsapplication/shared/components/constants.dart';
 import 'package:newsapplication/shared/setting/application_setting.dart';
@@ -22,7 +23,6 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-
   @override
   Widget build(BuildContext context) {
     var _posts = Provider.of<PostsManager>(context, listen: true).postsList;
@@ -30,88 +30,87 @@ class _NewsScreenState extends State<NewsScreen> {
         Provider.of<NewsTitlesManager>(context, listen: true).titlesList;
     var _favoritePosts = Provider.of<FavoritePostManager>(context, listen: true)
         .favoritePostsList;
-    SliverAppBar appBar = SliverAppBar(
-      actions: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 0.0),
-          child: PopupMenuButton(
-            icon: Icon(
-              Icons.more_vert,
-            ),
-            itemBuilder: (ctx) => List<PopupMenuItem<int>>.generate(
-              itemsPopupMenuButton.length,
-              (index) => PopupMenuItem(
-                child: Text(
-                  itemsPopupMenuButton[index],
-                ),
-                value:
-                    itemsPopupMenuButton.indexOf(itemsPopupMenuButton[index]),
-              ),
-            ),
-            onSelected: (item) {
-              // if (item == 0)
-              //   Navigator.of(context)
-              //       .pushNamed(AppSetting.appSettingScreen);
-              // if (item == 1)
-              //   Navigator.of(context).pushNamed(About.aboutScreen);
-              // if (item == 2)
-              //   Navigator.of(context)
-              //       .pushNamed(AddTitleBar.addTitleBar);
-              // ;
-              // if (item == 3) exit(0);
-            },
-          ),
-        )
-      ],
-      title:
-          Container(width: 120, child: defaultImageLogo(fit: BoxFit.contain)),
-      floating: true,
-      pinned: true,
-      snap: true,
-      elevation: 5,
-      bottom: TabBar(
-        isScrollable: true,
-        tabs: _titles.map((title) => Tab(text: title.title)).toList(),
-      ),
-    );
-    return defaultScaffld(
+    return defaultScaffold(
       context: context,
-      body: DefaultTabController(
-        length: Provider.of<NewsTitlesManager>(context, listen: true)
-            .titlesList
-            .length,
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverSafeArea(
-                top: false,
-                sliver: appBar,
-              ),
-            )
-          ],
-          body: TabBarView(
-            children: _titles
-                .map((_newsTitle) => Container(
-                      color: Theme.of(context).backgroundColor,
-                      child: SafeArea(
-                        top: false,
-                        bottom: false,
-                        child: Builder(
-                          builder: (BuildContext context) {
-                            return NotificationListener(
-                              onNotification: (scrollNotification) {
-                                return true;
-                              },
-                              child: RefreshIndicator(
-                                onRefresh: () async =>
-                                    await Provider.of<PostsManager>(context,
-                                            listen: false)
-                                        .fetchPosts(),
-                                child: CustomScrollView(
-                                  key: PageStorageKey<String>(_newsTitle.id!),
-                                  slivers: <Widget>[
-                                    SliverList(
+      body: SafeArea(
+        child: DefaultTabController(
+          length: _titles.length,
+          child: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverOverlapAbsorber(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverSafeArea(
+                  sliver: SliverAppBar(
+                    leading: Container(
+                        width: 120, child: defaultImageLogo(fit: BoxFit.contain)),
+                    leadingWidth: 120,
+                    actions: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 0.0),
+                        child: PopupMenuButton(
+                          icon: Icon(
+                            Icons.more_vert,
+                          ),
+                          itemBuilder: (ctx) => List<PopupMenuItem<int>>.generate(
+                            itemsPopupMenuButton.length,
+                                (index) => PopupMenuItem(
+                              child: Text(
+                                itemsPopupMenuButton[index],
+                              ),
+                              value: itemsPopupMenuButton
+                                  .indexOf(itemsPopupMenuButton[index]),
+                            ),
+                          ),
+                          onSelected: (item) {
+                            // if (item == 0)
+                            //   Navigator.of(context)
+                            //       .pushNamed(AppSetting.appSettingScreen);
+                            // if (item == 1)
+                            //   Navigator.of(context).pushNamed(About.aboutScreen);
+                            if (item == 2)
+                              Navigator.of(context)
+                                  .pushNamed(TitleEditing.titleEditing);
+
+                            // if (item == 3) exit(0);
+                          },
+                        ),
+                      )
+                    ],
+                    expandedHeight: 100,
+                    pinned: true,
+                    floating: true,
+                    snap: true,
+                    forceElevated: innerBoxIsScrolled,
+                    bottom: TabBar(
+                      isScrollable: true,
+                      tabs:
+                          _titles.map((title) => Tab(text: title.title)).toList(),
+                    ),
+                  ),
+                ),
+              )
+            ],
+            body: TabBarView(
+              children: _titles
+                  .map((_newsTitle) => Container(
+                        color: Theme.of(context).backgroundColor,
+                        child: SafeArea(
+                          top: false,
+                          bottom: false,
+                          child: Builder(
+                            builder: (context) => RefreshIndicator(
+                              onRefresh: () async =>
+                                  await Provider.of<PostsManager>(context,
+                                          listen: false)
+                                      .fetchPosts(),
+                              child: CustomScrollView(
+                                key: PageStorageKey<String>(_newsTitle.id!),
+                                slivers: <Widget>[
+                                  SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+                                  SliverPadding(
+                                    padding: EdgeInsets.all(2.0),
+                                    sliver: SliverList(
                                       delegate: SliverChildBuilderDelegate(
                                         (context, index) => _newsTitle
                                                     .typeTitle ==
@@ -141,15 +140,15 @@ class _NewsScreenState extends State<NewsScreen> {
                                                 : _favoritePosts.length),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            );
-                          },
+                            ),
+                          ),
                         ),
-                      ),
-                    ))
-                .toList(),
+                      ))
+                  .toList(),
+            ),
           ),
         ),
       ),
@@ -174,17 +173,9 @@ class _NewsScreenState extends State<NewsScreen> {
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: AutoSizeText(
-                      "${_posts[index].title}",
-                      style: Theme.of(context).textTheme.headline2,
-                      textAlign: TextAlign.justify,
-                      wrapWords: false,
-                      textDirection:
-                          intl.Bidi.detectRtlDirectionality(_posts[index].title)
-                              ? TextDirection.rtl
-                              : TextDirection.ltr,
-                      overflow: TextOverflow.fade,
-                      maxLines: 5,
+                    child: defaultAutoSizeText(
+                      text: "${_posts[index].title}",
+                      context: context,
                     ),
                   ),
                 ),
