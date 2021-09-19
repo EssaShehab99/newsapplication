@@ -1,4 +1,4 @@
-import 'package:auto_size_text_pk/auto_size_text_pk.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newsapplication/layout/main_layout/main_layout.dart';
 import 'package:newsapplication/models/post/favorite_posts_manager.dart';
@@ -9,9 +9,9 @@ import 'package:newsapplication/modules/title_news/title_editing.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:newsapplication/shared/components/constants.dart';
 import 'package:newsapplication/shared/setting/application_setting.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '/models/title/news_titles_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart' as intl;
 
 import 'news_details.dart';
 
@@ -23,6 +23,11 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var _posts = Provider.of<PostsManager>(context, listen: true).postsList;
@@ -39,11 +44,13 @@ class _NewsScreenState extends State<NewsScreen> {
             floatHeaderSlivers: true,
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverOverlapAbsorber(
-                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverSafeArea(
                   sliver: SliverAppBar(
                     leading: Container(
-                        width: 120, child: defaultImageLogo(fit: BoxFit.contain)),
+                        width: 120,
+                        child: defaultImageLogo(fit: BoxFit.contain)),
                     leadingWidth: 120,
                     actions: [
                       Container(
@@ -52,9 +59,10 @@ class _NewsScreenState extends State<NewsScreen> {
                           icon: Icon(
                             Icons.more_vert,
                           ),
-                          itemBuilder: (ctx) => List<PopupMenuItem<int>>.generate(
+                          itemBuilder: (ctx) =>
+                              List<PopupMenuItem<int>>.generate(
                             itemsPopupMenuButton.length,
-                                (index) => PopupMenuItem(
+                            (index) => PopupMenuItem(
                               child: Text(
                                 itemsPopupMenuButton[index],
                               ),
@@ -84,8 +92,9 @@ class _NewsScreenState extends State<NewsScreen> {
                     forceElevated: innerBoxIsScrolled,
                     bottom: TabBar(
                       isScrollable: true,
-                      tabs:
-                          _titles.map((title) => Tab(text: title.title)).toList(),
+                      tabs: _titles
+                          .map((title) => Tab(text: title.title))
+                          .toList(),
                     ),
                   ),
                 ),
@@ -99,51 +108,88 @@ class _NewsScreenState extends State<NewsScreen> {
                           top: false,
                           bottom: false,
                           child: Builder(
-                            builder: (context) => RefreshIndicator(
-                              onRefresh: () async =>
-                                  await Provider.of<PostsManager>(context,
-                                          listen: false)
-                                      .fetchPosts(),
-                              child: CustomScrollView(
-                                key: PageStorageKey<String>(_newsTitle.id!),
-                                slivers: <Widget>[
-                                  SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
-                                  SliverPadding(
-                                    padding: EdgeInsets.all(2.0),
-                                    sliver: SliverList(
-                                      delegate: SliverChildBuilderDelegate(
-                                        (context, index) => _newsTitle
-                                                    .typeTitle ==
-                                                TypeTitle.MIXED
-                                            ? _listViewBuilder(_posts, index)
-                                            : (_newsTitle.typeTitle ==
-                                                    TypeTitle.CLOUD
-                                                ? (_listViewBuilder(
-                                                    _posts
+                            builder: (context) {
+                              return Consumer<PostsManager>(
+                                builder: (context, value, child) {
+                                  value.refreshController=RefreshController(initialRefresh: false);
+                                  return SmartRefresher(
+                                  enablePullDown: true,
+                                  enablePullUp: true,
+                                  header: WaterDropHeader(),
+                                  footer: CustomFooter(
+                                    builder: ( context, mode){
+                                      Widget body ;
+                                      if(mode==LoadStatus.idle){
+                                        body =  Text("pull up load");
+                                      }
+                                      else if(mode==LoadStatus.loading){
+                                        body =  CupertinoActivityIndicator();
+                                      }
+                                      else if(mode == LoadStatus.failed){
+                                        body = Text("Load Failed!Click retry!");
+                                      }
+                                      else if(mode == LoadStatus.canLoading){
+                                        body = Text("release to load more");
+                                      }
+                                      else{
+                                        body = Text("No more Data");
+                                      }
+                                      return Container(
+                                        height: 55.0,
+                                        child: Center(child:body),
+                                      );
+                                    },
+                                  ),
+                                  controller: Provider.of<PostsManager>(context,
+                                      listen: true).refreshController!,
+                                  onRefresh: () => value.onRefresh(),
+                                  onLoading: ()=>value.onLoading(),
+                                  child: CustomScrollView(
+                                    key: PageStorageKey<String>(_newsTitle.id!),
+                                    slivers: [
+                                      SliverOverlapInjector(
+                                          handle: NestedScrollView
+                                              .sliverOverlapAbsorberHandleFor(
+                                                  context)),
+                                      SliverPadding(
+                                        padding: EdgeInsets.all(2.0),
+                                        sliver: SliverList(
+                                          delegate: SliverChildBuilderDelegate(
+                                            (context, index) => _newsTitle
+                                                        .typeTitle ==
+                                                    TypeTitle.MIXED
+                                                ? _listViewBuilder(_posts, index)
+                                                : (_newsTitle.typeTitle ==
+                                                        TypeTitle.CLOUD
+                                                    ? (_listViewBuilder(
+                                                        _posts
+                                                            .where((_post) =>
+                                                                _post.type.id ==
+                                                                _newsTitle.id)
+                                                            .toList(),
+                                                        index))
+                                                    : _listViewBuilder(
+                                                        _favoritePosts, index)),
+                                            childCount: _newsTitle.typeTitle ==
+                                                    TypeTitle.MIXED
+                                                ? _posts.length
+                                                : (_newsTitle.typeTitle ==
+                                                        TypeTitle.CLOUD
+                                                    ? _posts
                                                         .where((_post) =>
                                                             _post.type.id ==
                                                             _newsTitle.id)
-                                                        .toList(),
-                                                    index))
-                                                : _listViewBuilder(
-                                                    _favoritePosts, index)),
-                                        childCount: _newsTitle.typeTitle ==
-                                                TypeTitle.MIXED
-                                            ? _posts.length
-                                            : (_newsTitle.typeTitle ==
-                                                    TypeTitle.CLOUD
-                                                ? _posts
-                                                    .where((_post) =>
-                                                        _post.type.id ==
-                                                        _newsTitle.id)
-                                                    .length
-                                                : _favoritePosts.length),
+                                                        .length
+                                                    : _favoritePosts.length),
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
+                                );
+                                },
+                              );
+                            },
                           ),
                         ),
                       ))

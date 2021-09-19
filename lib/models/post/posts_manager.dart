@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'post.dart';
 
@@ -7,18 +10,41 @@ class PostsManager with ChangeNotifier {
   bool isUpload=false;
   List<Post> postsList = [];
   List<Post> favoritePostsList = [];
-
-
-
+  RefreshController? refreshController;
+int counter=0;
   Future<void> insertPost({required Post post}) async {}
 
   Future<void> updatePost({required Post post}) async {}
 
   Future<void> deletePost({required Post post}) async {}
 
-  Future<void> fetchPosts() async {}
+  Future<void> fetchPosts() async {
+    counter++;
 
-  Future<void> fetchPost({required Post post}) async {}
+    await Future.delayed(Duration(milliseconds: 1000));
+    print("Esss $counter sssa");
+    refreshController?.refreshCompleted();
+
+    await Future.delayed(Duration(milliseconds: 1000));
+
+    refreshController?.loadComplete();
+    notifyListeners();
+  }
+  void onRefresh() async{
+    counter++;
+    await Future.delayed(Duration(milliseconds: 1000));
+    print("Essa $counter");
+
+    refreshController?.refreshCompleted();
+  }
+
+  void onLoading() async{
+    counter++;
+    await Future.delayed(Duration(milliseconds: 1000));
+    print("Shehab $counter");
+
+    refreshController?.loadComplete();
+  }
 
   Future<void> changePostStatus({required Post post}) async {}
 
