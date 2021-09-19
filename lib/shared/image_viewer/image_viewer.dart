@@ -1,6 +1,6 @@
 import 'package:flowder/flowder.dart';
 import 'package:flutter/material.dart';
-import 'package:newsapplication/models/file_manager/download_button.dart';
+import 'package:newsapplication/shared/components/download_button.dart';
 import 'package:newsapplication/models/file_manager/files_manager.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:carousel_slider/carousel_slider.dart';

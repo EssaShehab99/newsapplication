@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:newsapplication/models/file_manager/download_button.dart';
+import 'package:newsapplication/shared/components/download_button.dart';
 import 'package:newsapplication/models/file_manager/files_manager.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:provider/provider.dart';
