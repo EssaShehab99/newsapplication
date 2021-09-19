@@ -3,11 +3,17 @@ import 'dart:io';
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:newsapplication/models/title/news_title.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import 'constants.dart';
+
+String shareText = ' ${"visitUsOnFacebook".tr().toString()} http://www.facebook.com/alyemennetblog';
 
 Future<List<File>?>? selectFiles({bool allowMultiple = true}) async {
   List<File>? _files = [];
@@ -33,36 +39,31 @@ Image defaultImageLogo({fit}) => Image.asset(
       fit: fit,
     );
 
-defaultTextButton({required Function onPressed, required Widget child,Function? onLongPress}) =>
-    Builder(builder: (context) {
-      return TextButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ),
-          overlayColor: MaterialStateProperty.all<Color>(onLongPress==null?Theme.of(context).backgroundColor:Theme.of(context).primaryColor)
-        ),
-        onPressed: () {
-          onPressed();
-        },
-        onLongPress:onLongPress==null?null : ()=>onLongPress,
-        child: child,
-      );
-    });
+defaultTextButton({required Function onPressed, required Widget child}) =>
+    Builder(
+        builder: (context) => TextButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                onPressed();
+              },
+              child: child,
+            ));
 
-defaultItemListView({required Widget child, required Function() onPressed,Function? onLongPress}) =>
+defaultItemListView({required Widget child, required Function() onPressed}) =>
     Card(
+      margin: EdgeInsets.all(0),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(0.0),
       ),
       elevation: 5.0,
       child: defaultTextButton(
-        onPressed: () {
-          onPressed();
-        },
-        onLongPress: onLongPress,
+        onPressed: onPressed,
         child: Container(
           child: child,
         ),
@@ -71,10 +72,10 @@ defaultItemListView({required Widget child, required Function() onPressed,Functi
 
 defaultImage({required String imageUrl}) => Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(0),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(0.0),
         child: FadeInImage(
           imageErrorBuilder: (context, error, stackTrace) => Container(),
           image: NetworkImage(imageUrl),
@@ -123,6 +124,7 @@ Widget defaultTextFormField({
   String hintText = "",
   int maxLength = 8000,
   TextInputAction? textInputAction,
+  required String key,
 }) =>
     Directionality(
       textDirection:
@@ -132,7 +134,7 @@ Widget defaultTextFormField({
       child: TextFormField(
         controller: textEditingController,
         focusNode: focusNode,
-        key: ValueKey('title'),
+        key: ValueKey(key),
         validator: validator,
         onSaved: onSaved,
         onChanged: onChanged,
@@ -151,7 +153,7 @@ Widget defaultTextFormField({
               borderSide: BorderSide(
                 width: 1,
               ),
-              borderRadius: BorderRadius.circular(5)),
+              borderRadius: BorderRadius.circular(borderRadius)),
         ),
       ),
     );
@@ -196,7 +198,7 @@ Widget defaultDropdownButton({
 Widget defaultBorderContainer({required child}) => Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: child,
     );
@@ -289,19 +291,21 @@ Future<dynamic> defaultConfirmDialog({
           ],
         ));
 
-defaultElevatedButton({required Function onPressed, required Widget child}) =>
+defaultElevatedButton(
+        {required Function onPressed,
+        required Widget child,
+        double width = 150}) =>
     SizedBox(
-      height: 50,
-      width: 200,
+      height: 48,
+      width: width,
       child: ElevatedButton(
         onPressed: () {
           onPressed();
         },
         child: Center(child: child),
         style: ButtonStyle(
-            minimumSize: MaterialStateProperty.all<Size>(Size(150, 50)),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)))),
+                borderRadius: BorderRadius.circular(borderRadius)))),
       ),
     );
 
@@ -311,7 +315,6 @@ defaultSelectableText(
         TextAlign textAlign = TextAlign.justify}) =>
     SelectableText(
       text,
-      //   "ميزة أو فائدة؟ ولكن من لديه الحق أن ينتقد شخص ما أراد أن يشعر بالسعادة التي لا تشوبها عواقب أليمة أو آخر أراد أن يتجنب الألم الذي ربما تنجم عنه بعض المتعة ؟ علي الجانب الآخر نشجب ونستنكر هؤلاء الرجال المفتونون بنشوة اللحظة الهائمون في رغباتهم فلا يدركون ما يعقبها من الألم والأسي المحتم، واللوم كذلك يشمل هؤلاء الذين أخفقوا في واجباتهم نتيجة لضعف إرادتهم فيتساوي مع هؤلاء الذين يتجنبون وينأون عن تحمل الكدح",
       textAlign: textAlign,
       style: style,
       textDirection: intl.Bidi.detectRtlDirectionality(text)
@@ -322,14 +325,86 @@ defaultSelectableText(
         selectAll: true,
       ),
     );
-Widget defaultAutoSizeText({required String text,required BuildContext context,TextAlign textAlign = TextAlign.justify})=>AutoSizeText(
-  text,
-textAlign: textAlign,
-style: Theme.of(context).textTheme.headline2,
-wrapWords: false,
-textDirection: intl.Bidi.detectRtlDirectionality(text)
-    ? TextDirection.rtl
-    : TextDirection.ltr,
-overflow: TextOverflow.fade,
-maxLines: 5,
+
+Widget defaultAutoSizeText(
+        {required String text,
+        required BuildContext context,
+        TextAlign textAlign = TextAlign.justify}) =>
+    AutoSizeText(
+      text,
+      textAlign: textAlign,
+      style: Theme.of(context).textTheme.headline2,
+      wrapWords: false,
+      textDirection: intl.Bidi.detectRtlDirectionality(text)
+          ? TextDirection.rtl
+          : TextDirection.ltr,
+      overflow: TextOverflow.fade,
+      maxLines: 5,
+    );
+
+Widget defaultSmartRefresher(
+        {required Widget child,
+        required RefreshController controller,
+        required Function() onRefresh,
+        required Function() onLoading}) =>
+    SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: true,
+      header: WaterDropHeader(),
+      footer: CustomFooter(
+        builder: (context, mode) {
+          Widget body;
+          if (mode == LoadStatus.idle) {
+            body = Text("pull up load");
+          } else if (mode == LoadStatus.loading) {
+            body = CupertinoActivityIndicator();
+          } else if (mode == LoadStatus.failed) {
+            body = Text("Load Failed!Click retry!");
+          } else if (mode == LoadStatus.canLoading) {
+            body = Text("release to load more");
+          } else {
+            body = Text("No more Data");
+          }
+          return Container(
+            height: 55.0,
+            child: Center(child: body),
+          );
+        },
+      ),
+      controller: controller,
+      onRefresh: onRefresh,
+      onLoading: onLoading,
+      child: child,
+    );
+
+Widget defaultDismissible({
+  required Widget child,
+  required String key,
+  DismissDirection direction = DismissDirection.none,
+  required Function(DismissDirection direction) onDismissed,
+  Future<bool?> Function(DismissDirection direction)? confirmDismiss,
+}) =>
+    Dismissible(
+      direction: direction,
+      key: Key(key),
+      onDismissed: onDismissed,
+      confirmDismiss: confirmDismiss,
+      child: child,
+      background: Container(
+          margin: EdgeInsetsDirectional.only(
+              top: direction == DismissDirection.down ? 30 : 0,
+              start: direction == DismissDirection.down ? 0 : 30),
+          alignment: direction == DismissDirection.down
+              ? AlignmentDirectional.topCenter
+              : AlignmentDirectional.centerStart,
+          child: Icon(Icons.delete)),
+      secondaryBackground: Container(
+          margin: EdgeInsetsDirectional.only(end: 30),
+          alignment: AlignmentDirectional.centerEnd,
+          child: Icon(Icons.edit)),
+    );
+defaultDivider()=>Divider(
+color: Colors.white10,
+thickness: 1,
+height: 1,
 );

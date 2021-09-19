@@ -20,7 +20,7 @@
   "display":"Display",
   "theme":"Theme",
   "dark":"Dark",
-  "about":"About",
+  "about_application":"About",
   "number":"Number",
   "imageTitle":"Image title",
   "titlePicture":"Title picture",
@@ -43,6 +43,8 @@
   "addImages":"Add Images",
   "language":"Language",
   "arabic":"Arabic",
-  "english":"English"
+  "english":"English",
+  "version":"version"
+
 
 }

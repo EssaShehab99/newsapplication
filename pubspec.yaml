@@ -11,9 +11,9 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# Read more about_application Android versioning at https://developer.android.com/studio/publish/versioning
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
+# Read more about_application iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+1
 
@@ -44,6 +44,8 @@ dependencies:
   dio: ^4.0.0
   favorite_button: ^0.0.4
   pull_to_refresh: ^2.0.0
+  share: ^2.0.4
+  url_launcher: ^6.0.11
 
 
 
@@ -65,7 +67,7 @@ flutter_icons:
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file_manager located at the root of your
-  # package. See that file_manager for information about deactivating specific lint
+  # package. See that file_manager for information about_application deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
 

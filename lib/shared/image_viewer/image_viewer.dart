@@ -39,11 +39,11 @@ class _PhotoViewerState extends State<PhotoViewer> {
             items: [
               if (widget.images != null)
                 for (var image in widget.images!)
-                  Dismissible(
+                  defaultDismissible(
                     direction: image.runtimeType == String
                         ? DismissDirection.none
                         : DismissDirection.down,
-                    key: Key(image.toString()),
+                    key: image.toString(),
                     onDismissed: (_) {
                       widget.images?.removeAt(widget.images!.indexOf(image));
                       setState(() {});

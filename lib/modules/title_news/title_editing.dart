@@ -1,15 +1,16 @@
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:newsapplication/layout/main_layout/main_layout.dart';
+import 'package:newsapplication/models/post/posts_manager.dart';
 import 'package:newsapplication/models/title/news_title.dart';
 import 'package:newsapplication/models/title/news_titles_manager.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TitleEditing extends StatefulWidget {
   const TitleEditing({Key? key}) : super(key: key);
   static String titleEditing = "/titleEditing";
-
 
   @override
   _TitleEditingState createState() => _TitleEditingState();
@@ -18,23 +19,22 @@ class TitleEditing extends StatefulWidget {
 class _TitleEditingState extends State<TitleEditing> {
   final GlobalKey<FormState> _formKeyTitle = GlobalKey();
   TextEditingController _title = TextEditingController();
+
   final focus = FocusNode();
   bool isNew = true;
-  List<NewsTitle> newsTitleList=[];
+  List<NewsTitle> newsTitleList = [];
 
   @override
   Widget build(BuildContext context) {
-    newsTitleList= Provider.of<NewsTitlesManager>(
-        context,
-        listen: false)
-        .titlesList;
+    newsTitleList =
+        Provider.of<NewsTitlesManager>(context, listen: false).titlesList;
     return defaultScaffold(
         title: "addTitle".tr().toString(),
         context: context,
         body: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(15),
+              margin: EdgeInsets.all(5),
               child: Form(
                 key: _formKeyTitle,
                 child: Row(
@@ -42,6 +42,7 @@ class _TitleEditingState extends State<TitleEditing> {
                   children: [
                     Expanded(
                       child: defaultTextFormField(
+                        key: '3',
                         textEditingController: _title,
                         focusNode: focus,
                         onFieldSubmitted: (v) {
@@ -54,6 +55,10 @@ class _TitleEditingState extends State<TitleEditing> {
                         },
                         validator: (text) {
                           if (!text!.trim().isNotEmpty) {
+                            FocusScope.of(context).unfocus();
+                            setState(() {
+                              isNew = true;
+                            });
                             return "mustEnterText".tr().toString();
                           }
                           return null;
@@ -66,6 +71,9 @@ class _TitleEditingState extends State<TitleEditing> {
                         context: context,
                       ),
                     ),
+                    SizedBox(
+                      width: 5,
+                    ),
                     Container(
                       child: defaultElevatedButton(
                         onPressed: _submit,
@@ -76,6 +84,7 @@ class _TitleEditingState extends State<TitleEditing> {
                           style: Theme.of(context).textTheme.headline1,
                           // style: StyleAndText.textStyleButton,
                         ),
+                        width: 70,
                       ),
                     ),
                   ],
@@ -83,41 +92,77 @@ class _TitleEditingState extends State<TitleEditing> {
               ),
             ),
             Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async =>
-                    await Provider.of<NewsTitlesManager>(context, listen: false)
-                        .fetchTitle(),
-                child: ListView.builder(
-                    itemBuilder: (context, index) => defaultItemListView(
-                      onLongPress: () async {
-                        var isDelete = await defaultConfirmDialog(
-                            context: context);
-                        isDelete == true
-                            ? print("true")
-                            : print("false");
-                      },
-                      onPressed: () {
-                        FocusScope.of(context).unfocus();
-                        setState(() {
-                          _title.text = newsTitleList[index]
-                              .title;
-                          setState(() {
-                            isNew = false;
-                          });
-                        });
-                      },
-                      child: defaultAutoSizeText(
-                      text:  "${newsTitleList[index].title}",
-                        textAlign: TextAlign.justify,
-                        context: context,
-                      ),
-                    ),
-                    itemCount: newsTitleList.length),
-              ),
+              child: Consumer<PostsManager>(builder: (context, value, child) {
+                value.refreshController =
+                    RefreshController(initialRefresh: false);
+                return defaultSmartRefresher(
+                  controller: value.refreshController!,
+                  onRefresh: value.onRefresh,
+                  onLoading: value.onLoading,
+                  child: ListView.builder(
+                      itemBuilder: (context, index) => Container(
+                            margin: EdgeInsets.symmetric(horizontal: 5),
+                            child: Column(
+                              children: [
+                                defaultDivider(),
+                                defaultItemListView(
+                                  onPressed: () {},
+                                  child: defaultDismissible(
+                                    key: index.toString(),
+                                    direction: DismissDirection.horizontal,
+                                    onDismissed:
+                                        (DismissDirection direction) async {},
+                                    confirmDismiss: (direction) async {
+                                      if (direction ==
+                                          DismissDirection.startToEnd) {
+                                        FocusScope.of(context).unfocus();
+                                        var isDelete =
+                                            await defaultConfirmDialog(
+                                                context: context);
+                                      } else {
+                                        _title.text =
+                                            newsTitleList[index].title;
+                                        _title.selection =
+                                            TextSelection.fromPosition(
+                                                TextPosition(
+                                                    offset:
+                                                        _title.text.length));
+                                        isNew = false;
+                                        setState(() {});
+                                        return await false;
+                                      }
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      child: Center(
+                                        child: defaultAutoSizeText(
+                                          text: "${newsTitleList[index].title}",
+                                          textAlign: TextAlign.justify,
+                                          context: context,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      itemCount: newsTitleList.length),
+                );
+              }),
             )
           ],
         ));
   }
 
-  _submit() {}
+  void  _submit() {
+    FocusScope.of(context).unfocus();
+    if(_formKeyTitle.currentState?.validate()==true) {
+      _title.clear();
+      Provider.of<NewsTitlesManager>(context, listen: false)
+          .insertTitle(title: _title.text);
+    }
+    else
+      FocusScope.of(context).requestFocus(focus);
+  }
 }

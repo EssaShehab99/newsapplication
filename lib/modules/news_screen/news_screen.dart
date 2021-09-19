@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:newsapplication/layout/main_layout/main_layout.dart';
 import 'package:newsapplication/models/post/favorite_posts_manager.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
+import 'package:newsapplication/modules/about_application/about_application.dart';
 import 'package:newsapplication/modules/determine_time/determine_time.dart';
 import 'package:newsapplication/modules/post_editing/post_editing.dart';
 import 'package:newsapplication/modules/title_news/title_editing.dart';
@@ -74,8 +75,8 @@ class _NewsScreenState extends State<NewsScreen> {
                             // if (item == 0)
                             //   Navigator.of(context)
                             //       .pushNamed(AppSetting.appSettingScreen);
-                            // if (item == 1)
-                            //   Navigator.of(context).pushNamed(About.aboutScreen);
+                            if (item == 1)
+                              Navigator.of(context).pushNamed(AboutApplication.aboutApplication);
                             if (item == 2)
                               Navigator.of(context)
                                   .pushNamed(TitleEditing.titleEditing);
@@ -85,7 +86,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         ),
                       )
                     ],
-                    expandedHeight: 100,
+                    expandedHeight: 120,
                     pinned: true,
                     floating: true,
                     snap: true,
@@ -112,38 +113,10 @@ class _NewsScreenState extends State<NewsScreen> {
                               return Consumer<PostsManager>(
                                 builder: (context, value, child) {
                                   value.refreshController=RefreshController(initialRefresh: false);
-                                  return SmartRefresher(
-                                  enablePullDown: true,
-                                  enablePullUp: true,
-                                  header: WaterDropHeader(),
-                                  footer: CustomFooter(
-                                    builder: ( context, mode){
-                                      Widget body ;
-                                      if(mode==LoadStatus.idle){
-                                        body =  Text("pull up load");
-                                      }
-                                      else if(mode==LoadStatus.loading){
-                                        body =  CupertinoActivityIndicator();
-                                      }
-                                      else if(mode == LoadStatus.failed){
-                                        body = Text("Load Failed!Click retry!");
-                                      }
-                                      else if(mode == LoadStatus.canLoading){
-                                        body = Text("release to load more");
-                                      }
-                                      else{
-                                        body = Text("No more Data");
-                                      }
-                                      return Container(
-                                        height: 55.0,
-                                        child: Center(child:body),
-                                      );
-                                    },
-                                  ),
-                                  controller: Provider.of<PostsManager>(context,
-                                      listen: true).refreshController!,
-                                  onRefresh: () => value.onRefresh(),
-                                  onLoading: ()=>value.onLoading(),
+                                  return defaultSmartRefresher(
+                                  controller: value.refreshController!,
+                                  onRefresh:  value.onRefresh,
+                                  onLoading: value.onLoading,
                                   child: CustomScrollView(
                                     key: PageStorageKey<String>(_newsTitle.id!),
                                     slivers: [
@@ -208,12 +181,15 @@ class _NewsScreenState extends State<NewsScreen> {
     );
   }
 
-  Widget _listViewBuilder(_posts, index) => defaultItemListView(
+  Widget _listViewBuilder(_posts, index) => Column(
+      children: [
+        defaultDivider(),
+        defaultItemListView(
       child: Column(
         children: [
           Container(
             height: MediaQuery.of(context).size.height * 0.2,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
             child: Row(
               children: [
                 Expanded(
@@ -263,5 +239,5 @@ class _NewsScreenState extends State<NewsScreen> {
       onPressed: () {
         Navigator.of(context)
             .pushNamed(NewsDetails.newsDetailsScreen, arguments: _posts[index]);
-      });
+      })]);
 }

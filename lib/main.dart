@@ -10,6 +10,7 @@ import 'models/file_manager/files_manager.dart';
 import 'models/post/favorite_posts_manager.dart';
 import 'models/post/posts_manager.dart';
 import 'models/title/news_titles_manager.dart';
+import 'modules/about_application/about_application.dart';
 import 'modules/home/home.dart';
 import 'modules/news_screen/news_details.dart';
 import 'modules/title_news/title_editing.dart';
@@ -98,8 +99,8 @@ class LauncherApp extends StatelessWidget {
         PostEditing.postEditing: (ctx) => const PostEditing(),
         NewsDetails.newsDetailsScreen: (ctx) => const NewsDetails(),
         TitleEditing.titleEditing : (ctx) => const TitleEditing(),
-        /*   NewsDetails.newsDetailsScreen: (ctx) => const NewsDetails(),
-        ImageControl.imageControlScreen: (ctx) => const ImageControl(),
+        AboutApplication.aboutApplication: (ctx) => const AboutApplication(),
+      /*   ImageControl.imageControlScreen: (ctx) => const ImageControl(),
         AddTitleBar.addTitleBar: (ctx) => const AddTitleBar(),
 */
       },

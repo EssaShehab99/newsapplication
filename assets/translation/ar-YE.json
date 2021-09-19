@@ -20,7 +20,7 @@
   "display":"العرض",
   "theme":"النمط",
   "dark":"داكن",
-  "about":"حول",
+  "about_application":"حول",
   "number":"الرقم",
   "imageTitle":"صورة العنوان",
   "titlePicture":"صورة العنوان",
@@ -43,5 +43,6 @@
   "addImages":"إضافة صور",
   "language":"اللغة",
   "arabic":"العربية",
-  "english":"الإنجليزية"
+  "english":"الإنجليزية",
+  "version":"الاصدار"
 }

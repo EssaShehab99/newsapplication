@@ -12,7 +12,9 @@ class PostsManager with ChangeNotifier {
   List<Post> favoritePostsList = [];
   RefreshController? refreshController;
 int counter=0;
-  Future<void> insertPost({required Post post}) async {}
+  Future<void> insertPost({required Post post}) async {
+    print(post.title);
+  }
 
   Future<void> updatePost({required Post post}) async {}
 
@@ -32,18 +34,23 @@ int counter=0;
   }
   void onRefresh() async{
     counter++;
-    await Future.delayed(Duration(milliseconds: 1000));
+    await Future.delayed(Duration(seconds: 2));
     print("Essa $counter");
 
     refreshController?.refreshCompleted();
+    notifyListeners();
+    print("Essa $counter");
+
   }
 
   void onLoading() async{
     counter++;
-    await Future.delayed(Duration(milliseconds: 1000));
+    await Future.delayed(Duration(seconds: 2));
     print("Shehab $counter");
 
     refreshController?.loadComplete();
+    notifyListeners();
+
   }
 
   Future<void> changePostStatus({required Post post}) async {}

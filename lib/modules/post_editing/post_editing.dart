@@ -3,10 +3,12 @@ import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:newsapplication/layout/main_layout/main_layout.dart';
+import 'package:newsapplication/models/post/post.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
 import 'package:newsapplication/models/title/news_title.dart';
 import 'package:newsapplication/models/title/news_titles_manager.dart';
 import 'package:newsapplication/shared/components/components.dart';
+import 'package:newsapplication/shared/components/constants.dart';
 import 'package:newsapplication/shared/image_viewer/image_viewer.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
@@ -30,8 +32,13 @@ class _PostEditingState extends State<PostEditing> {
   List<String>? _imagesUrl;
   String? _imageUrl = null;
 
-  Future<void> _submit(BuildContext context) async {
+  void _submit()  {
     FocusScope.of(context).unfocus();
+    if(_formKeyTitle.currentState?.validate()==true)
+      Provider.of<PostsManager>(context,listen: false).insertPost(post: Post(title: _title.text, detail: 'detail', date: 'DateTime.now()', type: NewsTitle(id: '1', title: 'title', typeTitle: TypeTitle.FAVORITE), isRead: true, isSync: true, isFavorite: true, remoteImageTitle: 'remoteImageTitle', remoteImageList: ['remoteImageList']));
+else
+      FocusScope.of(context).requestFocus(focus);
+
   }
 
   @override
@@ -52,6 +59,7 @@ class _PostEditingState extends State<PostEditing> {
                   Container(
                     child: defaultTextFormField(
                       context: context,
+                      key: '1',
                       textEditingController: _title,
                       hintText: "title".tr().toString(),
                       keyboardType: TextInputType.multiline,
@@ -62,7 +70,7 @@ class _PostEditingState extends State<PostEditing> {
                           return "mustEnterText".tr().toString();
                         return null;
                       },
-                      onSaved: (_) => _submit(context),
+                      onSaved: (_) => _submit,
                       textInputAction: TextInputAction.next,
                       focusNode: focus,
                       maxLength: 200,
@@ -71,6 +79,7 @@ class _PostEditingState extends State<PostEditing> {
                   Container(
                     child: defaultTextFormField(
                       context: context,
+                      key: '2',
                       keyboardType: TextInputType.multiline,
                       textEditingController: _detail,
                       hintText: "details".tr().toString(),
@@ -117,14 +126,14 @@ class _PostEditingState extends State<PostEditing> {
                                       ? Icon(Icons.add_photo_alternate_outlined)
                                       : ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(10),
+                                              BorderRadius.circular(borderRadius),
                                           child: Image.network(
                                             _imageUrl!,
                                             fit: BoxFit.fill,
                                           ),
                                         )
                                   : ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(borderRadius),
                                       child: Image.file(
                                         _image!,
                                         fit: BoxFit.fill,
@@ -139,8 +148,8 @@ class _PostEditingState extends State<PostEditing> {
                             decoration: BoxDecoration(
                                 color: Theme.of(context).primaryColor,
                                 borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10))),
+                                    bottomLeft: Radius.circular(borderRadius),
+                                    bottomRight: Radius.circular(borderRadius))),
                             child: Text(
                               "titlePicture".tr().toString(),
                               textAlign: TextAlign.center,
@@ -175,8 +184,8 @@ class _PostEditingState extends State<PostEditing> {
                               decoration: BoxDecoration(
                                   color: Theme.of(context).primaryColor,
                                   borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10))),
+                                      bottomLeft: Radius.circular(borderRadius),
+                                      bottomRight: Radius.circular(borderRadius))),
                               child: Text(
                                 "extraPictures".tr().toString(),
                                 textAlign: TextAlign.center,
@@ -192,11 +201,12 @@ class _PostEditingState extends State<PostEditing> {
                   ),
                   Container(
                     child: defaultElevatedButton(
-                        onPressed: () {},
+                        onPressed: _submit,
                         child: Text(
                           'post'.tr().toString(),
                           style: Theme.of(context).textTheme.headline6,
-                        )),
+                        ),
+                    ),
                   ),
                   SizedBox(
                     height: size.height * 0.04,
