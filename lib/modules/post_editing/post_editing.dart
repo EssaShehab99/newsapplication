@@ -25,20 +25,47 @@ class _PostEditingState extends State<PostEditing> {
   final GlobalKey<FormState> _formKeyTitle = GlobalKey();
   late TextEditingController _title = TextEditingController(text: "");
   late TextEditingController _detail = TextEditingController(text: "");
-  NewsTitle? _postTpe;
+  NewsTitle? _postType;
+  late String _id;
   final focus = FocusNode();
-  File? _image;
-  List<File>? _images;
-  List<String>? _imagesUrl;
-  String? _imageUrl = null;
+  List<dynamic>? _image = [];
+  List<dynamic>? _images = [];
+  bool isNew=true;
 
-  void _submit()  {
+  void _submit() {
+    print(_image?.length);
     FocusScope.of(context).unfocus();
-    if(_formKeyTitle.currentState?.validate()==true)
-      Provider.of<PostsManager>(context,listen: false).insertPost(post: Post(title: _title.text, detail: 'detail', date: 'DateTime.now()', type: NewsTitle(id: '1', title: 'title', typeTitle: TypeTitle.FAVORITE), isRead: true, isSync: true, isFavorite: true, remoteImageTitle: 'remoteImageTitle', remoteImageList: ['remoteImageList']));
-else
+    if (_formKeyTitle.currentState?.validate() == true)
+      Provider.of<PostsManager>(context, listen: false).insertPost(
+          post: Post(
+              title: _title.text,
+              detail: 'detail',
+              date: 'DateTime.now()',
+              type: NewsTitle(
+                  id: '1', title: 'title', typeTitle: TypeTitle.FAVORITE),
+              isRead: true,
+              isSync: true,
+              isFavorite: true,
+              remoteImageTitle: 'remoteImageTitle',
+              remoteImageList: ['remoteImageList']));
+    else
       FocusScope.of(context).requestFocus(focus);
+  }
 
+  @override
+  void didChangeDependencies() {
+    Post? post = ModalRoute.of(context)!.settings.arguments as Post?;
+    if (post != null) {
+      _id = post.id!;
+      _title.text = post.title;
+      _detail.text = post.detail ?? '';
+      _postType = post.type;
+      _image=[post.remoteImageTitle];
+      _images=post.remoteImageList;
+      isNew=false;
+    }
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -96,7 +123,7 @@ else
                         list: titlesList,
                         value: titlesList[0],
                         onChanged: (value) {
-                          _postTpe = value;
+                          _postType = value;
                         },
                         onTap: () {
                           FocusScope.of(context).unfocus();
@@ -109,39 +136,52 @@ else
                     child: defaultBorderContainer(
                         child: Stack(
                       children: [
-                        Container(
-                          width: double.infinity,
-                          child: InkWell(
-                            onTap: () {
-                              FocusScope.of(context).unfocus();
-                              selectFiles(allowMultiple: false)
-                                  ?.then((value) => setState(() {
-                                        _image = value?.firstOrNull;
-                                      }));
-                            },
-                            child: Container(
-                              height: 215,
-                              child: _image == null
-                                  ? _imageUrl == null
-                                      ? Icon(Icons.add_photo_alternate_outlined)
-                                      : ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(borderRadius),
-                                          child: Image.network(
-                                            _imageUrl!,
-                                            fit: BoxFit.fill,
-                                          ),
-                                        )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                      child: Image.file(
-                                        _image!,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                            ),
-                          ),
+                        PhotoViewer(
+                          enableInfiniteScroll: false,
+                          images: _image,
+                          onDismissed: (_) {},
+                          onPressed: () async {
+                            _image?.clear();
+                            await selectFiles(allowMultiple: false)
+                                ?.then((value) => setState(() {
+                                      _image?.insert(0, value?.firstOrNull);
+                                    }));
+                          },
+                          icon: Icons.add_photo_alternate_outlined,
                         ),
+                        // Container(
+                        //   width: double.infinity,
+                        //   child: InkWell(
+                        //     onTap: () {
+                        //       FocusScope.of(context).unfocus();
+                        //       selectFiles(allowMultiple: false)
+                        //           ?.then((value) => setState(() {
+                        //                 _image = value?.firstOrNull;
+                        //               }));
+                        //     },
+                        //     child: Container(
+                        //       height: 215,
+                        //       child: _image == null
+                        //           ? _imageUrl == null
+                        //               ? Icon(Icons.add_photo_alternate_outlined)
+                        //               : ClipRRect(
+                        //                   borderRadius:
+                        //                       BorderRadius.circular(borderRadius),
+                        //                   child: Image.network(
+                        //                     _imageUrl!,
+                        //                     fit: BoxFit.fill,
+                        //                   ),
+                        //                 )
+                        //           : ClipRRect(
+                        //               borderRadius: BorderRadius.circular(borderRadius),
+                        //               child: Image.file(
+                        //                 _image!,
+                        //                 fit: BoxFit.fill,
+                        //               ),
+                        //             ),
+                        //     ),
+                        //   ),
+                        // ),
                         Center(
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 20),
@@ -149,7 +189,8 @@ else
                                 color: Theme.of(context).primaryColor,
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(borderRadius),
-                                    bottomRight: Radius.circular(borderRadius))),
+                                    bottomRight:
+                                        Radius.circular(borderRadius))),
                             child: Text(
                               "titlePicture".tr().toString(),
                               textAlign: TextAlign.center,
@@ -170,13 +211,12 @@ else
                             enableInfiniteScroll: false,
                             images: _images,
                             onDismissed: (_) {},
-                            child: IconButton(
-                              onPressed: () async {
-                                _images = await selectFiles();
-                                setState(() {});
-                              },
-                              icon: Icon(Icons.add_to_photos_outlined),
-                            ),
+                            onPressed: () async {
+                              _images?.clear();
+                              _images = await selectFiles();
+                              setState(() {});
+                            },
+                            icon: Icons.add_to_photos_outlined,
                           ),
                           Center(
                             child: Container(
@@ -185,7 +225,8 @@ else
                                   color: Theme.of(context).primaryColor,
                                   borderRadius: BorderRadius.only(
                                       bottomLeft: Radius.circular(borderRadius),
-                                      bottomRight: Radius.circular(borderRadius))),
+                                      bottomRight:
+                                          Radius.circular(borderRadius))),
                               child: Text(
                                 "extraPictures".tr().toString(),
                                 textAlign: TextAlign.center,
@@ -201,11 +242,11 @@ else
                   ),
                   Container(
                     child: defaultElevatedButton(
-                        onPressed: _submit,
-                        child: Text(
-                          'post'.tr().toString(),
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
+                      onPressed: _submit,
+                      child: Text(
+                       isNew? 'post'.tr().toString():'edit'.tr().toString(),
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                     ),
                   ),
                   SizedBox(

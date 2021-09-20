@@ -13,7 +13,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'constants.dart';
 
-String shareText = ' ${"visitUsOnFacebook".tr().toString()} http://www.facebook.com/alyemennetblog';
+String shareText =
+    ' ${"visitUsOnFacebook".tr().toString()} http://www.facebook.com/alyemennetblog';
 
 Future<List<File>?>? selectFiles({bool allowMultiple = true}) async {
   List<File>? _files = [];
@@ -403,8 +404,38 @@ Widget defaultDismissible({
           alignment: AlignmentDirectional.centerEnd,
           child: Icon(Icons.edit)),
     );
-defaultDivider()=>Divider(
-color: Colors.white10,
-thickness: 1,
-height: 1,
-);
+
+defaultDivider() => Divider(
+      color: Colors.white10,
+      thickness: 1,
+      height: 1,
+    );
+
+Widget defaultListTile({
+  required String groupTitle,
+  required List<Widget> groupElements,
+}) =>
+    Container(
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(15.0),
+            child: Text(
+              groupTitle,
+              style: textStyle(
+                  color: Colors.blue,
+                  fontSize: 13,
+                  fontWeight: FontWeight.normal),
+            ),
+          ),
+          Column(
+            children: groupElements.map((e) => e).toList(),
+          ),
+          Divider(
+            height: 20,
+            thickness: 0.5,
+          ),
+        ],
+      ),
+    );

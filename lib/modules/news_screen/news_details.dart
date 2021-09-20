@@ -4,6 +4,7 @@ import 'package:newsapplication/layout/main_layout/main_layout.dart';
 import 'package:newsapplication/models/file_manager/files_manager.dart';
 import 'package:newsapplication/models/post/post.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
+import 'package:newsapplication/modules/post_editing/post_editing.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:newsapplication/shared/components/constants.dart';
 import 'package:newsapplication/shared/image_viewer/image_viewer.dart';
@@ -56,6 +57,19 @@ class _NewsDetailsState extends State<NewsDetails> {
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.04,
+                ),
+                Container(
+                  height: 250,
+                  child: DefaultBoxImage(
+                    images: [post.remoteImageTitle],
+                    index:  0,
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.04,
+                ),
                 Container(
                   width: double.infinity,
                   child: defaultSelectableText(
@@ -63,15 +77,6 @@ class _NewsDetailsState extends State<NewsDetails> {
                         .format(DateTime.parse(value.postsList[0].date)),
                     style: Theme.of(context).textTheme.headline2,
                   ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.04,
-                ),
-                PhotoViewer(
-                  images: [value.postsList[0].remoteImageTitle],
-                  onDismissed: (_) {},
-                  enableInfiniteScroll: false,
-                  child: Container(),
                 ),
                 Divider(
                   thickness: 1.0,
@@ -94,7 +99,6 @@ class _NewsDetailsState extends State<NewsDetails> {
                 PhotoViewer(
                   images: value.postsList[0].remoteImageList,
                   onDismissed: (_) {},
-                  child: Container(),
                 ),
                 Container(
                     alignment: Alignment.center,
@@ -115,23 +119,19 @@ class _NewsDetailsState extends State<NewsDetails> {
       ),
       floatingActionButton: defaultFloatingActionButton(
         onPressed: () {
-          // Navigator.of(context).pushNamed(AddPost.addPostScreen, arguments: {
-          //   "isNew": false,
-          //   "post": Post(
-          //       id: argumentPassed.id,
-          //       title: argumentPassed.title,
-          //       detail: argumentPassed.detail,
-          //       date: argumentPassed.date,
-          //       type: Provider.of<TitleBarList>(context, listen: false)
-          //           .titleBarList
-          //           .firstWhere(
-          //               (element) => element.id == argumentPassed.type!.id),
-          //       isRead: argumentPassed.isRead,
-          //       isSync: argumentPassed.isSync,
-          //       isFavorite: argumentPassed.isFavorite,
-          //       imageTitle: argumentPassed.imageTitle,
-          //       imageList: argumentPassed.imageList)
-          // });
+          Navigator.of(context).pushNamed(PostEditing.postEditing, arguments:
+             Post(
+                id: post.id,
+                title: post.title,
+                detail: post.detail,
+                date: post.date,
+                type: post.type,
+                isRead: post.isRead,
+                isSync: post.isSync,
+                isFavorite: post.isFavorite,
+               remoteImageTitle: post.remoteImageTitle,
+                 remoteImageList: post.remoteImageList)
+          );
         },
         icon: Icons.edit,
       ),

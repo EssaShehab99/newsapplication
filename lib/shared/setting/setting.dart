@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-class ApplicationSetting with ChangeNotifier {
+class Setting with ChangeNotifier {
 
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   int? themeModeValue;
@@ -8,7 +8,7 @@ class ApplicationSetting with ChangeNotifier {
   String? themeModeName="";
   String? languageName="Ara";
   ThemeMode themeMode = ThemeMode.system;
-  bool? isImageLoad;
+  bool autoDownloadMedia=false;
   String? favoriteId;
   Locale? _locale;
   Locale? get locale => _locale;
@@ -28,12 +28,12 @@ class ApplicationSetting with ChangeNotifier {
     checkFavoriteId();
   }
 
-  Future<void> setImageLoadValue(bool isImageLoadValue) async {
+  Future<void> setAutoDownloadMedia(bool autoDownloadMediaValue) async {
     final SharedPreferences prefs = await _prefs;
 
-    await  prefs.setBool("isImageLoadValue", isImageLoadValue);
+    await  prefs.setBool("autoDownloadMediaValue", autoDownloadMediaValue);
 
-    checkImageLoad();
+    getDownloadMedia();
   }
   // void setLocale(Locale locale){
   //   if(!L10n.all.contains(locale)) return;
@@ -69,10 +69,9 @@ class ApplicationSetting with ChangeNotifier {
 
     notifyListeners();
   }
-  void checkImageLoad() async {
+  void getDownloadMedia() async {
     final SharedPreferences prefs = await _prefs;
-    isImageLoad = prefs.getBool('isImageLoadValue') ?? true;
-
+    autoDownloadMedia = prefs.getBool('autoDownloadMediaValue') ?? false;
     notifyListeners();
   }
   void checkFavoriteId() async {

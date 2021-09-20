@@ -1,5 +1,6 @@
 import 'package:flowder/flowder.dart';
 import 'package:flutter/material.dart';
+import 'package:newsapplication/shared/components/constants.dart';
 import 'package:newsapplication/shared/components/download_button.dart';
 import 'package:newsapplication/models/file_manager/files_manager.dart';
 import 'package:newsapplication/shared/components/components.dart';
@@ -15,11 +16,12 @@ class PhotoViewer extends StatefulWidget {
       required this.images,
       required Function(DismissDirection) this.onDismissed,
       this.enableInfiniteScroll = true,
-    required  this.child})
+      this.icon,this.onPressed})
       : super(key: key);
   final List<dynamic>? images;
   final bool enableInfiniteScroll;
-  final Widget child;
+  final IconData? icon;
+  final Function? onPressed;
 
   @override
   _PhotoViewerState createState() => _PhotoViewerState();
@@ -30,14 +32,14 @@ class PhotoViewer extends StatefulWidget {
 class _PhotoViewerState extends State<PhotoViewer> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
-      child: Center(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: CarouselSlider(
-            items: [
-              if (widget.images != null)
+    if (widget.images != null) {
+      return Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius),
+            child: CarouselSlider(
+              items: [
                 for (var image in widget.images!)
                   defaultDismissible(
                     direction: image.runtimeType == String
@@ -47,41 +49,51 @@ class _PhotoViewerState extends State<PhotoViewer> {
                     onDismissed: (_) {
                       widget.images?.removeAt(widget.images!.indexOf(image));
                       setState(() {});
-                      print(image.absolute);
                     },
                     child: DefaultBoxImage(
                       images: widget.images!,
-                      image: image,
+                      index: widget.images!.indexOf(image),
                     ),
                   ),
-              widget.child
-            ],
-            options: CarouselOptions(
-              enableInfiniteScroll: false,
-              enlargeCenterPage: false,
-              viewportFraction: widget.enableInfiniteScroll ? 0.8 : 1.0,
-              height: 215,
+                if ( widget.onPressed != null&& widget.icon!=null)
+                IconButton(
+                  onPressed: () async {
+                    widget.onPressed!();
+                    setState(() {});
+                  },
+                  icon: Icon(widget.icon),
+                )
+              ],
+              options: CarouselOptions(
+                enableInfiniteScroll: false,
+                enlargeCenterPage: false,
+                viewportFraction: widget.enableInfiniteScroll ? 0.8 : 1.0,
+                height: 215,
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }
 
 class DefaultBoxImage extends StatelessWidget {
-  const DefaultBoxImage({Key? key, required this.images, required this.image})
+  const DefaultBoxImage({Key? key, required this.images, required this.index})
       : super(key: key);
   final List<dynamic> images;
-  final image;
+  final index;
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.all(0.0),
       child: Stack(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(borderRadius),
             child: InkWell(
                 onTap: () {
                   Navigator.push(
@@ -89,22 +101,24 @@ class DefaultBoxImage extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (_) => InteractiveImage(
                                 images: images,
-                                index: images.indexOf(image),
+                                index: index,
                               )));
                 },
-                child: image.runtimeType == String
+                child: images[index].runtimeType == String
                     ? Consumer<FilesManager>(
                         builder: (context, value, child) => Stack(
                               children: [
                                 DownloadButton(
-                                    remoteUrl: image, folder: 'Yemen Net'),
-                                if (value.fileInDatabase(image) != null)
+                                    remoteUrl: images[index],
+                                    folder: 'Yemen Net'),
+                                if (value.fileInDatabase(images[index]) != null)
                                   defaultPhotoView(
-                                      value: File(value.fileInDatabase(image)!),
+                                      value: File(
+                                          value.fileInDatabase(images[index])!),
                                       onPressed: () {}),
                               ],
                             ))
-                    : defaultPhotoView(value: image, onPressed: () {})),
+                    : defaultPhotoView(value: images[index], onPressed: () {})),
           ),
         ],
       ),

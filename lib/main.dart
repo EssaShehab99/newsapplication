@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:newsapplication/modules/post_editing/post_editing.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:newsapplication/shared/components/constants.dart';
-import '../shared/setting/application_setting.dart';
+import '../shared/setting/setting.dart';
 import 'package:provider/provider.dart';
 
 import 'models/file_manager/files_manager.dart';
@@ -11,6 +11,7 @@ import 'models/post/favorite_posts_manager.dart';
 import 'models/post/posts_manager.dart';
 import 'models/title/news_titles_manager.dart';
 import 'modules/about_application/about_application.dart';
+import 'modules/application_setting/application_setting.dart';
 import 'modules/home/home.dart';
 import 'modules/news_screen/news_details.dart';
 import 'modules/title_news/title_editing.dart';
@@ -31,7 +32,7 @@ class InitialApp extends StatelessWidget {
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => PostsManager()),
-          ChangeNotifierProvider(create: (_) => ApplicationSetting()),
+          ChangeNotifierProvider(create: (_) => Setting()),
           ChangeNotifierProvider(create: (_) => NewsTitlesManager()),
           ChangeNotifierProvider(create: (_) => FavoritePostManager()),
           ChangeNotifierProvider(create: (_) => FilesManager()),
@@ -100,8 +101,8 @@ class LauncherApp extends StatelessWidget {
         NewsDetails.newsDetailsScreen: (ctx) => const NewsDetails(),
         TitleEditing.titleEditing : (ctx) => const TitleEditing(),
         AboutApplication.aboutApplication: (ctx) => const AboutApplication(),
-      /*   ImageControl.imageControlScreen: (ctx) => const ImageControl(),
-        AddTitleBar.addTitleBar: (ctx) => const AddTitleBar(),
+        ApplicationSetting.applicationSetting: (ctx) => const ApplicationSetting(),
+       /*   AddTitleBar.addTitleBar: (ctx) => const AddTitleBar(),
 */
       },
     );

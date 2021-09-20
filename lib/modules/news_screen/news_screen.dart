@@ -2,14 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newsapplication/layout/main_layout/main_layout.dart';
 import 'package:newsapplication/models/post/favorite_posts_manager.dart';
+import 'package:newsapplication/models/post/post.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
 import 'package:newsapplication/modules/about_application/about_application.dart';
+import 'package:newsapplication/modules/application_setting/application_setting.dart';
 import 'package:newsapplication/modules/determine_time/determine_time.dart';
 import 'package:newsapplication/modules/post_editing/post_editing.dart';
 import 'package:newsapplication/modules/title_news/title_editing.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:newsapplication/shared/components/constants.dart';
-import 'package:newsapplication/shared/setting/application_setting.dart';
+import 'package:newsapplication/shared/image_viewer/image_viewer.dart';
+import 'package:newsapplication/shared/setting/setting.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '/models/title/news_titles_manager.dart';
 import 'package:provider/provider.dart';
@@ -72,9 +75,9 @@ class _NewsScreenState extends State<NewsScreen> {
                             ),
                           ),
                           onSelected: (item) {
-                            // if (item == 0)
-                            //   Navigator.of(context)
-                            //       .pushNamed(AppSetting.appSettingScreen);
+                            if (item == 0)
+                              Navigator.of(context)
+                                  .pushNamed(ApplicationSetting.applicationSetting);
                             if (item == 1)
                               Navigator.of(context).pushNamed(AboutApplication.aboutApplication);
                             if (item == 2)
@@ -174,14 +177,14 @@ class _NewsScreenState extends State<NewsScreen> {
       floatingActionButton: defaultFloatingActionButton(
         icon: Icons.edit,
         onPressed: () {
-          Navigator.of(context).pushNamed(PostEditing.postEditing,
-              arguments: {'isNew': true, 'post': null});
+          Navigator.of(context).pushNamed(PostEditing.postEditing/*,
+              arguments: {'isNew': true, 'post': null}*/);
         },
       ),
     );
   }
 
-  Widget _listViewBuilder(_posts, index) => Column(
+  Widget _listViewBuilder(List<Post>_posts, index) => Column(
       children: [
         defaultDivider(),
         defaultItemListView(
@@ -201,13 +204,14 @@ class _NewsScreenState extends State<NewsScreen> {
                     ),
                   ),
                 ),
-                Provider.of<ApplicationSetting>(context, listen: true)
-                            .isImageLoad ==
-                        true
-                    ? (_posts[index].imageTitle == null
-                        ? SizedBox.shrink()
-                        : defaultImage(imageUrl: _posts[index].imageTitle))
-                    : SizedBox.shrink(),
+                Container(
+                  width: 120,
+                  height: 120,
+                  child: DefaultBoxImage(
+                    images: [_posts[index].remoteImageTitle],
+                    index:0,
+                  ),
+                ),
               ],
             ),
           ),
