@@ -55,15 +55,15 @@ class _PostEditingState extends State<PostEditing> {
   @override
   void didChangeDependencies() {
     Post? post = ModalRoute.of(context)!.settings.arguments as Post?;
-    if (post != null) {
-      _id = post.id!;
-      _title.text = post.title;
-      _detail.text = post.detail ?? '';
-      _postType = post.type;
-      _image=[post.remoteImageTitle];
-      _images=post.remoteImageList;
-      isNew=false;
-    }
+    // if (post != null) {
+    //   _id = post.id!;
+    //   _title.text = post.title;
+    //   _detail.text = post.detail ?? '';
+    //   _postType = post.type;
+    //   _image=[post.remoteImageTitle];
+    //   _images=post.remoteImageList;
+    //   isNew=false;
+    // }
 
     super.didChangeDependencies();
   }
@@ -137,8 +137,7 @@ class _PostEditingState extends State<PostEditing> {
                         child: Stack(
                       children: [
                         PhotoViewer(
-                          enableInfiniteScroll: false,
-                          images: _image==null?_image:[],
+                          images: _image?.isNotEmpty==true?_image:null,
                           onDismissed: (_) {},
                           onPressed: () async {
                             _image?.clear();
@@ -146,6 +145,9 @@ class _PostEditingState extends State<PostEditing> {
                                 ?.then((value) => setState(() {
                                       _image?.insert(0, value?.firstOrNull);
                                     }));
+                            setState(() {
+
+                            });
                           },
                           icon: Icons.add_photo_alternate_outlined,
                         ),
@@ -208,7 +210,6 @@ class _PostEditingState extends State<PostEditing> {
                       child: Stack(
                         children: [
                           PhotoViewer(
-                            enableInfiniteScroll: false,
                             images: _images,
                             onDismissed: (_) {},
                             onPressed: () async {

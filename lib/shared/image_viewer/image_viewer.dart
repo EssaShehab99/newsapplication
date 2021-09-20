@@ -15,11 +15,9 @@ class PhotoViewer extends StatefulWidget {
       {Key? key,
       required this.images,
       required Function(DismissDirection) this.onDismissed,
-      this.enableInfiniteScroll = true,
       this.icon,this.onPressed})
       : super(key: key);
   final List<dynamic>? images;
-  final bool enableInfiniteScroll;
   final IconData? icon;
   final Function? onPressed;
 
@@ -32,7 +30,7 @@ class PhotoViewer extends StatefulWidget {
 class _PhotoViewerState extends State<PhotoViewer> {
   @override
   Widget build(BuildContext context) {
-    if (widget.images != null) {
+
       return Padding(
         padding: const EdgeInsets.all(0.0),
         child: Center(
@@ -40,6 +38,7 @@ class _PhotoViewerState extends State<PhotoViewer> {
             borderRadius: BorderRadius.circular(borderRadius),
             child: CarouselSlider(
               items: [
+                if (widget.images != null)
                 for (var image in widget.images!)
                   defaultDismissible(
                     direction: image.runtimeType == String
@@ -66,17 +65,14 @@ class _PhotoViewerState extends State<PhotoViewer> {
               ],
               options: CarouselOptions(
                 enableInfiniteScroll: false,
-                enlargeCenterPage: false,
-                viewportFraction: widget.enableInfiniteScroll ? 0.8 : 1.0,
+                enlargeCenterPage: true,
+                viewportFraction: 1,
                 height: 215,
               ),
             ),
           ),
         ),
       );
-    } else {
-      return SizedBox.shrink();
-    }
   }
 }
 
