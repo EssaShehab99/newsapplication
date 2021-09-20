@@ -87,7 +87,7 @@ class _HomeState extends State<Home> {
           title:
               "I have some text, maybe long and a box, WxH fixed size. I've calculated that given my font size and height scale, I can fit L lines of text. So I put maxLines and ellipsize and it works in Android app (since line height is predictable), but doesn't in Flutter app.",
           remoteImageTitle:
-              "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+              null,
           remoteImageList: [
             'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
             'https://cdn.pixabay.com/photo/2016/05/05/02/37/sunset-1373171__340.jpg',
@@ -114,7 +114,7 @@ class _HomeState extends State<Home> {
           isSync: true,
           date: "${DateTime.now()}",
           type: Provider.of<NewsTitlesManager>(context, listen: false)
-              .titlesList[2],
+              .titlesList[3],
           isRead: false,
           isFavorite: false,
         ));

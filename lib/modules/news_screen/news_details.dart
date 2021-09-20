@@ -61,9 +61,9 @@ class _NewsDetailsState extends State<NewsDetails> {
                   height: MediaQuery.of(context).size.height * 0.04,
                 ),
                 Container(
-                  height: 250,
+                  height:post.remoteImageTitle!=null? 250:0,
                   child: DefaultBoxImage(
-                    images: [post.remoteImageTitle],
+                    images: post.remoteImageTitle!=null?[post.remoteImageTitle]:[],
                     index:  0,
                   ),
                 ),

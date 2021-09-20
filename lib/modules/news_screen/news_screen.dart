@@ -205,10 +205,10 @@ class _NewsScreenState extends State<NewsScreen> {
                   ),
                 ),
                 Container(
-                  width: 120,
-                  height: 120,
+                  width: _posts[index].remoteImageTitle!=null?120:0.0,
+                  height:_posts[index].remoteImageTitle!=null? 120:0.0,
                   child: DefaultBoxImage(
-                    images: [_posts[index].remoteImageTitle],
+                    images: _posts[index].remoteImageTitle!=null? [_posts[index].remoteImageTitle]:[],
                     index:0,
                   ),
                 ),

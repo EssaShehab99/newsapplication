@@ -88,7 +88,8 @@ class DefaultBoxImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    if (images.isNotEmpty) {
+      return Card(
       margin: EdgeInsets.all(0.0),
       child: Stack(
         children: [
@@ -123,5 +124,8 @@ class DefaultBoxImage extends StatelessWidget {
         ],
       ),
     );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }

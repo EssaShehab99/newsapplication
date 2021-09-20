@@ -121,7 +121,7 @@ class _PostEditingState extends State<PostEditing> {
                     child: defaultDropdownButton(
                         context: context,
                         list: titlesList,
-                        value: titlesList[0],
+                        value: _postType==null?titlesList[0]:_postType,
                         onChanged: (value) {
                           _postType = value;
                         },
@@ -138,7 +138,7 @@ class _PostEditingState extends State<PostEditing> {
                       children: [
                         PhotoViewer(
                           enableInfiniteScroll: false,
-                          images: _image,
+                          images: _image==null?_image:[],
                           onDismissed: (_) {},
                           onPressed: () async {
                             _image?.clear();
