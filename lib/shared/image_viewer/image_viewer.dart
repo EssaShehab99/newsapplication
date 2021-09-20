@@ -84,13 +84,14 @@ class DefaultBoxImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (images.isNotEmpty) {
-      return Card(
-        margin: EdgeInsets.all(0.0),
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadius),
-              child: InkWell(
+      return ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+        child: Card(
+          color: Theme.of(context).backgroundColor,
+          margin: EdgeInsets.all(0.0),
+          child: Stack(
+            children: [
+              InkWell(
                   onTap: () {
                     Navigator.push(
                         context,
@@ -117,8 +118,8 @@ class DefaultBoxImage extends StatelessWidget {
                               ))
                       : defaultPhotoView(
                           value: images[index], onPressed: () {})),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     } else {

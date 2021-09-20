@@ -45,75 +45,73 @@ class _NewsDetailsState extends State<NewsDetails> {
       ],
       body: Consumer<PostsManager>(
         builder: (context, value, child) => SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Container(
-                  child: defaultSelectableText(
-                    text: post.title.trim(),
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
+        padding: const EdgeInsets.all(padding),
+          child: Column(
+            children: [
+              Container(
+                child: defaultSelectableText(
+                  text: post.title.trim(),
+                  style: Theme.of(context).textTheme.headline3,
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.04,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.04,
+              ),
+              Container(
+                height: post.remoteImageTitle != null ? 250 : 0,
+                child: DefaultBoxImage(
+                  images: post.remoteImageTitle != null
+                      ? [post.remoteImageTitle]
+                      : [],
+                  index: 0,
                 ),
-                Container(
-                  height: post.remoteImageTitle != null ? 250 : 0,
-                  child: DefaultBoxImage(
-                    images: post.remoteImageTitle != null
-                        ? [post.remoteImageTitle]
-                        : [],
-                    index: 0,
-                  ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.04,
+              ),
+              Container(
+                width: double.infinity,
+                child: defaultSelectableText(
+                  text: localization.DateFormat(timeFormat)
+                      .format(DateTime.parse(value.postsList[0].date)),
+                  style: Theme.of(context).textTheme.headline4,
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.04,
+              ),
+              Divider(
+                thickness: 1.0,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.04,
+              ),
+              Container(
+                child: defaultSelectableText(
+                  text: value.postsList[0].detail?.trim() ?? '',
+                  style: Theme.of(context).textTheme.headline3,
                 ),
-                Container(
-                  width: double.infinity,
-                  child: defaultSelectableText(
-                    text: localization.DateFormat(timeFormat)
-                        .format(DateTime.parse(value.postsList[0].date)),
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                ),
-                Divider(
-                  thickness: 1.0,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.04,
-                ),
-                Container(
-                  child: defaultSelectableText(
-                    text: value.postsList[0].detail?.trim() ?? '',
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.04,
-                ),
-                Divider(
-                  thickness: 1.0,
-                ),
-                PhotoViewer(
-                  images: value.postsList[0].remoteImageList,
-                  onDismissed: (_) {},
-                ),
-                Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 20),
-                    child: StarButton(
-                      isStarred:
-                          value.favoritePostsList.contains(value.postsList[0]),
-                      valueChanged: (favoriteStatus) {
-                        value.favoritePost(
-                            post: value.postsList[0],
-                            favoriteStatus: favoriteStatus);
-                      },
-                    )),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.04,
+              ),
+              Divider(
+                thickness: 1.0,
+              ),
+              PhotoViewer(
+                images: value.postsList[0].remoteImageList,
+                onDismissed: (_) {},
+              ),
+              Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(top: 20),
+                  child: StarButton(
+                    isStarred:
+                        value.favoritePostsList.contains(value.postsList[0]),
+                    valueChanged: (favoriteStatus) {
+                      value.favoritePost(
+                          post: value.postsList[0],
+                          favoriteStatus: favoriteStatus);
+                    },
+                  )),
+            ],
           ),
         ),
       ),

@@ -10,7 +10,6 @@ Scaffold defaultScaffold(
     Scaffold(
         appBar: (title != null || actions != null || leading != null)
             ? AppBar(
-                backgroundColor: Theme.of(context).primaryColor,
                 title: Text(
                   "$title",
                 ),
@@ -19,5 +18,6 @@ Scaffold defaultScaffold(
                 centerTitle: true,
               )
             : null,
+        backgroundColor: Theme.of(context).primaryColor,
         body: body,
         floatingActionButton: floatingActionButton);

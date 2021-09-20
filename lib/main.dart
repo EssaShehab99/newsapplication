@@ -58,50 +58,177 @@ class LauncherApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
+      themeMode: Provider
+          .of<Setting>(context, listen: true)
+          .themeMode,
       theme: ThemeData(
           fontFamily: "Cairo",
           primaryColor: primaryColor_light,
           backgroundColor: backgroundColor_light,
+          dividerColor: reverseColor_light,
           indicatorColor: backgroundColor_light,
+          cardColor: reverseColor_light,
+          colorScheme: ColorScheme.light(),
+          iconTheme: IconThemeData(color: reverseColor_light),
+          popupMenuTheme: PopupMenuThemeData(
+            color: backgroundColor_light,
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: secondaryColor_light))
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0))),
+                backgroundColor: MaterialStateProperty.all(primaryColor_light),
+                overlayColor: MaterialStateProperty.all(backgroundColor_light)),
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(borderRadius))),
+                backgroundColor:
+                MaterialStateProperty.all(backgroundColor_light)),
+          ),
           tabBarTheme: TabBarTheme(
             labelColor: reverseColor_light,
             unselectedLabelColor: secondaryColor_light,
             labelStyle: textStyle(fontSize: 15, color: reverseColor_light),
             unselectedLabelStyle:
-                textStyle(fontSize: 13, color: secondaryColor_light),
+            textStyle(fontSize: 13, color: secondaryColor_light),
           ),
           appBarTheme: AppBarTheme(
-            color: primaryColor_light,
-            titleTextStyle: textStyle(color: reverseColor_light,fontSize: 16),
+            color: backgroundColor_light,
+            titleTextStyle: textStyle(color: reverseColor_light, fontSize: 16),
             iconTheme: IconThemeData(color: reverseColor_light),
           ),
           checkboxTheme: CheckboxThemeData(
             checkColor: MaterialStateProperty.all(primaryColor_light),
-            fillColor: MaterialStateProperty.all(secondaryColor_light),
+            fillColor: MaterialStateProperty.all(reverseColor_light),
+          ),
+          radioTheme: RadioThemeData(
+            fillColor: MaterialStateProperty.all(reverseColor_light),
           ),
           textTheme: TextTheme(
-            headline1: textStyle(fontSize: 16, color: reverseColor_light),
-            headline2: textStyle(fontSize: 15, color: reverseColor_light),
-            headline3: textStyle(fontSize: 14, color: reverseColor_light),
-            headline4: textStyle(fontSize: 13, color: reverseColor_light),
-            headline5: textStyle(fontSize: 12, color: reverseColor_light, fontWeight: FontWeight.normal),
-            headline6: textStyle(fontSize: 11, color: reverseColor_light),
-            bodyText1: textStyle(fontSize: 15, color: backgroundColor_light),
-            bodyText2: textStyle(fontSize: 14, color: backgroundColor_light),
-            subtitle1: textStyle(fontSize: 13, color: secondaryColor_light, fontWeight: FontWeight.normal),
-            button: textStyle(fontSize: 13, color: primaryColor_light, fontWeight: FontWeight.bold),
-            caption: textStyle(fontSize: 14, color: reverseColor_light, fontWeight: FontWeight.normal),
-            overline: textStyle(color: Colors.blue,fontSize: 14,fontWeight: FontWeight.bold)
-          )),
+              headline1: textStyle(fontSize: 16, color: reverseColor_light),
+              headline2: textStyle(fontSize: 15, color: reverseColor_light),
+              headline3: textStyle(fontSize: 14, color: reverseColor_light),
+              headline4: textStyle(fontSize: 13, color: reverseColor_light),
+              headline5: textStyle(
+                  fontSize: 12,
+                  color: reverseColor_light,
+                  fontWeight: FontWeight.normal),
+              headline6: textStyle(fontSize: 11, color: reverseColor_light),
+              bodyText1: textStyle(fontSize: 15, color: backgroundColor_light),
+              bodyText2: textStyle(fontSize: 14, color: backgroundColor_light),
+              subtitle1: textStyle(
+                  fontSize: 13,
+                  color: secondaryColor_light,
+                  fontWeight: FontWeight.normal),
+              button: textStyle(
+                  fontSize: 13,
+                  color: primaryColor_light,
+                  fontWeight: FontWeight.bold),
+              caption: textStyle(
+                  fontSize: 14,
+                  color: reverseColor_light,
+                  fontWeight: FontWeight.normal),
+              overline: textStyle(
+                  color: Colors.blue,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold)),
+          textSelectionTheme:
+          TextSelectionThemeData(
+              selectionHandleColor: reverseColor_light,cursorColor: reverseColor_light)),
+      darkTheme: ThemeData(
+          fontFamily: "Cairo",
+          primaryColor: primaryColor_dark,
+          backgroundColor: backgroundColor_dark,
+          dividerColor: reverseColor_dark,
+          indicatorColor: backgroundColor_dark,
+          cardColor: reverseColor_dark,
+          colorScheme: ColorScheme.dark(),
+          iconTheme: IconThemeData(color: reverseColor_dark),
+          popupMenuTheme: PopupMenuThemeData(
+            color: backgroundColor_dark,
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: secondaryColor_dark))
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0))),
+                backgroundColor: MaterialStateProperty.all(primaryColor_dark),
+                overlayColor: MaterialStateProperty.all(backgroundColor_dark)),
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(borderRadius))),
+                backgroundColor:
+                MaterialStateProperty.all(backgroundColor_dark)),
+          ),
+          tabBarTheme: TabBarTheme(
+            labelColor: reverseColor_dark,
+            unselectedLabelColor: secondaryColor_dark,
+            labelStyle: textStyle(fontSize: 15, color: reverseColor_dark),
+            unselectedLabelStyle:
+            textStyle(fontSize: 13, color: secondaryColor_dark),
+          ),
+          appBarTheme: AppBarTheme(
+            color: backgroundColor_dark,
+            titleTextStyle: textStyle(color: reverseColor_dark, fontSize: 16),
+            iconTheme: IconThemeData(color: reverseColor_dark),
+          ),
+          checkboxTheme: CheckboxThemeData(
+            checkColor: MaterialStateProperty.all(primaryColor_dark),
+            fillColor: MaterialStateProperty.all(reverseColor_dark),
+          ),
+          radioTheme: RadioThemeData(
+            fillColor: MaterialStateProperty.all(reverseColor_dark),
+          ),
+          textTheme: TextTheme(
+              headline1: textStyle(fontSize: 16, color: reverseColor_dark),
+              headline2: textStyle(fontSize: 15, color: reverseColor_dark),
+              headline3: textStyle(fontSize: 14, color: reverseColor_dark),
+              headline4: textStyle(fontSize: 13, color: reverseColor_dark),
+              headline5: textStyle(
+                  fontSize: 12,
+                  color: reverseColor_dark,
+                  fontWeight: FontWeight.normal),
+              headline6: textStyle(fontSize: 11, color: reverseColor_dark),
+              bodyText1: textStyle(fontSize: 15, color: backgroundColor_dark),
+              bodyText2: textStyle(fontSize: 14, color: backgroundColor_dark),
+              subtitle1: textStyle(
+                  fontSize: 13,
+                  color: secondaryColor_dark,
+                  fontWeight: FontWeight.normal),
+              button: textStyle(
+                  fontSize: 13,
+                  color: primaryColor_dark,
+                  fontWeight: FontWeight.bold),
+              caption: textStyle(
+                  fontSize: 14,
+                  color: reverseColor_dark,
+                  fontWeight: FontWeight.normal),
+              overline: textStyle(
+                  color: Colors.blue,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold)),
+          textSelectionTheme:
+          TextSelectionThemeData(
+              selectionHandleColor: reverseColor_dark,cursorColor: reverseColor_dark)),
       initialRoute: '/',
       routes: {
         '/': (ctx) => Home(),
         PostEditing.postEditing: (ctx) => const PostEditing(),
         NewsDetails.newsDetailsScreen: (ctx) => const NewsDetails(),
-        TitleEditing.titleEditing : (ctx) => const TitleEditing(),
+        TitleEditing.titleEditing: (ctx) => const TitleEditing(),
         AboutApplication.aboutApplication: (ctx) => const AboutApplication(),
-        ApplicationSetting.applicationSetting: (ctx) => const ApplicationSetting(),
-       /*   AddTitleBar.addTitleBar: (ctx) => const AddTitleBar(),
+        ApplicationSetting.applicationSetting: (ctx) =>
+        const ApplicationSetting(),
+        /*   AddTitleBar.addTitleBar: (ctx) => const AddTitleBar(),
 */
       },
     );

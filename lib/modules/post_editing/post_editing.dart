@@ -58,9 +58,9 @@ class _PostEditingState extends State<PostEditing> {
       _title.text = post.title;
       _detail.text = post.detail ?? '';
       _postType = post.type;
-      _image=post.remoteImageTitle!=null?[post.remoteImageTitle]:[];
-      _images=post.remoteImageList!=null?post.remoteImageList:[];
-      isNew=false;
+      _image = post.remoteImageTitle != null ? [post.remoteImageTitle] : [];
+      _images = post.remoteImageList != null ? post.remoteImageList : [];
+      isNew = false;
     }
 
     super.didChangeDependencies();
@@ -75,8 +75,8 @@ class _PostEditingState extends State<PostEditing> {
         title: "addPost".tr().toString(),
         context: context,
         body: Container(
-          padding: EdgeInsets.all(15),
           child: SingleChildScrollView(
+            padding: const EdgeInsets.all(padding),
             child: Form(
               key: _formKeyTitle,
               child: Column(
@@ -139,10 +139,7 @@ class _PostEditingState extends State<PostEditing> {
                           onDismissed: (_) {},
                           onPressed: () async {
                             _image?.clear();
-                            await selectFiles(allowMultiple: false)
-                                ?.then((value) => setState(() {
-                                      _image?.insert(0, value?.firstOrNull);
-                                    }));
+                            _image = await selectFiles(allowMultiple: false);
                             setState(() {});
                           },
                           icon: Icons.add_photo_alternate_outlined,

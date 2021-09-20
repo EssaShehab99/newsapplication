@@ -116,7 +116,7 @@ class _NewsScreenState extends State<NewsScreen> {
             body: TabBarView(
               children: _titles
                   .map((_newsTitle) => Container(
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).primaryColor,
                         child: SafeArea(
                           top: false,
                           bottom: false,
@@ -220,6 +220,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         ),
                       ),
                       Container(
+                        padding: EdgeInsetsDirectional.only(end: 10),
                         width:
                             _posts[index].remoteImageTitle != null ? 120 : 0.0,
                         height:
@@ -236,11 +237,10 @@ class _NewsScreenState extends State<NewsScreen> {
                 ),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.symmetric(horizontal: padding),
                   child: Row(
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
                         child: DetermineTime(
                           DateTime.parse(_posts[index].date),
                         ),

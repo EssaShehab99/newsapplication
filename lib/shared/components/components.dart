@@ -65,6 +65,7 @@ defaultTextButton({required Function onPressed, required Widget child}) =>
                     borderRadius: BorderRadius.circular(0.0),
                   ),
                 ),
+                elevation: MaterialStateProperty.all(5)
               ),
               onPressed: () {
                 onPressed();
@@ -73,17 +74,11 @@ defaultTextButton({required Function onPressed, required Widget child}) =>
             ));
 
 defaultItemListView({required Widget child, required Function() onPressed}) =>
-    Card(
-      margin: EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0.0),
-      ),
-      elevation: 5.0,
-      child: defaultTextButton(
-        onPressed: onPressed,
-        child: Container(
-          child: child,
-        ),
+    defaultTextButton(
+      onPressed: onPressed,
+      child: Container(
+
+        child: child,
       ),
     );
 
@@ -120,11 +115,11 @@ Widget defaultFloatingActionButton(
         {required IconData icon, required Function onPressed}) =>
     Builder(builder: (context) {
       return FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         onPressed: () => onPressed(),
         child: Icon(
           icon,
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).cardColor,
         ),
       );
     });
@@ -171,6 +166,7 @@ Widget defaultTextFormField({
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(borderRadius)),
+
         ),
       ),
     );
@@ -198,7 +194,7 @@ Widget defaultDropdownButton({
       ),
       value: value,
       hint: hint,
-      isExpanded: true,
+      isExpanded: true,dropdownColor: Theme.of(context).backgroundColor,
       onTap: onTap,
       style: Theme.of(context).textTheme.headline4,
       onChanged: onChanged,
@@ -261,7 +257,7 @@ Future<dynamic> defaultDialog(
     id,
     Widget? title,
     Widget? child,
-    double height = 90.0}) async {
+    double height = 100.0}) async {
   AlertDialog alertDialog = AlertDialog(
     title: Center(child: title),
     content: Container(
@@ -289,14 +285,15 @@ Future<dynamic> defaultConfirmDialog({
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(
+                MaterialButton(
                     onPressed: () {
                       Navigator.of(context).pop(true);
                     },
                     child: Text(
                       "yes".tr().toString(),
                     )),
-                TextButton(
+                SizedBox(width: 30,),
+                MaterialButton(
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
@@ -321,10 +318,6 @@ defaultElevatedButton(
           onPressed();
         },
         child: Center(child: child),
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(borderRadius))),
-        backgroundColor: MaterialStateProperty.all(backgroundColor_light)),
       ),
     );
 
@@ -418,18 +411,22 @@ Widget defaultDismissible({
           alignment: direction == DismissDirection.down
               ? AlignmentDirectional.topCenter
               : AlignmentDirectional.centerStart,
-          child: Icon(Icons.delete)),
+          child: Icon(Icons.delete,color: reverseColor_dark,)),
       secondaryBackground: Container(
           margin: EdgeInsetsDirectional.only(end: 30),
           alignment: AlignmentDirectional.centerEnd,
-          child: Icon(Icons.edit)),
+          child: Icon(Icons.edit,color: reverseColor_dark)),
     );
 
-defaultDivider() => Divider(
-      color: Colors.white10,
-      thickness: 1,
-      height: 1,
-    );
+defaultDivider() => Builder(builder: (context) {
+      return Divider(
+        thickness: 0.4,
+        height: 0.0,
+        indent: MediaQuery.of(context).size.width*0.045,
+        endIndent: MediaQuery.of(context).size.width*0.045,
+        // endIndent: MediaQuery.of(context).size.width*0.9,
+      );
+    });
 
 Widget defaultGroupListTile({
   required String groupTitle,
@@ -438,25 +435,19 @@ Widget defaultGroupListTile({
     Container(
       child: Column(
         children: [
-          Builder(
-            builder: (context) {
-              return Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  groupTitle,
-                  style: Theme.of(context).textTheme.overline,
-                ),
-              );
-            }
-          ),
+          Builder(builder: (context) {
+            return Container(
+              width: double.infinity,
+              child: Text(
+                groupTitle,
+                style: Theme.of(context).textTheme.overline,
+              ),
+            );
+          }),
           Column(
             children: groupElements,
           ),
-          Divider(
-            height: 20,
-            thickness: 0.5,
-          ),
+          defaultDivider(),
         ],
       ),
     );
