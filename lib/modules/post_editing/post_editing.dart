@@ -137,7 +137,7 @@ class _PostEditingState extends State<PostEditing> {
                         child: Stack(
                       children: [
                         PhotoViewer(
-                          images: _image?.isNotEmpty==true?_image:null,
+                          images: _image,
                           onDismissed: (_) {},
                           onPressed: () async {
                             _image?.clear();
