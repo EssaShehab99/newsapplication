@@ -58,8 +58,8 @@ class _PostEditingState extends State<PostEditing> {
       _title.text = post.title;
       _detail.text = post.detail ?? '';
       _postType = post.type;
-      _image=[post.remoteImageTitle];
-      _images=post.remoteImageList;
+      _image=post.remoteImageTitle!=null?[post.remoteImageTitle]:[];
+      _images=post.remoteImageList!=null?post.remoteImageList:[];
       isNew=false;
     }
 
