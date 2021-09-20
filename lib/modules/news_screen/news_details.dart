@@ -1,7 +1,6 @@
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:newsapplication/layout/main_layout/main_layout.dart';
-import 'package:newsapplication/models/file_manager/files_manager.dart';
 import 'package:newsapplication/models/post/post.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
 import 'package:newsapplication/modules/post_editing/post_editing.dart';
@@ -9,7 +8,6 @@ import 'package:newsapplication/shared/components/components.dart';
 import 'package:newsapplication/shared/components/constants.dart';
 import 'package:newsapplication/shared/image_viewer/image_viewer.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart' as intl;
 import 'package:easy_localization/easy_localization.dart' as localization;
 import 'package:favorite_button/favorite_button.dart';
 
@@ -61,10 +59,12 @@ class _NewsDetailsState extends State<NewsDetails> {
                   height: MediaQuery.of(context).size.height * 0.04,
                 ),
                 Container(
-                  height:post.remoteImageTitle!=null? 250:0,
+                  height: post.remoteImageTitle != null ? 250 : 0,
                   child: DefaultBoxImage(
-                    images: post.remoteImageTitle!=null?[post.remoteImageTitle]:[],
-                    index:  0,
+                    images: post.remoteImageTitle != null
+                        ? [post.remoteImageTitle]
+                        : [],
+                    index: 0,
                   ),
                 ),
                 SizedBox(
@@ -119,19 +119,18 @@ class _NewsDetailsState extends State<NewsDetails> {
       ),
       floatingActionButton: defaultFloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed(PostEditing.postEditing, arguments:
-             Post(
-                id: post.id,
-                title: post.title,
-                detail: post.detail,
-                date: post.date,
-                type: post.type,
-                isRead: post.isRead,
-                isSync: post.isSync,
-                isFavorite: post.isFavorite,
-               remoteImageTitle: post.remoteImageTitle,
-                 remoteImageList: post.remoteImageList)
-          );
+          Navigator.of(context).pushNamed(PostEditing.postEditing,
+              arguments: Post(
+                  id: post.id,
+                  title: post.title,
+                  detail: post.detail,
+                  date: post.date,
+                  type: post.type,
+                  isRead: post.isRead,
+                  isSync: post.isSync,
+                  isFavorite: post.isFavorite,
+                  remoteImageTitle: post.remoteImageTitle,
+                  remoteImageList: post.remoteImageList));
         },
         icon: Icons.edit,
       ),

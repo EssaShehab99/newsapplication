@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:newsapplication/layout/main_layout/main_layout.dart';
 import 'package:newsapplication/models/post/post.dart';
 import 'package:newsapplication/models/post/posts_manager.dart';
@@ -30,7 +28,7 @@ class _PostEditingState extends State<PostEditing> {
   final focus = FocusNode();
   List<dynamic>? _image = [];
   List<dynamic>? _images = [];
-  bool isNew=true;
+  bool isNew = true;
 
   void _submit() {
     print(_image?.length);
@@ -55,15 +53,15 @@ class _PostEditingState extends State<PostEditing> {
   @override
   void didChangeDependencies() {
     Post? post = ModalRoute.of(context)!.settings.arguments as Post?;
-    // if (post != null) {
-    //   _id = post.id!;
-    //   _title.text = post.title;
-    //   _detail.text = post.detail ?? '';
-    //   _postType = post.type;
-    //   _image=[post.remoteImageTitle];
-    //   _images=post.remoteImageList;
-    //   isNew=false;
-    // }
+    if (post != null) {
+      _id = post.id!;
+      _title.text = post.title;
+      _detail.text = post.detail ?? '';
+      _postType = post.type;
+      _image=[post.remoteImageTitle];
+      _images=post.remoteImageList;
+      isNew=false;
+    }
 
     super.didChangeDependencies();
   }
@@ -121,7 +119,7 @@ class _PostEditingState extends State<PostEditing> {
                     child: defaultDropdownButton(
                         context: context,
                         list: titlesList,
-                        value: _postType==null?titlesList[0]:_postType,
+                        value: _postType == null ? titlesList[0] : _postType,
                         onChanged: (value) {
                           _postType = value;
                         },
@@ -145,45 +143,10 @@ class _PostEditingState extends State<PostEditing> {
                                 ?.then((value) => setState(() {
                                       _image?.insert(0, value?.firstOrNull);
                                     }));
-                            setState(() {
-
-                            });
+                            setState(() {});
                           },
                           icon: Icons.add_photo_alternate_outlined,
                         ),
-                        // Container(
-                        //   width: double.infinity,
-                        //   child: InkWell(
-                        //     onTap: () {
-                        //       FocusScope.of(context).unfocus();
-                        //       selectFiles(allowMultiple: false)
-                        //           ?.then((value) => setState(() {
-                        //                 _image = value?.firstOrNull;
-                        //               }));
-                        //     },
-                        //     child: Container(
-                        //       height: 215,
-                        //       child: _image == null
-                        //           ? _imageUrl == null
-                        //               ? Icon(Icons.add_photo_alternate_outlined)
-                        //               : ClipRRect(
-                        //                   borderRadius:
-                        //                       BorderRadius.circular(borderRadius),
-                        //                   child: Image.network(
-                        //                     _imageUrl!,
-                        //                     fit: BoxFit.fill,
-                        //                   ),
-                        //                 )
-                        //           : ClipRRect(
-                        //               borderRadius: BorderRadius.circular(borderRadius),
-                        //               child: Image.file(
-                        //                 _image!,
-                        //                 fit: BoxFit.fill,
-                        //               ),
-                        //             ),
-                        //     ),
-                        //   ),
-                        // ),
                         Center(
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 20),
@@ -245,7 +208,7 @@ class _PostEditingState extends State<PostEditing> {
                     child: defaultElevatedButton(
                       onPressed: _submit,
                       child: Text(
-                       isNew? 'post'.tr().toString():'edit'.tr().toString(),
+                        isNew ? 'post'.tr().toString() : 'edit'.tr().toString(),
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),

@@ -12,7 +12,6 @@ import 'package:newsapplication/modules/title_news/title_editing.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:newsapplication/shared/components/constants.dart';
 import 'package:newsapplication/shared/image_viewer/image_viewer.dart';
-import 'package:newsapplication/shared/setting/setting.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '/models/title/news_titles_manager.dart';
 import 'package:provider/provider.dart';
@@ -76,10 +75,11 @@ class _NewsScreenState extends State<NewsScreen> {
                           ),
                           onSelected: (item) {
                             if (item == 0)
-                              Navigator.of(context)
-                                  .pushNamed(ApplicationSetting.applicationSetting);
+                              Navigator.of(context).pushNamed(
+                                  ApplicationSetting.applicationSetting);
                             if (item == 1)
-                              Navigator.of(context).pushNamed(AboutApplication.aboutApplication);
+                              Navigator.of(context)
+                                  .pushNamed(AboutApplication.aboutApplication);
                             if (item == 2)
                               Navigator.of(context)
                                   .pushNamed(TitleEditing.titleEditing);
@@ -115,54 +115,61 @@ class _NewsScreenState extends State<NewsScreen> {
                             builder: (context) {
                               return Consumer<PostsManager>(
                                 builder: (context, value, child) {
-                                  value.refreshController=RefreshController(initialRefresh: false);
+                                  value.refreshController =
+                                      RefreshController(initialRefresh: false);
                                   return defaultSmartRefresher(
-                                  controller: value.refreshController!,
-                                  onRefresh:  value.onRefresh,
-                                  onLoading: value.onLoading,
-                                  child: CustomScrollView(
-                                    key: PageStorageKey<String>(_newsTitle.id!),
-                                    slivers: [
-                                      SliverOverlapInjector(
-                                          handle: NestedScrollView
-                                              .sliverOverlapAbsorberHandleFor(
-                                                  context)),
-                                      SliverPadding(
-                                        padding: EdgeInsets.all(2.0),
-                                        sliver: SliverList(
-                                          delegate: SliverChildBuilderDelegate(
-                                            (context, index) => _newsTitle
-                                                        .typeTitle ==
-                                                    TypeTitle.MIXED
-                                                ? _listViewBuilder(_posts, index)
-                                                : (_newsTitle.typeTitle ==
-                                                        TypeTitle.CLOUD
-                                                    ? (_listViewBuilder(
-                                                        _posts
-                                                            .where((_post) =>
-                                                                _post.type.id ==
-                                                                _newsTitle.id)
-                                                            .toList(),
-                                                        index))
-                                                    : _listViewBuilder(
-                                                        _favoritePosts, index)),
-                                            childCount: _newsTitle.typeTitle ==
-                                                    TypeTitle.MIXED
-                                                ? _posts.length
-                                                : (_newsTitle.typeTitle ==
-                                                        TypeTitle.CLOUD
-                                                    ? _posts
-                                                        .where((_post) =>
-                                                            _post.type.id ==
-                                                            _newsTitle.id)
-                                                        .length
-                                                    : _favoritePosts.length),
+                                    controller: value.refreshController!,
+                                    onRefresh: value.onRefresh,
+                                    onLoading: value.onLoading,
+                                    child: CustomScrollView(
+                                      key: PageStorageKey<String>(
+                                          _newsTitle.id!),
+                                      slivers: [
+                                        SliverOverlapInjector(
+                                            handle: NestedScrollView
+                                                .sliverOverlapAbsorberHandleFor(
+                                                    context)),
+                                        SliverPadding(
+                                          padding: EdgeInsets.all(2.0),
+                                          sliver: SliverList(
+                                            delegate:
+                                                SliverChildBuilderDelegate(
+                                              (context, index) => _newsTitle
+                                                          .typeTitle ==
+                                                      TypeTitle.MIXED
+                                                  ? _listViewBuilder(
+                                                      _posts, index)
+                                                  : (_newsTitle.typeTitle ==
+                                                          TypeTitle.CLOUD
+                                                      ? (_listViewBuilder(
+                                                          _posts
+                                                              .where((_post) =>
+                                                                  _post.type
+                                                                      .id ==
+                                                                  _newsTitle.id)
+                                                              .toList(),
+                                                          index))
+                                                      : _listViewBuilder(
+                                                          _favoritePosts,
+                                                          index)),
+                                              childCount: _newsTitle
+                                                          .typeTitle ==
+                                                      TypeTitle.MIXED
+                                                  ? _posts.length
+                                                  : (_newsTitle.typeTitle ==
+                                                          TypeTitle.CLOUD
+                                                      ? _posts
+                                                          .where((_post) =>
+                                                              _post.type.id ==
+                                                              _newsTitle.id)
+                                                          .length
+                                                      : _favoritePosts.length),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                      ],
+                                    ),
+                                  );
                                 },
                               );
                             },
@@ -177,71 +184,76 @@ class _NewsScreenState extends State<NewsScreen> {
       floatingActionButton: defaultFloatingActionButton(
         icon: Icons.edit,
         onPressed: () {
-          Navigator.of(context).pushNamed(PostEditing.postEditing/*,
-              arguments: {'isNew': true, 'post': null}*/);
+          Navigator.of(context).pushNamed(PostEditing
+                  .postEditing);
         },
       ),
     );
   }
 
-  Widget _listViewBuilder(List<Post>_posts, index) => Column(
-      children: [
+  Widget _listViewBuilder(List<Post> _posts, index) => Column(children: [
         defaultDivider(),
         defaultItemListView(
-      child: Column(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height * 0.2,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: defaultAutoSizeText(
-                      text: "${_posts[index].title}",
-                      context: context,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: _posts[index].remoteImageTitle!=null?120:0.0,
-                  height:_posts[index].remoteImageTitle!=null? 120:0.0,
-                  child: DefaultBoxImage(
-                    images: _posts[index].remoteImageTitle!=null? [_posts[index].remoteImageTitle]:[],
-                    index:0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.only(top: 10),
-            child: Row(
+            child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: DetermineTime(
-                    DateTime.parse(_posts[index].date),
-                  ),
-                ),
-                Spacer(),
-                _posts[index].isRead
-                    ? SizedBox.shrink()
-                    : Container(
-                        height: 20,
-                        width: 20,
-                        decoration: BoxDecoration(
-                            color: Colors.green, shape: BoxShape.circle),
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: defaultAutoSizeText(
+                            text: "${_posts[index].title}",
+                            context: context,
+                          ),
+                        ),
                       ),
+                      Container(
+                        width:
+                            _posts[index].remoteImageTitle != null ? 120 : 0.0,
+                        height:
+                            _posts[index].remoteImageTitle != null ? 120 : 0.0,
+                        child: DefaultBoxImage(
+                          images: _posts[index].remoteImageTitle != null
+                              ? [_posts[index].remoteImageTitle]
+                              : [],
+                          index: 0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.only(top: 10),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: DetermineTime(
+                          DateTime.parse(_posts[index].date),
+                        ),
+                      ),
+                      Spacer(),
+                      _posts[index].isRead
+                          ? SizedBox.shrink()
+                          : Container(
+                              height: 20,
+                              width: 20,
+                              decoration: BoxDecoration(
+                                  color: Colors.green, shape: BoxShape.circle),
+                            ),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
-      onPressed: () {
-        Navigator.of(context)
-            .pushNamed(NewsDetails.newsDetailsScreen, arguments: _posts[index]);
-      })]);
+            onPressed: () {
+              Navigator.of(context).pushNamed(NewsDetails.newsDetailsScreen,
+                  arguments: _posts[index]);
+            })
+      ]);
 }
