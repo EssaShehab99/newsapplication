@@ -74,7 +74,7 @@ class _DetermineTimeState extends State<DetermineTime> {
 
     return Builder(
       builder: (context) {
-        return Text(textTime, style: Theme.of(context).textTheme.headline2);
+        return Text(textTime, style: Theme.of(context).textTheme.headline4);
       },
     );
   }

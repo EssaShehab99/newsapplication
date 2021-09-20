@@ -151,13 +151,14 @@ class _PostEditingState extends State<PostEditing> {
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
+                                color: backgroundColor_light,
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(borderRadius),
                                     bottomRight:
                                         Radius.circular(borderRadius))),
                             child: Text(
                               "titlePicture".tr().toString(),
+                              style: Theme.of(context).textTheme.headline4,
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -186,13 +187,14 @@ class _PostEditingState extends State<PostEditing> {
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
+                                  color: backgroundColor_light,
                                   borderRadius: BorderRadius.only(
                                       bottomLeft: Radius.circular(borderRadius),
                                       bottomRight:
                                           Radius.circular(borderRadius))),
                               child: Text(
                                 "extraPictures".tr().toString(),
+                                style: Theme.of(context).textTheme.headline4,
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -209,7 +211,7 @@ class _PostEditingState extends State<PostEditing> {
                       onPressed: _submit,
                       child: Text(
                         isNew ? 'post'.tr().toString() : 'edit'.tr().toString(),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.headline4,
                       ),
                     ),
                   ),

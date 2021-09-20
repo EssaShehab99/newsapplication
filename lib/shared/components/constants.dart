@@ -5,17 +5,12 @@ enum TypeTitle {
   MIXED,
   CLOUD,
 }
-List<String> itemsPopupMenuButton = [
-  "setting".tr().toString(),
-  "about_application".tr().toString(),
-  "addTitle".tr().toString(),
-  "exit".tr().toString(),
-];
 
 String timeFormat = 'dd/MM/yyyy hh:mm a';
 
 Color primaryColor_light=Color.fromRGBO(255, 255, 255, 1);
-Color secondaryColor_light=Color.fromRGBO(170, 170, 170, 1);
+Color backgroundColor_light=Color.fromRGBO(220, 220, 220, 1);
+Color secondaryColor_light=Color.fromRGBO(150, 150, 150, 1);
 Color reverseColor_light=Color.fromRGBO(0, 0, 0, 1);
 
 const double borderRadius=5.0;

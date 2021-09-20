@@ -61,12 +61,8 @@ class LauncherApp extends StatelessWidget {
       theme: ThemeData(
           fontFamily: "Cairo",
           primaryColor: primaryColor_light,
-          backgroundColor: secondaryColor_light,
-          indicatorColor: secondaryColor_light,
-          elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(secondaryColor_light))),
+          backgroundColor: backgroundColor_light,
+          indicatorColor: backgroundColor_light,
           tabBarTheme: TabBarTheme(
             labelColor: reverseColor_light,
             unselectedLabelColor: secondaryColor_light,
@@ -76,23 +72,26 @@ class LauncherApp extends StatelessWidget {
           ),
           appBarTheme: AppBarTheme(
             color: primaryColor_light,
-            titleTextStyle: textStyle(color: reverseColor_light),
+            titleTextStyle: textStyle(color: reverseColor_light,fontSize: 16),
             iconTheme: IconThemeData(color: reverseColor_light),
           ),
+          checkboxTheme: CheckboxThemeData(
+            checkColor: MaterialStateProperty.all(primaryColor_light),
+            fillColor: MaterialStateProperty.all(secondaryColor_light),
+          ),
           textTheme: TextTheme(
-            headline1: textStyle(fontSize: 15, color: reverseColor_light),
-            headline2: textStyle(fontSize: 13, color: reverseColor_light),
-            headline3: textStyle(fontSize: 10, color: reverseColor_light),
-            headline4: textStyle(fontSize: 15, color: secondaryColor_light),
-            headline5: textStyle(
-                fontSize: 15,
-                color: secondaryColor_light,
-                fontWeight: FontWeight.normal),
-            headline6: textStyle(fontSize: 15, color: primaryColor_light),
-            bodyText1: textStyle(
-                fontSize: 13,
-                color: reverseColor_light,
-                fontWeight: FontWeight.normal),
+            headline1: textStyle(fontSize: 16, color: reverseColor_light),
+            headline2: textStyle(fontSize: 15, color: reverseColor_light),
+            headline3: textStyle(fontSize: 14, color: reverseColor_light),
+            headline4: textStyle(fontSize: 13, color: reverseColor_light),
+            headline5: textStyle(fontSize: 12, color: reverseColor_light, fontWeight: FontWeight.normal),
+            headline6: textStyle(fontSize: 11, color: reverseColor_light),
+            bodyText1: textStyle(fontSize: 15, color: backgroundColor_light),
+            bodyText2: textStyle(fontSize: 14, color: backgroundColor_light),
+            subtitle1: textStyle(fontSize: 13, color: secondaryColor_light, fontWeight: FontWeight.normal),
+            button: textStyle(fontSize: 13, color: primaryColor_light, fontWeight: FontWeight.bold),
+            caption: textStyle(fontSize: 14, color: reverseColor_light, fontWeight: FontWeight.normal),
+            overline: textStyle(color: Colors.blue,fontSize: 14,fontWeight: FontWeight.bold)
           )),
       initialRoute: '/',
       routes: {

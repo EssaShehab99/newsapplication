@@ -51,8 +51,8 @@ class _NewsDetailsState extends State<NewsDetails> {
               children: [
                 Container(
                   child: defaultSelectableText(
-                    text: value.postsList[0].title.trim(),
-                    style: Theme.of(context).textTheme.bodyText1,
+                    text: post.title.trim(),
+                    style: Theme.of(context).textTheme.headline3,
                   ),
                 ),
                 SizedBox(
@@ -75,7 +75,7 @@ class _NewsDetailsState extends State<NewsDetails> {
                   child: defaultSelectableText(
                     text: localization.DateFormat(timeFormat)
                         .format(DateTime.parse(value.postsList[0].date)),
-                    style: Theme.of(context).textTheme.headline2,
+                    style: Theme.of(context).textTheme.headline4,
                   ),
                 ),
                 Divider(
@@ -87,7 +87,7 @@ class _NewsDetailsState extends State<NewsDetails> {
                 Container(
                   child: defaultSelectableText(
                     text: value.postsList[0].detail?.trim() ?? '',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.headline3,
                   ),
                 ),
                 SizedBox(

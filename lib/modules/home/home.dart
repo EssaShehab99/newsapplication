@@ -4,6 +4,7 @@ import 'package:newsapplication/models/post/posts_manager.dart';
 import 'package:newsapplication/models/title/news_title.dart';
 import 'package:newsapplication/models/title/news_titles_manager.dart';
 import 'package:newsapplication/shared/components/constants.dart';
+import 'package:newsapplication/shared/setting/setting.dart';
 import 'package:provider/provider.dart';
 import '/modules/news_screen/news_screen.dart';
 
@@ -17,6 +18,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   void initState() {
+    Provider.of<Setting>(context,listen: false).getThemeMode();
+    Provider.of<Setting>(context,listen: false).getDownloadMedia();
+    Provider.of<Setting>(context,listen: false).getLanguage();
+
     Provider.of<NewsTitlesManager>(context, listen: false).titlesList.add(
         NewsTitle(id: "1", title: "اخر الاخبار", typeTitle: TypeTitle.MIXED));
     Provider.of<NewsTitlesManager>(context, listen: false)
@@ -85,7 +90,7 @@ class _HomeState extends State<Home> {
     Provider.of<PostsManager>(context, listen: false).postsList.add(Post(
           id: "2",
           title:
-              "I have some text, maybe long and a box, WxH fixed size. I've calculated that given my font size and height scale, I can fit L lines of text. So I put maxLines and ellipsize and it works in Android app (since line height is predictable), but doesn't in Flutter app.",
+              "إرادتهم فيتساوي مع هؤلاء الذين يتجنبون وينأون عن تحمل الكدح",
           remoteImageTitle:
               null,
           remoteImageList: [

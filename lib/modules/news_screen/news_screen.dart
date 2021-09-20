@@ -62,17 +62,26 @@ class _NewsScreenState extends State<NewsScreen> {
                           icon: Icon(
                             Icons.more_vert,
                           ),
-                          itemBuilder: (ctx) =>
-                              List<PopupMenuItem<int>>.generate(
-                            itemsPopupMenuButton.length,
-                            (index) => PopupMenuItem(
-                              child: Text(
-                                itemsPopupMenuButton[index],
-                              ),
-                              value: itemsPopupMenuButton
-                                  .indexOf(itemsPopupMenuButton[index]),
-                            ),
-                          ),
+                          shape:  RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
+                          itemBuilder: (ctx) {
+                            final list = <PopupMenuEntry<int>>[];
+                            itemsPopupMenuButton.forEach((itemPopupMenuButton) {
+                              list.add(PopupMenuItem(
+                                child: Text(
+                                  itemPopupMenuButton,
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
+                                value: itemsPopupMenuButton
+                                    .indexOf(itemPopupMenuButton),
+                              ));
+                              list.add(
+                                const PopupMenuDivider(
+                                  height: 5,
+                                ),
+                              );
+                            });
+                            return list;
+                          },
                           onSelected: (item) {
                             if (item == 0)
                               Navigator.of(context).pushNamed(
@@ -184,8 +193,7 @@ class _NewsScreenState extends State<NewsScreen> {
       floatingActionButton: defaultFloatingActionButton(
         icon: Icons.edit,
         onPressed: () {
-          Navigator.of(context).pushNamed(PostEditing
-                  .postEditing);
+          Navigator.of(context).pushNamed(PostEditing.postEditing);
         },
       ),
     );

@@ -14,30 +14,133 @@ class ApplicationSetting extends StatefulWidget {
 }
 
 class _ApplicationSettingState extends State<ApplicationSetting> {
+  int? _radioValue;
+
   @override
   Widget build(BuildContext context) {
     return defaultScaffold(
         title: "setting".tr().toString(),
         body: Consumer<Setting>(
-          builder: (context, value, child) => ListView(
-            children: [
-              defaultListTile(groupTitle: "dataUsing".tr().toString(), groupElements: [
-                CheckboxListTile(
-                  title: Text(
-                    "photos".tr().toString(),
-                  ),
-                  subtitle: Text(
-                    "loadPhotosOnTheHomeScreen".tr().toString(),
-                  ),
-                  value: value.autoDownloadMedia,
-                  onChanged: (onChangedValue) {
-                    value.setAutoDownloadMedia(onChangedValue!);
-                  },
-                )
-              ])
-            ],
-          ),
-        ),
+            builder: (context, value, child) => ListView(
+                  children: [
+                    defaultGroupListTile(
+                        groupTitle: "dataUsing".tr().toString(),
+                        groupElements: [
+                          Builder(
+                            builder: (context) => CheckboxListTile(
+                              title: Text(
+                                "photos".tr().toString(),
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                              subtitle: Text(
+                                "loadPhotosOnTheHomeScreen".tr().toString(),
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                              value: value.autoDownloadMedia,
+                              onChanged: (onChangedValue) {
+                                value.setAutoDownloadMedia(onChangedValue!);
+                              },
+                            ),
+                          ),
+                        ]),
+                    defaultGroupListTile(
+                        groupTitle: "display".tr().toString(),
+                        groupElements: [
+                          defaultListTile(
+                              title: "theme".tr().toString(),
+                              subtitle: "${value.themeModeName!}",
+                              onTap: () {
+                                defaultDialog(
+                                    context: context,
+                                    height: 180,
+                                    title: Text(
+                                      "theme".tr().toString(),
+                                      style:
+                                          Theme.of(context).textTheme.headline3,
+                                    ),
+                                    child: Consumer<Setting>(
+                                        builder: (context, value, child) =>
+                                            Column(
+                                              children: themeItems
+                                                  .map((themeItem) =>
+                                                      RadioListTile<int>(
+                                                        controlAffinity:
+                                                            ListTileControlAffinity
+                                                                .leading,
+                                                        value: themeItems
+                                                            .indexOf(themeItem),
+                                                        groupValue: value
+                                                            .themeModeValue,
+                                                        onChanged: (val) {
+                                                          setState(() {
+                                                            value.setThemeMode(
+                                                                val!);
+                                                          });
+                                                        },
+                                                        title: Text(
+                                                          themeItem,
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .headline2,
+                                                        ),
+                                                      ))
+                                                  .toList(),
+                                            )));
+                              })
+                        ]),
+                    defaultGroupListTile(
+                        groupTitle: "language".tr().toString(),
+                        groupElements: [
+                          defaultListTile(
+                              title: "language".tr().toString(),
+                              subtitle: "${value.languageName!}",
+                              onTap: () {
+                                defaultDialog(
+                                    context: context,
+                                    height: 120,
+                                    title: Text(
+                                      "language".tr().toString(),
+                                      style:
+                                          Theme.of(context).textTheme.headline3,
+                                    ),
+                                    child: Consumer<Setting>(
+                                        builder: (context, value, child) =>
+                                            Column(
+                                              children: languages
+                                                  .map((language) =>
+                                                      RadioListTile<int>(
+                                                        controlAffinity:
+                                                            ListTileControlAffinity
+                                                                .leading,
+                                                        value: languages
+                                                            .indexOf(language),
+                                                        groupValue:
+                                                            value.languageValue,
+                                                        onChanged: (val) {
+                                                          setState(() {
+                                                            value.setLanguage(
+                                                                val!);
+                                                          });
+                                                        },
+                                                        title: Text(
+                                                          language,
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .headline2,
+                                                        ),
+                                                      ))
+                                                  .toList(),
+                                            )));
+                              })
+                        ]),
+                  ],
+                )),
         context: context);
   }
 }
