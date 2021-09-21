@@ -1,3 +1,4 @@
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newsapplication/layout/main_layout/main_layout.dart';
@@ -33,6 +34,12 @@ class _NewsScreenState extends State<NewsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> itemsPopupMenuButton = [
+      "setting".tr().toString(),
+      "about_application".tr().toString(),
+      "addTitle".tr().toString(),
+      "exit".tr().toString(),
+    ];
     var _posts = Provider.of<PostsManager>(context, listen: true).postsList;
     var _titles =
         Provider.of<NewsTitlesManager>(context, listen: true).titlesList;
@@ -64,7 +71,7 @@ class _NewsScreenState extends State<NewsScreen> {
                           ),
                           shape:  RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
                           itemBuilder: (ctx) {
-                            final list = <PopupMenuEntry<int>>[];
+                            List<PopupMenuEntry<int>> list = <PopupMenuEntry<int>>[];
                             itemsPopupMenuButton.forEach((itemPopupMenuButton) {
                               list.add(PopupMenuItem(
                                 child: Text(

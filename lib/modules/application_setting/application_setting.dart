@@ -83,11 +83,10 @@ class _ApplicationSettingState extends State<ApplicationSetting> {
                                                             groupValue: value
                                                                 .themeModeValue,
                                                             onChanged: (val) {
-                                                              setState(() {
                                                                 value
                                                                     .setThemeMode(
                                                                         val!);
-                                                              });
+
                                                             },
                                                             title: Text(
                                                               themeItem,
@@ -109,7 +108,7 @@ class _ApplicationSettingState extends State<ApplicationSetting> {
                             groupElements: [
                               defaultListTile(
                                   title: "language".tr().toString(),
-                                  subtitle: "${value.languageName!}",
+                                  subtitle: "${value.languageName}",
                                   onTap: () {
                                     defaultDialog(
                                         context: context,
@@ -123,23 +122,23 @@ class _ApplicationSettingState extends State<ApplicationSetting> {
                                         child: Consumer<Setting>(
                                             builder: (context, value, child) =>
                                                 Column(
-                                                  children: languages
+                                                  children: value.languages()
                                                       .map((language) =>
                                                           RadioListTile<int>(
                                                             controlAffinity:
                                                                 ListTileControlAffinity
                                                                     .leading,
-                                                            value: languages
+                                                            value: value.languages()
                                                                 .indexOf(
                                                                     language),
                                                             groupValue: value
                                                                 .languageValue,
                                                             onChanged: (val) {
-                                                              setState(() {
+                                                                print('ttttttttttttttttttt${val}');
                                                                 value
                                                                     .setLanguage(
-                                                                        val!);
-                                                              });
+                                                                        val!,context);
+
                                                             },
                                                             title: Text(
                                                               language,

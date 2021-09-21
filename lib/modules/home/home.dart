@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
   void initState() {
     Provider.of<Setting>(context,listen: false).getThemeMode();
     Provider.of<Setting>(context,listen: false).getDownloadMedia();
-    Provider.of<Setting>(context,listen: false).getLanguage();
+    Provider.of<Setting>(context,listen: false).getLanguage(context);
 
     Provider.of<NewsTitlesManager>(context, listen: false).titlesList.add(
         NewsTitle(id: "1", title: "اخر الاخبار", typeTitle: TypeTitle.MIXED));

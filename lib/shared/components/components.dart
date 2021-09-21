@@ -15,22 +15,14 @@ import 'constants.dart';
 
 String shareText =
     ' ${"visitUsOnFacebook".tr().toString()} http://www.facebook.com/alyemennetblog';
-List<String> itemsPopupMenuButton = [
-  "setting".tr().toString(),
-  "about_application".tr().toString(),
-  "addTitle".tr().toString(),
-  "exit".tr().toString(),
-];
+
 List<String> themeItems = [
   "auto".tr().toString(),
   "light".tr().toString(),
   "dark".tr().toString()
 ];
 
-List<String> languages = [
-  "arabic".tr().toString(),
-  "english".tr().toString(),
-];
+
 
 Future<List<File>?>? selectFiles({bool allowMultiple = true}) async {
   List<File>? _files = [];

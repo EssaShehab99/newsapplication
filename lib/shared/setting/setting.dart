@@ -1,18 +1,30 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../main.dart';
 class Setting with ChangeNotifier {
 
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   int themeModeValue=0;
   int? languageValue=0;
-  String? themeModeName="";
-  String? languageName="Arabic";
+  String? themeModeName;
+  String? languageName;
   ThemeMode themeMode = ThemeMode.system;
   bool autoDownloadMedia=false;
   String? favoriteId;
-  Locale? _locale;
-  Locale? get locale => _locale;
+  Locale? locale=Locale('ar', 'YE');
+  LocalizationsDelegate? localizationsDelegate;
+
+  List<String> languages(){
+    return [
+      "english".tr().toString(),
+      "arabic".tr().toString(),
+    ];
+  }
+
 
   Future<void> setThemeMode(int themeModeValue) async {
     final SharedPreferences prefs = await _prefs;
@@ -21,12 +33,12 @@ class Setting with ChangeNotifier {
     this.themeModeValue=themeModeValue;
     getThemeMode();
   }
-  Future<void> setLanguage(int languageValue) async {
+  Future<void> setLanguage(int languageValue,BuildContext context) async {
     final SharedPreferences prefs = await _prefs;
 
     await  prefs.setInt("languageValue", languageValue);
     this.languageValue=languageValue;
-    getLanguage();
+    getLanguage(context);
   }
   Future<void> getDownloadMedia() async {
     final SharedPreferences prefs = await _prefs;
@@ -50,17 +62,21 @@ class Setting with ChangeNotifier {
 
     notifyListeners();
   }
-  Future<void> getLanguage() async {
+  Future<void> getLanguage(BuildContext context) async {
     final SharedPreferences prefs = await _prefs;
     languageValue = prefs.getInt('languageValue') ?? 0;
     if (languageValue == 0) {
-      languageName=languages[0];
       languageValue = 0;
-    } else {
-      languageName=languages[1];
-      languageValue = 1;
-    }
+      await EasyLocalization.of(context)?.setLocale(Locale('en','US'));
+        languageName=await "english".tr().toString();
 
+    } else {
+      languageValue = 1;
+     await EasyLocalization.of(context)?.setLocale(Locale('ar','YE'));
+       languageName=await "arabic".tr().toString();
+
+
+    }
     notifyListeners();
   }
   Future<void> setAutoDownloadMedia(bool autoDownloadMediaValue) async {
