@@ -206,8 +206,6 @@ class _NewsScreenState extends State<NewsScreen> {
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height * 0.2,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(5)),
                   child: Row(
                     children: [
                       Expanded(

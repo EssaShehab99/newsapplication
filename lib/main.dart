@@ -78,8 +78,6 @@ class LauncherApp extends StatelessWidget {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0.0))),
                 backgroundColor: MaterialStateProperty.all(primaryColor_light),
                 overlayColor: MaterialStateProperty.all(backgroundColor_light)),
           ),
