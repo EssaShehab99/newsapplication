@@ -5,7 +5,7 @@ class Post {
   final String title;
   final String? detail;
   final String date;
-  final NewsTitle type;
+  final NewsTitle? type;
   final bool isRead;
   final bool isSync;
   bool isFavorite;

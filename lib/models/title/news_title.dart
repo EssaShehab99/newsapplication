@@ -1,7 +1,7 @@
 import '/shared/components/constants.dart';
 
 class NewsTitle {
-  final String? id;
+  final int? id;
   final String title;
   TypeTitle typeTitle;
   bool? isSync;

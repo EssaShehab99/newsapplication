@@ -135,11 +135,11 @@ class _NewsScreenState extends State<NewsScreen> {
                                       RefreshController(initialRefresh: false);
                                   return defaultSmartRefresher(
                                     controller: value.refreshController!,
-                                    onRefresh: value.onRefresh,
+                                    onRefresh: ()=>value.fetchPosts(context),
                                     onLoading: value.onLoading,
                                     child: CustomScrollView(
                                       key: PageStorageKey<String>(
-                                          _newsTitle.id!),
+                                          _newsTitle.id!.toString()),
                                       slivers: [
                                         SliverOverlapInjector(
                                             handle: NestedScrollView
@@ -161,7 +161,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                                           _posts
                                                               .where((_post) =>
                                                                   _post.type
-                                                                      .id ==
+                                                                      ?.id ==
                                                                   _newsTitle.id)
                                                               .toList(),
                                                           index))
@@ -176,7 +176,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                                           TypeTitle.CLOUD
                                                       ? _posts
                                                           .where((_post) =>
-                                                              _post.type.id ==
+                                                              _post.type?.id ==
                                                               _newsTitle.id)
                                                           .length
                                                       : _favoritePosts.length),
@@ -207,7 +207,6 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   Widget _listViewBuilder(List<Post> _posts, index) => Column(children: [
-        defaultDivider(),
         defaultItemListView(
             child: Column(
               children: [
@@ -267,6 +266,7 @@ class _NewsScreenState extends State<NewsScreen> {
             onPressed: () {
               Navigator.of(context).pushNamed(NewsDetails.newsDetailsScreen,
                   arguments: _posts[index]);
-            })
+            }),
+    defaultDivider(),
       ]);
 }

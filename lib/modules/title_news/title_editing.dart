@@ -97,7 +97,7 @@ class _TitleEditingState extends State<TitleEditing> {
                     RefreshController(initialRefresh: false);
                 return defaultSmartRefresher(
                   controller: value.refreshController!,
-                  onRefresh: value.onRefresh,
+                  onRefresh: ()=>value.onRefresh(context),
                   onLoading: value.onLoading,
                   child: ListView.builder(
                       itemBuilder: (context, index) => Container(

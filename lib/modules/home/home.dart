@@ -21,35 +21,36 @@ class _HomeState extends State<Home> {
     Provider.of<Setting>(context,listen: false).getThemeMode();
     Provider.of<Setting>(context,listen: false).getDownloadMedia();
     Provider.of<Setting>(context,listen: false).getLanguage(context);
+    // Provider.of<PostsManager>(context,listen: false).fetchPosts();
 
     Provider.of<NewsTitlesManager>(context, listen: false).titlesList.add(
-        NewsTitle(id: "1", title: "اخر الاخبار", typeTitle: TypeTitle.MIXED));
+        NewsTitle(id: 1, title: "اخر الاخبار", typeTitle: TypeTitle.MIXED));
     Provider.of<NewsTitlesManager>(context, listen: false)
         .titlesList
-        .add(NewsTitle(id: "2", title: "عاجل", typeTitle: TypeTitle.CLOUD));
+        .add(NewsTitle(id: 2, title: "عاجل", typeTitle: TypeTitle.CLOUD));
     Provider.of<NewsTitlesManager>(context, listen: false)
         .titlesList
-        .add(NewsTitle(id: "3", title: "طوائ", typeTitle: TypeTitle.CLOUD));
+        .add(NewsTitle(id: 3, title: "طوائ", typeTitle: TypeTitle.CLOUD));
     Provider.of<NewsTitlesManager>(context, listen: false)
         .titlesList
-        .add(NewsTitle(id: "4", title: "الجنوب", typeTitle: TypeTitle.CLOUD));
+        .add(NewsTitle(id: 4, title: "الجنوب", typeTitle: TypeTitle.CLOUD));
     Provider.of<NewsTitlesManager>(context, listen: false)
         .titlesList
-        .add(NewsTitle(id: "5", title: "الشمال", typeTitle: TypeTitle.CLOUD));
+        .add(NewsTitle(id: 5 ,title: "الشمال", typeTitle: TypeTitle.CLOUD));
     Provider.of<NewsTitlesManager>(context, listen: false)
         .titlesList
-        .add(NewsTitle(id: "6", title: "السعودية", typeTitle: TypeTitle.CLOUD));
+        .add(NewsTitle(id: 6, title: "السعودية", typeTitle: TypeTitle.CLOUD));
     Provider.of<NewsTitlesManager>(context, listen: false)
         .titlesList
-        .add(NewsTitle(id: "7", title: "الخليج", typeTitle: TypeTitle.CLOUD));
+        .add(NewsTitle(id: 7, title: "الخليج", typeTitle: TypeTitle.CLOUD));
     Provider.of<NewsTitlesManager>(context, listen: false)
         .titlesList
-        .add(NewsTitle(id: "8", title: "الصرف", typeTitle: TypeTitle.CLOUD));
+        .add(NewsTitle(id: 8, title: "الصرف", typeTitle: TypeTitle.CLOUD));
     Provider.of<NewsTitlesManager>(context, listen: false)
         .titlesList
-        .add(NewsTitle(id: "9", title: "عالمية", typeTitle: TypeTitle.CLOUD));
+        .add(NewsTitle(id: 9, title: "عالمية", typeTitle: TypeTitle.CLOUD));
     Provider.of<NewsTitlesManager>(context, listen: false).titlesList.add(
-        NewsTitle(id: "10", title: "المفضلات", typeTitle: TypeTitle.FAVORITE));
+        NewsTitle(id: 10, title: "المفضلات", typeTitle: TypeTitle.FAVORITE));
 
     Provider.of<PostsManager>(context, listen: false).postsList.add(Post(
           id: "1",

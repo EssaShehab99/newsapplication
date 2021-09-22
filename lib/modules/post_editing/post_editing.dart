@@ -40,7 +40,7 @@ class _PostEditingState extends State<PostEditing> {
               detail: 'detail',
               date: 'DateTime.now()',
               type: NewsTitle(
-                  id: '1', title: 'title', typeTitle: TypeTitle.FAVORITE),
+                  id: 1, title: 'title', typeTitle: TypeTitle.FAVORITE),
               isRead: true,
               isSync: true,
               isFavorite: true,
