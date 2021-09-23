@@ -72,7 +72,7 @@ class _PostEditingState extends State<PostEditing> {
     List<NewsTitle> titlesList =
         Provider.of<NewsTitlesManager>(context, listen: true).titlesList;
     return defaultScaffold(
-        title: "addPost".tr().toString(),
+        title: "add-post".tr().toString(),
         context: context,
         body: Container(
           child: SingleChildScrollView(
@@ -92,7 +92,7 @@ class _PostEditingState extends State<PostEditing> {
                       validator: (String? value) {
                         if (value != null && value.trim().isEmpty ||
                             value == null)
-                          return "mustEnterText".tr().toString();
+                          return "must-enter-text".tr().toString();
                         return null;
                       },
                       onSaved: (_) => _submit,
@@ -154,7 +154,7 @@ class _PostEditingState extends State<PostEditing> {
                                     bottomRight:
                                         Radius.circular(borderRadius))),
                             child: Text(
-                              "titlePicture".tr().toString(),
+                              "title-picture".tr().toString(),
                               style: Theme.of(context).textTheme.headline4,
                               textAlign: TextAlign.center,
                             ),
@@ -190,7 +190,7 @@ class _PostEditingState extends State<PostEditing> {
                                       bottomRight:
                                           Radius.circular(borderRadius))),
                               child: Text(
-                                "extraPictures".tr().toString(),
+                                "extra-pictures".tr().toString(),
                                 style: Theme.of(context).textTheme.headline4,
                                 textAlign: TextAlign.center,
                               ),

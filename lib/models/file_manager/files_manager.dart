@@ -40,7 +40,6 @@ class FilesManager extends ChangeNotifier {
         final progress = (current / total);
         progressValue(remoteUrl: url, value: progress);
         notifyListeners();
-        print('Downloading: $progress');
       },
       file: File(_filePath),
       progress: ProgressImplementation(),
@@ -48,7 +47,6 @@ class FilesManager extends ChangeNotifier {
         insertImageToDownload(
             remoteUrl: url, localUrl: _filePath);
         notifyListeners();
-        print('COMPLETE ${fileInDatabase(url)}');
       },
       deleteOnCancel: true,
       /* client: Dio(BaseOptions(

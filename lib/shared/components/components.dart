@@ -13,7 +13,7 @@ import 'package:photo_view/photo_view.dart';
 import 'constants.dart';
 
 String shareText =
-    ' ${"visitUsOnFacebook".tr().toString()} http://www.facebook.com/alyemennetblog';
+    ' ${"visit-us-on-facebook".tr().toString()} http://www.facebook.com/alyemennetblog';
 
 List<String> themeItems = [
   "auto".tr().toString(),
@@ -263,7 +263,7 @@ Future<dynamic> defaultConfirmDialog({
         child: Column(
           children: [
             Text(
-              "doYouWantToDeleteThePost".tr().toString(),
+              "do-you-want-to-delete-the-post".tr().toString(),
               style: Theme.of(context).textTheme.headline1,
             ),
             SizedBox(
@@ -345,40 +345,6 @@ Widget defaultAutoSizeText(
       maxLines: 5,
     );
 
-/*Widget defaultSmartRefresher(
-        {required Widget child,
-        required RefreshController controller,
-        required Function onRefresh,
-        required Function onLoading}) =>
-    SmartRefresher(
-      enablePullDown: true,
-      enablePullUp: false,
-      header: WaterDropHeader(),
-      footer: CustomFooter(
-        builder: (context, mode) {
-          Widget body;
-          if (mode == LoadStatus.idle) {
-            body = Text("pull up load");
-          } else if (mode == LoadStatus.loading) {
-            body = CupertinoActivityIndicator();
-          } else if (mode == LoadStatus.failed) {
-            body = Text("Load Failed!Click retry!");
-          } else if (mode == LoadStatus.canLoading) {
-            body = Text("release to load more");
-          } else {
-            body = Text("No more Data");
-          }
-          return Container(
-            height: 55.0,
-            child: Center(child: body),
-          );
-        },
-      ),
-      controller: controller,
-      onRefresh: ()=>onRefresh(),
-      onLoading: ()=>onLoading(),
-      child: child,
-    );*/
 
 Widget defaultDismissible({
   required Widget child,

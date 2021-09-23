@@ -14,7 +14,7 @@ class AboutApplication extends StatelessWidget {
   Widget build(BuildContext context) {
     return defaultScaffold(
       context: context,
-      title: "about_application".tr().toString(),
+      title: "about-application".tr().toString(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -46,7 +46,7 @@ class AboutApplication extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () async {
-                    Share.share(shareText, subject: 'Look what I made!');
+                    Share.share(shareText);
                   },
                   icon: Icon(Icons.share),
                 ),

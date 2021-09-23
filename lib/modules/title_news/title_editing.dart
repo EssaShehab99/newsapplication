@@ -28,7 +28,7 @@ class _TitleEditingState extends State<TitleEditing> {
     newsTitleList =
         Provider.of<NewsTitlesManager>(context, listen: false).titlesList;
     return defaultScaffold(
-        title: "addTitle".tr().toString(),
+        title: "add-title".tr().toString(),
         context: context,
         body: Column(
           children: [
@@ -58,7 +58,7 @@ class _TitleEditingState extends State<TitleEditing> {
                             setState(() {
                               isNew = true;
                             });
-                            return "mustEnterText".tr().toString();
+                            return "must-enter-text".tr().toString();
                           }
                           return null;
                         },

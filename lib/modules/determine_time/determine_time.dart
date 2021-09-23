@@ -42,12 +42,12 @@ class _DetermineTimeState extends State<DetermineTime> {
     if (DateTime.now().difference(dateTime!).inMinutes < 1) {
       return Builder(builder: (context) {
         return Text("now".tr().toString(),
-            style: textStyle(fontSize: 13,color: Colors.blue));
+            style: textStyle(fontSize: 13, color: Colors.blue));
       });
     } else if (DateTime.now().difference(dateTime!).inMinutes == 1) {
       return Builder(builder: (context) {
-        return Text("oneMinute".tr().toString(),
-            style: textStyle(fontSize: 13,color: Colors.blue));
+        return Text("one-minute".tr().toString(),
+            style: textStyle(fontSize: 13, color: Colors.blue));
       });
     } else if (DateTime.now().difference(dateTime!).inMinutes <= 10) {
       textTime = (DateTime.now().difference(dateTime!).inMinutes).toString() +
@@ -63,7 +63,7 @@ class _DetermineTimeState extends State<DetermineTime> {
           (DateTime.now().difference(dateTime!).inHours).toString() +
           "hours".tr().toString();
     } else if (DateTime.now().difference(dateTime!).inDays == 1) {
-      textTime = "sinceOneDay".tr().toString();
+      textTime = "since-one-day".tr().toString();
     } else if (DateTime.now().difference(dateTime!).inDays <= 10) {
       textTime = "since".tr().toString() +
           (DateTime.now().difference(dateTime!).inDays).toString() +

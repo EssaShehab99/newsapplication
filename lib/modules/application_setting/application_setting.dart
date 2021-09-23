@@ -29,7 +29,7 @@ class _ApplicationSettingState extends State<ApplicationSetting> {
                     child: Column(
                       children: [
                         defaultGroupListTile(
-                            groupTitle: "dataUsing".tr().toString(),
+                            groupTitle: "data-using".tr().toString(),
                             groupElements: [
                               Builder(
                                 builder: (context) => CheckboxListTile(
@@ -39,7 +39,7 @@ class _ApplicationSettingState extends State<ApplicationSetting> {
                                         Theme.of(context).textTheme.headline3,
                                   ),
                                   subtitle: Text(
-                                    "loadPhotosOnTheHomeScreen".tr().toString(),
+                                    "load-photos-on-the-home-screen".tr().toString(),
                                     style:
                                         Theme.of(context).textTheme.subtitle1,
                                   ),

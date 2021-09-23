@@ -5,5 +5,6 @@ class NewsTitle {
   final String title;
   TypeTitle typeTitle;
   bool? isSync;
+
   NewsTitle({required this.id, required this.title, required this.typeTitle});
 }

@@ -40,8 +40,8 @@ print('on fetch');
   Widget build(BuildContext context) {
     List<String> itemsPopupMenuButton = [
       "setting".tr().toString(),
-      "about_application".tr().toString(),
-      "addTitle".tr().toString(),
+      "about-application".tr().toString(),
+      "add-title".tr().toString(),
       "exit".tr().toString(),
     ];
     var _posts = Provider.of<PostsManager>(context, listen: true).postsList;
