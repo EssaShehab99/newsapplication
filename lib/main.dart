@@ -32,9 +32,13 @@ class InitialApp extends StatelessWidget {
     return EasyLocalization(
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => PostsManager()),
           ChangeNotifierProvider(create: (_) => Setting()),
           ChangeNotifierProvider(create: (_) => NewsTitlesManager()),
+          ChangeNotifierProxyProvider<NewsTitlesManager, PostsManager>(
+            create: (_) => PostsManager(),
+            update: (_, values, previousProvider) =>
+                PostsManager()..update(values.titlesList),
+          ),
           ChangeNotifierProvider(create: (_) => FavoritePostManager()),
           ChangeNotifierProvider(create: (_) => FilesManager()),
         ],
@@ -60,8 +64,7 @@ class LauncherApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       locale: context.locale,
       supportedLocales: context.supportedLocales,
-      themeMode:
-      Provider.of<Setting>(context, listen: true).themeMode,
+      themeMode: Provider.of<Setting>(context, listen: true).themeMode,
       theme: ThemeData(
           fontFamily: "Cairo",
           primaryColor: primaryColor_light,
@@ -76,36 +79,29 @@ class LauncherApp extends StatelessWidget {
           ),
           inputDecorationTheme: InputDecorationTheme(
               focusedBorder: UnderlineInputBorder(
-                  borderSide:
-                  BorderSide(color: secondaryColor_light))),
+                  borderSide: BorderSide(color: secondaryColor_light))),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-                backgroundColor:
-                MaterialStateProperty.all(primaryColor_light),
-                overlayColor:
-                MaterialStateProperty.all(backgroundColor_light)),
+                backgroundColor: MaterialStateProperty.all(primaryColor_light),
+                overlayColor: MaterialStateProperty.all(backgroundColor_light)),
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
-                shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.circular(borderRadius))),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(borderRadius))),
                 backgroundColor:
-                MaterialStateProperty.all(backgroundColor_light)),
+                    MaterialStateProperty.all(backgroundColor_light)),
           ),
           tabBarTheme: TabBarTheme(
             labelColor: reverseColor_light,
             unselectedLabelColor: secondaryColor_light,
-            labelStyle:
-            textStyle(fontSize: 15, color: reverseColor_light),
+            labelStyle: textStyle(fontSize: 15, color: reverseColor_light),
             unselectedLabelStyle:
-            textStyle(fontSize: 13, color: secondaryColor_light),
+                textStyle(fontSize: 13, color: secondaryColor_light),
           ),
           appBarTheme: AppBarTheme(
             color: backgroundColor_light,
-            titleTextStyle:
-            textStyle(color: reverseColor_light, fontSize: 16),
+            titleTextStyle: textStyle(color: reverseColor_light, fontSize: 16),
             iconTheme: IconThemeData(color: reverseColor_light),
           ),
           checkboxTheme: CheckboxThemeData(
@@ -116,24 +112,17 @@ class LauncherApp extends StatelessWidget {
             fillColor: MaterialStateProperty.all(reverseColor_light),
           ),
           textTheme: TextTheme(
-              headline1:
-              textStyle(fontSize: 16, color: reverseColor_light),
-              headline2:
-              textStyle(fontSize: 15, color: reverseColor_light),
-              headline3:
-              textStyle(fontSize: 14, color: reverseColor_light),
-              headline4:
-              textStyle(fontSize: 13, color: reverseColor_light),
+              headline1: textStyle(fontSize: 16, color: reverseColor_light),
+              headline2: textStyle(fontSize: 15, color: reverseColor_light),
+              headline3: textStyle(fontSize: 14, color: reverseColor_light),
+              headline4: textStyle(fontSize: 13, color: reverseColor_light),
               headline5: textStyle(
                   fontSize: 12,
                   color: reverseColor_light,
                   fontWeight: FontWeight.normal),
-              headline6:
-              textStyle(fontSize: 11, color: reverseColor_light),
-              bodyText1: textStyle(
-                  fontSize: 15, color: backgroundColor_light),
-              bodyText2: textStyle(
-                  fontSize: 14, color: backgroundColor_light),
+              headline6: textStyle(fontSize: 11, color: reverseColor_light),
+              bodyText1: textStyle(fontSize: 15, color: backgroundColor_light),
+              bodyText2: textStyle(fontSize: 14, color: backgroundColor_light),
               subtitle1: textStyle(
                   fontSize: 13,
                   color: secondaryColor_light,
@@ -167,39 +156,31 @@ class LauncherApp extends StatelessWidget {
           ),
           inputDecorationTheme: InputDecorationTheme(
               focusedBorder: UnderlineInputBorder(
-                  borderSide:
-                  BorderSide(color: secondaryColor_dark))),
+                  borderSide: BorderSide(color: secondaryColor_dark))),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-                shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0.0))),
-                backgroundColor:
-                MaterialStateProperty.all(primaryColor_dark),
-                overlayColor:
-                MaterialStateProperty.all(backgroundColor_dark)),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0))),
+                backgroundColor: MaterialStateProperty.all(primaryColor_dark),
+                overlayColor: MaterialStateProperty.all(backgroundColor_dark)),
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
-                shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.circular(borderRadius))),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(borderRadius))),
                 backgroundColor:
-                MaterialStateProperty.all(backgroundColor_dark)),
+                    MaterialStateProperty.all(backgroundColor_dark)),
           ),
           tabBarTheme: TabBarTheme(
             labelColor: reverseColor_dark,
             unselectedLabelColor: secondaryColor_dark,
-            labelStyle:
-            textStyle(fontSize: 15, color: reverseColor_dark),
+            labelStyle: textStyle(fontSize: 15, color: reverseColor_dark),
             unselectedLabelStyle:
-            textStyle(fontSize: 13, color: secondaryColor_dark),
+                textStyle(fontSize: 13, color: secondaryColor_dark),
           ),
           appBarTheme: AppBarTheme(
             color: backgroundColor_dark,
-            titleTextStyle:
-            textStyle(color: reverseColor_dark, fontSize: 16),
+            titleTextStyle: textStyle(color: reverseColor_dark, fontSize: 16),
             iconTheme: IconThemeData(color: reverseColor_dark),
           ),
           checkboxTheme: CheckboxThemeData(
@@ -210,24 +191,17 @@ class LauncherApp extends StatelessWidget {
             fillColor: MaterialStateProperty.all(reverseColor_dark),
           ),
           textTheme: TextTheme(
-              headline1:
-              textStyle(fontSize: 16, color: reverseColor_dark),
-              headline2:
-              textStyle(fontSize: 15, color: reverseColor_dark),
-              headline3:
-              textStyle(fontSize: 14, color: reverseColor_dark),
-              headline4:
-              textStyle(fontSize: 13, color: reverseColor_dark),
+              headline1: textStyle(fontSize: 16, color: reverseColor_dark),
+              headline2: textStyle(fontSize: 15, color: reverseColor_dark),
+              headline3: textStyle(fontSize: 14, color: reverseColor_dark),
+              headline4: textStyle(fontSize: 13, color: reverseColor_dark),
               headline5: textStyle(
                   fontSize: 12,
                   color: reverseColor_dark,
                   fontWeight: FontWeight.normal),
-              headline6:
-              textStyle(fontSize: 11, color: reverseColor_dark),
-              bodyText1: textStyle(
-                  fontSize: 15, color: backgroundColor_dark),
-              bodyText2: textStyle(
-                  fontSize: 14, color: backgroundColor_dark),
+              headline6: textStyle(fontSize: 11, color: reverseColor_dark),
+              bodyText1: textStyle(fontSize: 15, color: backgroundColor_dark),
+              bodyText2: textStyle(fontSize: 14, color: backgroundColor_dark),
               subtitle1: textStyle(
                   fontSize: 13,
                   color: secondaryColor_dark,
@@ -253,10 +227,9 @@ class LauncherApp extends StatelessWidget {
         PostEditing.postEditing: (ctx) => const PostEditing(),
         NewsDetails.newsDetailsScreen: (ctx) => const NewsDetails(),
         TitleEditing.titleEditing: (ctx) => const TitleEditing(),
-        AboutApplication.aboutApplication: (ctx) =>
-        const AboutApplication(),
+        AboutApplication.aboutApplication: (ctx) => const AboutApplication(),
         ApplicationSetting.applicationSetting: (ctx) =>
-        const ApplicationSetting(),
+            const ApplicationSetting(),
         /*   AddTitleBar.addTitleBar: (ctx) => const AddTitleBar(),
 */
       },

@@ -12,24 +12,28 @@ import 'package:newsapplication/modules/post_editing/post_editing.dart';
 import 'package:newsapplication/modules/title_news/title_editing.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:newsapplication/shared/components/constants.dart';
+import 'package:newsapplication/shared/components/default_smart_refresher.dart';
 import 'package:newsapplication/shared/image_viewer/image_viewer.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '/models/title/news_titles_manager.dart';
 import 'package:provider/provider.dart';
 
 import 'news_details.dart';
 
-class NewsScreen extends StatefulWidget {
+class NewsScreen extends StatelessWidget {
   const NewsScreen({Key? key}) : super(key: key);
 
-  @override
-  _NewsScreenState createState() => _NewsScreenState();
-}
 
-class _NewsScreenState extends State<NewsScreen> {
-  @override
-  void initState() {
-    super.initState();
+  Future<void> _onRefresh() async{
+
+    await Future.delayed(Duration(seconds: 5));
+print('on fetch');
+  }
+
+  void _onLoading(refreshController,context) async{
+    // Provider.of<PostsManager>(context, listen: false).onLoading();
+    await Future.delayed(Duration(seconds: 5));
+    print('on loading');
+    refreshController.loadComplete();
   }
 
   @override
@@ -69,9 +73,12 @@ class _NewsScreenState extends State<NewsScreen> {
                           icon: Icon(
                             Icons.more_vert,
                           ),
-                          shape:  RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(borderRadius)),
                           itemBuilder: (ctx) {
-                            List<PopupMenuEntry<int>> list = <PopupMenuEntry<int>>[];
+                            List<PopupMenuEntry<int>> list =
+                                <PopupMenuEntry<int>>[];
                             itemsPopupMenuButton.forEach((itemPopupMenuButton) {
                               list.add(PopupMenuItem(
                                 child: Text(
@@ -121,79 +128,70 @@ class _NewsScreenState extends State<NewsScreen> {
               )
             ],
             body: TabBarView(
-              children: _titles
-                  .map((_newsTitle) => Container(
-                        color: Theme.of(context).primaryColor,
-                        child: SafeArea(
-                          top: false,
-                          bottom: false,
-                          child: Builder(
-                            builder: (context) {
-                              return Consumer<PostsManager>(
-                                builder: (context, value, child) {
-                                  value.refreshController =
-                                      RefreshController(initialRefresh: false);
-                                  return defaultSmartRefresher(
-                                    controller: value.refreshController!,
-                                    onRefresh: ()=>value.fetchPosts(context),
-                                    onLoading: value.onLoading,
+                  children: _titles
+                      .map((_newsTitle) => Container(
+                            color: Theme.of(context).primaryColor,
+                            child: SafeArea(
+                              top: false,
+                              bottom: false,
+                              child: Builder(
+                                builder: (context) {
+                                  return DefaultSmartRefresher(
                                     child: CustomScrollView(
-                                      key: PageStorageKey<String>(
-                                          _newsTitle.id!.toString()),
-                                      slivers: [
-                                        SliverOverlapInjector(
-                                            handle: NestedScrollView
-                                                .sliverOverlapAbsorberHandleFor(
+                                          key: PageStorageKey<String>(
+                                              _newsTitle.id!.toString()),
+                                          slivers: [
+                                            SliverOverlapInjector(
+                                                handle: NestedScrollView
+                                                    .sliverOverlapAbsorberHandleFor(
                                                     context)),
-                                        SliverPadding(
-                                          padding: EdgeInsets.all(2.0),
-                                          sliver: SliverList(
-                                            delegate:
+                                            SliverPadding(
+                                              padding: EdgeInsets.all(2.0),
+                                              sliver: SliverList(
+                                                delegate:
                                                 SliverChildBuilderDelegate(
-                                              (context, index) => _newsTitle
-                                                          .typeTitle ==
+                                                      (context, index) => _newsTitle
+                                                      .typeTitle ==
                                                       TypeTitle.MIXED
-                                                  ? _listViewBuilder(
+                                                      ? _listViewBuilder(
                                                       _posts, index)
-                                                  : (_newsTitle.typeTitle ==
-                                                          TypeTitle.CLOUD
+                                                      : (_newsTitle.typeTitle ==
+                                                      TypeTitle.CLOUD
                                                       ? (_listViewBuilder(
-                                                          _posts
-                                                              .where((_post) =>
-                                                                  _post.type
-                                                                      ?.id ==
-                                                                  _newsTitle.id)
-                                                              .toList(),
-                                                          index))
-                                                      : _listViewBuilder(
-                                                          _favoritePosts,
-                                                          index)),
-                                              childCount: _newsTitle
-                                                          .typeTitle ==
-                                                      TypeTitle.MIXED
-                                                  ? _posts.length
-                                                  : (_newsTitle.typeTitle ==
-                                                          TypeTitle.CLOUD
-                                                      ? _posts
+                                                      _posts
                                                           .where((_post) =>
-                                                              _post.type?.id ==
-                                                              _newsTitle.id)
-                                                          .length
+                                                      _post.type
+                                                          ?.id ==
+                                                          _newsTitle.id)
+                                                          .toList(),
+                                                      index))
+                                                      : _listViewBuilder(
+                                                      _favoritePosts,
+                                                      index)),
+                                                  childCount: _newsTitle
+                                                      .typeTitle ==
+                                                      TypeTitle.MIXED
+                                                      ? _posts.length
+                                                      : (_newsTitle.typeTitle ==
+                                                      TypeTitle.CLOUD
+                                                      ? _posts
+                                                      .where((_post) =>
+                                                  _post.type?.id ==
+                                                      _newsTitle.id)
+                                                      .length
                                                       : _favoritePosts.length),
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
                                   );
                                 },
-                              );
-                            },
-                          ),
-                        ),
-                      ))
-                  .toList(),
-            ),
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                ),
           ),
         ),
       ),
@@ -206,67 +204,76 @@ class _NewsScreenState extends State<NewsScreen> {
     );
   }
 
-  Widget _listViewBuilder(List<Post> _posts, index) => Column(children: [
-        defaultItemListView(
-            child: Column(
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: defaultAutoSizeText(
-                            text: "${_posts[index].title}",
-                            context: context,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsetsDirectional.only(end: 10),
-                        width:
-                            _posts[index].remoteImageTitle != null ? 120 : 0.0,
-                        height:
-                            _posts[index].remoteImageTitle != null ? 120 : 0.0,
-                        child: DefaultBoxImage(
-                          images: _posts[index].remoteImageTitle != null
-                              ? [_posts[index].remoteImageTitle]
-                              : [],
-                          index: 0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: padding),
-                  child: Row(
+  Widget _listViewBuilder(List<Post> _posts, index) => Card(
+        child: Builder(
+          builder: (context) {
+            return Column(children: [
+              defaultItemListView(
+                  child: Column(
                     children: [
                       Container(
-                        child: DetermineTime(
-                          DateTime.parse(_posts[index].date),
-                        ),
-                      ),
-                      Spacer(),
-                      _posts[index].isRead
-                          ? SizedBox.shrink()
-                          : Container(
-                              height: 20,
-                              width: 20,
-                              decoration: BoxDecoration(
-                                  color: Colors.green, shape: BoxShape.circle),
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: defaultAutoSizeText(
+                                  text: "${_posts[index].title}",
+                                  context: context,
+                                ),
+                              ),
                             ),
+                            Container(
+                              padding: EdgeInsetsDirectional.only(end: 10),
+                              width: _posts[index].remoteImageTitle != null
+                                  ? 120
+                                  : 0.0,
+                              height: _posts[index].remoteImageTitle != null
+                                  ? 120
+                                  : 0.0,
+                              child: DefaultBoxImage(
+                                images: _posts[index].remoteImageTitle != null
+                                    ? [_posts[index].remoteImageTitle]
+                                    : [],
+                                index: 0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: padding),
+                        child: Row(
+                          children: [
+                            Container(
+                              child: DetermineTime(
+                                DateTime.parse(_posts[index].date),
+                              ),
+                            ),
+                            Spacer(),
+                            _posts[index].isRead
+                                ? SizedBox.shrink()
+                                : Container(
+                                    height: 20,
+                                    width: 20,
+                                    decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        shape: BoxShape.circle),
+                                  ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            onPressed: () {
-              Navigator.of(context).pushNamed(NewsDetails.newsDetailsScreen,
-                  arguments: _posts[index]);
-            }),
-    defaultDivider(),
-      ]);
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(NewsDetails.newsDetailsScreen,
+                        arguments: _posts[index]);
+                  }),
+              defaultDivider(),
+            ]);
+          }
+        ),
+      );
 }

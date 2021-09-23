@@ -1,7 +1,7 @@
 import '../title/news_title.dart';
 
 class Post {
-  String? id;
+  int? id;
   final String title;
   final String? detail;
   final String date;

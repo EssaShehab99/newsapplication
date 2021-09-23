@@ -6,7 +6,6 @@ import 'package:newsapplication/models/title/news_title.dart';
 import 'package:newsapplication/models/title/news_titles_manager.dart';
 import 'package:newsapplication/shared/components/components.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TitleEditing extends StatefulWidget {
   const TitleEditing({Key? key}) : super(key: key);
@@ -93,13 +92,9 @@ class _TitleEditingState extends State<TitleEditing> {
             ),
             Expanded(
               child: Consumer<PostsManager>(builder: (context, value, child) {
-                value.refreshController =
-                    RefreshController(initialRefresh: false);
-                return defaultSmartRefresher(
-                  controller: value.refreshController!,
-                  onRefresh: ()=>value.onRefresh(context),
-                  onLoading: value.onLoading,
-                  child: ListView.builder(
+                // value.refreshController =
+                //     RefreshController(initialRefresh: false);
+                return ListView.builder(
                       itemBuilder: (context, index) => Container(
                             margin: EdgeInsets.symmetric(horizontal: 5),
                             child: Column(
@@ -147,8 +142,7 @@ class _TitleEditingState extends State<TitleEditing> {
                               ],
                             ),
                           ),
-                      itemCount: newsTitleList.length),
-                );
+                      itemCount: newsTitleList.length);
               }),
             )
           ],

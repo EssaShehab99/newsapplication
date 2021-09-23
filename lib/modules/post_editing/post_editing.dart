@@ -24,7 +24,7 @@ class _PostEditingState extends State<PostEditing> {
   late TextEditingController _title = TextEditingController(text: "");
   late TextEditingController _detail = TextEditingController(text: "");
   NewsTitle? _postType;
-  late String _id;
+  late int _id;
   final focus = FocusNode();
   List<dynamic>? _image = [];
   List<dynamic>? _images = [];

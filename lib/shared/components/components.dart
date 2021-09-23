@@ -9,7 +9,6 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:newsapplication/models/title/news_title.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'constants.dart';
 
@@ -21,8 +20,6 @@ List<String> themeItems = [
   "light".tr().toString(),
   "dark".tr().toString()
 ];
-
-
 
 Future<List<File>?>? selectFiles({bool allowMultiple = true}) async {
   List<File>? _files = [];
@@ -52,13 +49,12 @@ defaultTextButton({required Function onPressed, required Widget child}) =>
     Builder(
         builder: (context) => TextButton(
               style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0.0),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0.0),
+                    ),
                   ),
-                ),
-                elevation: MaterialStateProperty.all(5)
-              ),
+                  elevation: MaterialStateProperty.all(5)),
               onPressed: () {
                 onPressed();
               },
@@ -69,7 +65,6 @@ defaultItemListView({required Widget child, required Function() onPressed}) =>
     defaultTextButton(
       onPressed: onPressed,
       child: Container(
-
         child: child,
       ),
     );
@@ -158,7 +153,6 @@ Widget defaultTextFormField({
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(borderRadius)),
-
         ),
       ),
     );
@@ -186,7 +180,8 @@ Widget defaultDropdownButton({
       ),
       value: value,
       hint: hint,
-      isExpanded: true,dropdownColor: Theme.of(context).backgroundColor,
+      isExpanded: true,
+      dropdownColor: Theme.of(context).backgroundColor,
       onTap: onTap,
       style: Theme.of(context).textTheme.headline4,
       onChanged: onChanged,
@@ -284,7 +279,9 @@ Future<dynamic> defaultConfirmDialog({
                     child: Text(
                       "yes".tr().toString(),
                     )),
-                SizedBox(width: 30,),
+                SizedBox(
+                  width: 30,
+                ),
                 MaterialButton(
                   onPressed: () {
                     Navigator.of(context).pop(false);
@@ -348,14 +345,14 @@ Widget defaultAutoSizeText(
       maxLines: 5,
     );
 
-Widget defaultSmartRefresher(
+/*Widget defaultSmartRefresher(
         {required Widget child,
         required RefreshController controller,
-        required Function() onRefresh,
-        required Function() onLoading}) =>
+        required Function onRefresh,
+        required Function onLoading}) =>
     SmartRefresher(
       enablePullDown: true,
-      enablePullUp: true,
+      enablePullUp: false,
       header: WaterDropHeader(),
       footer: CustomFooter(
         builder: (context, mode) {
@@ -378,10 +375,10 @@ Widget defaultSmartRefresher(
         },
       ),
       controller: controller,
-      onRefresh: onRefresh,
-      onLoading: onLoading,
+      onRefresh: ()=>onRefresh(),
+      onLoading: ()=>onLoading(),
       child: child,
-    );
+    );*/
 
 Widget defaultDismissible({
   required Widget child,
@@ -403,19 +400,22 @@ Widget defaultDismissible({
           alignment: direction == DismissDirection.down
               ? AlignmentDirectional.topCenter
               : AlignmentDirectional.centerStart,
-          child: Icon(Icons.delete,color: reverseColor_dark,)),
+          child: Icon(
+            Icons.delete,
+            color: reverseColor_dark,
+          )),
       secondaryBackground: Container(
           margin: EdgeInsetsDirectional.only(end: 30),
           alignment: AlignmentDirectional.centerEnd,
-          child: Icon(Icons.edit,color: reverseColor_dark)),
+          child: Icon(Icons.edit, color: reverseColor_dark)),
     );
 
 defaultDivider() => Builder(builder: (context) {
       return Divider(
         thickness: 0.4,
         height: 0.0,
-        indent: MediaQuery.of(context).size.width*0.045,
-        endIndent: MediaQuery.of(context).size.width*0.045,
+        indent: MediaQuery.of(context).size.width * 0.045,
+        endIndent: MediaQuery.of(context).size.width * 0.045,
         // endIndent: MediaQuery.of(context).size.width*0.9,
       );
     });
