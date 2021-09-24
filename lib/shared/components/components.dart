@@ -45,16 +45,9 @@ Image defaultImageLogo({fit}) => Image.asset(
       fit: fit,
     );
 
-defaultTextButton({required Function onPressed, required Widget child}) =>
+defaultMaterialButton({required Function onPressed, required Widget child}) =>
     Builder(
-        builder: (context) => TextButton(
-              style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0.0),
-                    ),
-                  ),
-                  elevation: MaterialStateProperty.all(5)),
+        builder: (context) => MaterialButton(
               onPressed: () {
                 onPressed();
               },
@@ -62,7 +55,7 @@ defaultTextButton({required Function onPressed, required Widget child}) =>
             ));
 
 defaultItemListView({required Widget child, required Function() onPressed}) =>
-    defaultTextButton(
+    defaultMaterialButton(
       onPressed: onPressed,
       child: Container(
         child: child,
@@ -377,12 +370,17 @@ Widget defaultDismissible({
     );
 
 defaultDivider() => Builder(builder: (context) {
-      return Divider(
-        thickness: 0.4,
-        height: 0.0,
-        indent: MediaQuery.of(context).size.width * 0.045,
-        endIndent: MediaQuery.of(context).size.width * 0.045,
-        // endIndent: MediaQuery.of(context).size.width*0.9,
+      return Builder(
+        builder: (context) {
+          return Divider(
+            thickness: 0.4,
+            height: 0.0,
+            color: Theme.of(context).dividerColor,
+            indent: MediaQuery.of(context).size.width * 0.045,
+            endIndent: MediaQuery.of(context).size.width * 0.045,
+            // endIndent: MediaQuery.of(context).size.width*0.9,
+          );
+        }
       );
     });
 

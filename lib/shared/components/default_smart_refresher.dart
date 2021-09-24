@@ -18,7 +18,8 @@ class _DefaultSmartRefresherState extends State<DefaultSmartRefresher> {
       RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
-    await Provider.of<PostsManager>(context,listen: false).fetchPosts();
+    if(mounted)
+      await Provider.of<PostsManager>(context,listen: false).fetchPosts();
     print('_onRefresh');
     _refreshController.refreshCompleted();
   }

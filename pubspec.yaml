@@ -49,6 +49,8 @@ dependencies:
   share: ^2.0.4
   url_launcher: ^6.0.11
   http: ^0.13.3
+  connectivity: ^3.0.6
+  internet_connection_checker: ^0.0.1+2
 
 
 

@@ -22,22 +22,9 @@ import 'news_details.dart';
 class NewsScreen extends StatelessWidget {
   const NewsScreen({Key? key}) : super(key: key);
 
-
-  Future<void> _onRefresh() async{
-
-    await Future.delayed(Duration(seconds: 5));
-print('on fetch');
-  }
-
-  void _onLoading(refreshController,context) async{
-    // Provider.of<PostsManager>(context, listen: false).onLoading();
-    await Future.delayed(Duration(seconds: 5));
-    print('on loading');
-    refreshController.loadComplete();
-  }
-
   @override
   Widget build(BuildContext context) {
+      Provider.of<PostsManager>(context,listen: false).fetchPosts();
     List<String> itemsPopupMenuButton = [
       "setting".tr().toString(),
       "about-application".tr().toString(),
@@ -47,7 +34,7 @@ print('on fetch');
     var _posts = Provider.of<PostsManager>(context, listen: true).postsList;
     var _titles =
         Provider.of<NewsTitlesManager>(context, listen: true).titlesList;
-    var _favoritePosts = Provider.of<FavoritePostManager>(context, listen: true)
+    var _favoritePosts = Provider.of<PostsManager>(context, listen: true)
         .favoritePostsList;
     return defaultScaffold(
       context: context,
@@ -128,70 +115,65 @@ print('on fetch');
               )
             ],
             body: TabBarView(
-                  children: _titles
-                      .map((_newsTitle) => Container(
-                            color: Theme.of(context).primaryColor,
-                            child: SafeArea(
-                              top: false,
-                              bottom: false,
-                              child: Builder(
-                                builder: (context) {
-                                  return DefaultSmartRefresher(
-                                    child: CustomScrollView(
-                                          key: PageStorageKey<String>(
-                                              _newsTitle.id!.toString()),
-                                          slivers: [
-                                            SliverOverlapInjector(
-                                                handle: NestedScrollView
-                                                    .sliverOverlapAbsorberHandleFor(
-                                                    context)),
-                                            SliverPadding(
-                                              padding: EdgeInsets.all(2.0),
-                                              sliver: SliverList(
-                                                delegate:
-                                                SliverChildBuilderDelegate(
-                                                      (context, index) => _newsTitle
+              children: _titles
+                  .map((_newsTitle) => Container(
+                        color: Theme.of(context).primaryColor,
+                        child: SafeArea(
+                          top: false,
+                          bottom: false,
+                          child: Builder(
+                            builder: (context) {
+                              return DefaultSmartRefresher(
+                                child: CustomScrollView(
+                                  key: PageStorageKey<String>(
+                                      _newsTitle.id!.toString()),
+                                  slivers: [
+                                    SliverOverlapInjector(
+                                        handle: NestedScrollView
+                                            .sliverOverlapAbsorberHandleFor(
+                                                context)),
+                                    SliverPadding(
+                                      padding: EdgeInsets.all(2.0),
+                                      sliver: SliverList(
+                                        delegate: SliverChildBuilderDelegate(
+                                          (context, index) => _newsTitle
                                                       .typeTitle ==
-                                                      TypeTitle.MIXED
-                                                      ? _listViewBuilder(
-                                                      _posts, index)
-                                                      : (_newsTitle.typeTitle ==
+                                                  TypeTitle.MIXED
+                                              ? _listViewBuilder(_posts, index)
+                                              : (_newsTitle.typeTitle ==
                                                       TypeTitle.CLOUD
-                                                      ? (_listViewBuilder(
+                                                  ? (_listViewBuilder(
                                                       _posts
                                                           .where((_post) =>
-                                                      _post.type
-                                                          ?.id ==
-                                                          _newsTitle.id)
+                                                              _post.type?.id ==
+                                                              _newsTitle.id)
                                                           .toList(),
                                                       index))
-                                                      : _listViewBuilder(
-                                                      _favoritePosts,
-                                                      index)),
-                                                  childCount: _newsTitle
-                                                      .typeTitle ==
-                                                      TypeTitle.MIXED
-                                                      ? _posts.length
-                                                      : (_newsTitle.typeTitle ==
+                                                  : _listViewBuilder(
+                                                      _favoritePosts, index)),
+                                          childCount: _newsTitle.typeTitle ==
+                                                  TypeTitle.MIXED
+                                              ? _posts.length
+                                              : (_newsTitle.typeTitle ==
                                                       TypeTitle.CLOUD
-                                                      ? _posts
+                                                  ? _posts
                                                       .where((_post) =>
-                                                  _post.type?.id ==
-                                                      _newsTitle.id)
+                                                          _post.type?.id ==
+                                                          _newsTitle.id)
                                                       .length
-                                                      : _favoritePosts.length),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                                  : _favoritePosts.length),
                                         ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ))
+                  .toList(),
+            ),
           ),
         ),
       ),
@@ -204,76 +186,74 @@ print('on fetch');
     );
   }
 
-  Widget _listViewBuilder(List<Post> _posts, index) => Card(
-        child: Builder(
-          builder: (context) {
-            return Column(children: [
-              defaultItemListView(
-                  child: Column(
+  Widget _listViewBuilder(List<Post> _posts, index) => Builder(builder: (context) {
+    return Column(
+      children: [
+        defaultItemListView(
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  child: Row(
                     children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                child: defaultAutoSizeText(
-                                  text: "${_posts[index].title}",
-                                  context: context,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsetsDirectional.only(end: 10),
-                              width: _posts[index].remoteImageTitle != null
-                                  ? 120
-                                  : 0.0,
-                              height: _posts[index].remoteImageTitle != null
-                                  ? 120
-                                  : 0.0,
-                              child: DefaultBoxImage(
-                                images: _posts[index].remoteImageTitle != null
-                                    ? [_posts[index].remoteImageTitle]
-                                    : [],
-                                index: 0,
-                              ),
-                            ),
-                          ],
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: defaultAutoSizeText(
+                            text: "${_posts[index].title}",
+                            context: context,
+                          ),
                         ),
                       ),
                       Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: padding),
-                        child: Row(
-                          children: [
-                            Container(
-                              child: DetermineTime(
-                                DateTime.parse(_posts[index].date),
-                              ),
-                            ),
-                            Spacer(),
-                            _posts[index].isRead
-                                ? SizedBox.shrink()
-                                : Container(
-                                    height: 20,
-                                    width: 20,
-                                    decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        shape: BoxShape.circle),
-                                  ),
-                          ],
+                        padding: EdgeInsetsDirectional.only(end: 10),
+                        width: _posts[index].remoteImageTitle != null
+                            ? 120
+                            : 0.0,
+                        height: _posts[index].remoteImageTitle != null
+                            ? 120
+                            : 0.0,
+                        child: DefaultBoxImage(
+                          images: _posts[index].remoteImageTitle != null
+                          ? [_posts[index].remoteImageTitle]
+                              : [],
+                          index: 0,
                         ),
                       ),
                     ],
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(NewsDetails.newsDetailsScreen,
-                        arguments: _posts[index]);
-                  }),
-              defaultDivider(),
-            ]);
-          }
-        ),
-      );
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: padding),
+                  child: Row(
+                    children: [
+                      Container(
+                        child: DetermineTime(
+                          DateTime.parse(_posts[index].date),
+                        ),
+                      ),
+                      Spacer(),
+                      _posts[index].isRead
+                          ? SizedBox.shrink()
+                          : Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            color: Colors.green,
+                            shape: BoxShape.circle),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            onPressed: () {
+              Navigator.of(context).pushNamed(NewsDetails.newsDetailsScreen,
+                  arguments: _posts[index]);
+            }),
+        defaultDivider()
+      ],
+    );
+  });
 }

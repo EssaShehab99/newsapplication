@@ -45,7 +45,7 @@ class _NewsDetailsState extends State<NewsDetails> {
       ],
       body: Consumer<PostsManager>(
         builder: (context, value, child) => SingleChildScrollView(
-        padding: const EdgeInsets.all(padding),
+          padding: const EdgeInsets.all(padding),
           child: Column(
             children: [
               Container(
@@ -103,8 +103,7 @@ class _NewsDetailsState extends State<NewsDetails> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(top: 20),
                   child: StarButton(
-                    isStarred:
-                        value.favoritePostsList.contains(value.postsList[0]),
+                    isStarred: value.checkFavoritePost(id: post.id!),
                     valueChanged: (favoriteStatus) {
                       value.favoritePost(
                           post: value.postsList[0],

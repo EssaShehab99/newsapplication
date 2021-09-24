@@ -39,7 +39,10 @@ class InitialApp extends StatelessWidget {
             update: (_, values, previousProvider) =>
                 PostsManager()..update(values.titlesList),
           ),
-          ChangeNotifierProvider(create: (_) => FavoritePostManager()),
+          ChangeNotifierProxyProvider<PostsManager, FavoritePostManager>(
+            create:(context) =>  FavoritePostManager(),
+            update: (context, value, previous) => FavoritePostManager()..update(value.postsList),
+          ),
           ChangeNotifierProvider(create: (_) => FilesManager()),
         ],
         child: const LauncherApp(),
